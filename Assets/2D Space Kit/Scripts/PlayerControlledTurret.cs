@@ -15,7 +15,7 @@ public class PlayerControlledTurret : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+        /*
 		//This makes the turret aim at the mouse position (Controlled by CustomPointer, but you can replace CustomPointer.pointerPosition with Input.MousePosition and it should work)
 		Vector2 turretPosition = Camera.main.WorldToScreenPoint(transform.position);
 		Vector3 direction = CustomPointer.pointerPosition - turretPosition;
@@ -33,6 +33,6 @@ public class PlayerControlledTurret : MonoBehaviour {
 			
 		
 		}
-	
+        */
 	}
 }

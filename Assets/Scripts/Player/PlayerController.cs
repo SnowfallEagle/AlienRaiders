@@ -4,10 +4,13 @@ using UnityEngine;
 using UnityEngine.Assertions;
 
 [RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(PlayerShip))]
 public class PlayerController : MonoBehaviour
 {
-    public SpriteRenderer TargetSizeSprite;
+    [SerializeField] protected SpriteRenderer m_ScreenBounds;
+
     private Rigidbody2D m_RigidBody;
+    private Ship m_Ship;
 
     private Vector3 m_LastControlledWorldPosition = Vector3.zero;
     private bool m_bControlled = false;
@@ -15,8 +18,9 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         m_RigidBody = GetComponent<Rigidbody2D>();
+        m_Ship = GetComponent<Ship>();
 
-        Assert.IsNotNull(TargetSizeSprite);
+        Assert.IsNotNull(m_ScreenBounds);
     }
 
     private void Update()
@@ -31,6 +35,7 @@ public class PlayerController : MonoBehaviour
         }
 
         CheckBounds();
+        Fire();
     }
 
     private void ProcessTouch()
@@ -78,39 +83,47 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        Vector3 currentMouseWorldPosition = ScreenToWorldPosition(Input.mousePosition);
-        Vector3 deltaPosition = currentMouseWorldPosition - m_LastControlledWorldPosition;
-        m_LastControlledWorldPosition = currentMouseWorldPosition;
+        Vector3 CurrentMouseWorldPosition = ScreenToWorldPosition(Input.mousePosition);
+        Vector3 DeltaPosition = CurrentMouseWorldPosition - m_LastControlledWorldPosition;
+        m_LastControlledWorldPosition = CurrentMouseWorldPosition;
 
-        transform.position += deltaPosition;
+        transform.position += DeltaPosition;
     }
 
-    private Vector3 ScreenToWorldPosition(Vector3 position)
+    private Vector3 ScreenToWorldPosition(Vector3 Position)
     {
-        return Camera.main.ScreenToWorldPoint(position);
+        return Camera.main.ScreenToWorldPoint(Position);
     }
 
     private void CheckBounds()
     {
-        if (!TargetSizeSprite)
+        if (!m_ScreenBounds)
         {
             return;
         }
 
-        Vector3 currentPosition = transform.position;
+        Vector3 CurrentPosition = transform.position;
 
-        Vector3 boundsSizeDiv2 = TargetSizeSprite.bounds.size * 0.5f;
-        Vector3 boundsCenter = TargetSizeSprite.bounds.center;
+        Vector3 BoundsSizeDiv2 = m_ScreenBounds.bounds.size * 0.5f;
+        Vector3 BoundsCenter = m_ScreenBounds.bounds.center;
 
-        Vector3 boundsBottomLeft = boundsCenter - boundsSizeDiv2;
-        Vector3 boundsTopRight = boundsCenter + boundsSizeDiv2;
+        Vector3 BoundsBottomLeft = BoundsCenter - BoundsSizeDiv2;
+        Vector3 BoundsTopRight = BoundsCenter + BoundsSizeDiv2;
 
-        if (currentPosition.x < boundsBottomLeft.x) currentPosition.x = boundsBottomLeft.x;
-        if (currentPosition.y < boundsBottomLeft.y) currentPosition.y = boundsBottomLeft.y;
+        if (CurrentPosition.x < BoundsBottomLeft.x) CurrentPosition.x = BoundsBottomLeft.x;
+        if (CurrentPosition.y < BoundsBottomLeft.y) CurrentPosition.y = BoundsBottomLeft.y;
 
-        if (currentPosition.y > boundsTopRight.y) currentPosition.y = boundsTopRight.y;
-        if (currentPosition.x > boundsTopRight.x) currentPosition.x = boundsTopRight.x;
+        if (CurrentPosition.y > BoundsTopRight.y) CurrentPosition.y = BoundsTopRight.y;
+        if (CurrentPosition.x > BoundsTopRight.x) CurrentPosition.x = BoundsTopRight.x;
 
-        transform.position = currentPosition;
+        transform.position = CurrentPosition;
+    }
+
+    private void Fire()
+    {
+        if (m_bControlled)
+        {
+            m_Ship.Fire();
+        }
     }
 }

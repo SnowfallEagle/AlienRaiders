@@ -15,20 +15,20 @@ public class ViewportManager : MonoBehaviour
             return;
         }
 
-        float screenRatio = (float)Screen.width / (float)Screen.height;
-        float targetRatio = TargetSizeSprite.bounds.size.x / TargetSizeSprite.bounds.size.y;
-        float targetYDivTwo = TargetSizeSprite.bounds.size.y * 0.5f;
+        float ScreenRatio = (float)Screen.width / (float)Screen.height;
+        float TargetRatio = TargetSizeSprite.bounds.size.x / TargetSizeSprite.bounds.size.y;
+        float TargetYDivTwo = TargetSizeSprite.bounds.size.y * 0.5f;
 
-        Camera camera = GetComponent<Camera>();
+        Camera Camera = GetComponent<Camera>();
 
-        if (screenRatio >= targetRatio)
+        if (ScreenRatio >= TargetRatio)
         {
-            camera.orthographicSize = targetYDivTwo;
+            Camera.orthographicSize = TargetYDivTwo;
         }
         else
         {
-            float screenToTarget = targetRatio / screenRatio;
-            camera.orthographicSize = targetYDivTwo * screenToTarget;
+            float screenToTarget = TargetRatio / ScreenRatio;
+            Camera.orthographicSize = TargetYDivTwo * screenToTarget;
         }
     }
 }
