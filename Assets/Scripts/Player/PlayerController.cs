@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-[RequireComponent(typeof(PlayerShip))]
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] protected SpriteRenderer m_ScreenBounds;
 
     private Ship m_Ship;
+    private ShipWeaponComponent m_ShipWeaponComponent;
 
     private Vector3 m_LastControlledWorldPosition = Vector3.zero;
     private bool m_bControlled = false;
@@ -16,7 +16,9 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         m_Ship = GetComponent<Ship>();
+        m_ShipWeaponComponent = GetComponent<ShipWeaponComponent>();
 
+        Assert.IsNotNull(m_Ship); // Ship check already asserts its components
         Assert.IsNotNull(m_ScreenBounds);
     }
 
@@ -32,7 +34,6 @@ public class PlayerController : MonoBehaviour
         }
 
         CheckBounds();
-        Fire();
     }
 
     private void ProcessTouch()
@@ -44,6 +45,7 @@ public class PlayerController : MonoBehaviour
             case TouchPhase.Began:
                 m_bControlled = true;
                 m_LastControlledWorldPosition = ScreenToWorldPosition(touch.position);
+                m_ShipWeaponComponent.StartFire();
                 break;
 
             case TouchPhase.Stationary:
@@ -53,6 +55,7 @@ public class PlayerController : MonoBehaviour
             case TouchPhase.Canceled:
             case TouchPhase.Ended:
                 m_bControlled = false;
+                m_ShipWeaponComponent.StopFire();
                 break;
 
             case TouchPhase.Moved:
@@ -69,7 +72,11 @@ public class PlayerController : MonoBehaviour
     {
         if (!Input.GetMouseButton(0))
         {
-            m_bControlled = false;
+            if (m_bControlled)
+            {
+                m_ShipWeaponComponent.StopFire();
+                m_bControlled = false;
+            }
             return;
         }
 
@@ -77,6 +84,7 @@ public class PlayerController : MonoBehaviour
         {
             m_LastControlledWorldPosition = ScreenToWorldPosition(Input.mousePosition);
             m_bControlled = true;
+            m_ShipWeaponComponent.StartFire();
             return;
         }
 
@@ -114,13 +122,5 @@ public class PlayerController : MonoBehaviour
         if (CurrentPosition.x > BoundsTopRight.x) CurrentPosition.x = BoundsTopRight.x;
 
         transform.position = CurrentPosition;
-    }
-
-    private void Fire()
-    {
-        if (m_bControlled)
-        {
-            m_Ship.GetComponent<ShipWeaponComponent>().Fire();
-        }
     }
 }
