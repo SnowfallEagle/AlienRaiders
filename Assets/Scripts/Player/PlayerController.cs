@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-[RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(PlayerShip))]
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] protected SpriteRenderer m_ScreenBounds;
 
-    private Rigidbody2D m_RigidBody;
     private Ship m_Ship;
 
     private Vector3 m_LastControlledWorldPosition = Vector3.zero;
@@ -17,7 +15,6 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        m_RigidBody = GetComponent<Rigidbody2D>();
         m_Ship = GetComponent<Ship>();
 
         Assert.IsNotNull(m_ScreenBounds);
@@ -123,7 +120,7 @@ public class PlayerController : MonoBehaviour
     {
         if (m_bControlled)
         {
-            m_Ship.Fire();
+            m_Ship.GetComponent<ShipWeaponComponent>().Fire();
         }
     }
 }

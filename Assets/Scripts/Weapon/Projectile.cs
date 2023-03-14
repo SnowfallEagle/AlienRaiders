@@ -19,7 +19,6 @@ public class Projectile : MonoBehaviour
     private void Update()
     {
         transform.Translate(0f, m_Speed * Time.deltaTime, 0f);
-        Debug.Log(transform.position.y);
     }
 
     public void Initialize(Team OwnerTeam)
@@ -38,7 +37,7 @@ public class Projectile : MonoBehaviour
         if (Ship && Ship.Team != m_OwnerTeam)
         {
             // TODO: Maybe spawn effect?
-            Ship.TakeDamage(m_Damage);
+            Ship.GetComponent<ShipHealthComponent>().TakeDamage(m_Damage);
             Destroy(gameObject);
         }
     }
