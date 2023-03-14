@@ -5,6 +5,7 @@ using UnityEngine.Assertions;
 
 public class ShipWeaponComponent : MonoBehaviour
 {
+    // TODO: Later we should remove projectile from base class
     [SerializeField] protected Projectile m_Projectile;
 
     protected BoxCollider2D m_Collider;
@@ -14,7 +15,7 @@ public class ShipWeaponComponent : MonoBehaviour
     private float m_TimeLeftToFire = 0f;
     private bool m_bFiring = false;
 
-    public void Start()
+    private void Start()
     {
         m_Collider = GetComponent<BoxCollider2D>();        
         m_Owner = GetComponent<Ship>();
@@ -23,7 +24,7 @@ public class ShipWeaponComponent : MonoBehaviour
         Assert.IsNotNull(m_Owner);
     }
 
-    public void Update()
+    private void Update()
     {
         m_TimeLeftToFire -= Time.deltaTime;
 
@@ -41,6 +42,7 @@ public class ShipWeaponComponent : MonoBehaviour
         }
     }
 
+    // TODO: Make it virtual, so any weapon component can change it
     protected void Fire()
     {
         Vector3 Position = transform.position;

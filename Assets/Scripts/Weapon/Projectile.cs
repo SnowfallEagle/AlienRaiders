@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider2D))]
+[RequireComponent(typeof(Rigidbody2D))]
 public class Projectile : MonoBehaviour
 {
     [SerializeField] protected float m_Damage = 5f;
     [SerializeField] protected float m_LifeTime = 5f;
-    [SerializeField] protected float m_Speed = 0.1f;
+    [SerializeField] protected float m_Speed = 5f;
 
     Team m_OwnerTeam;
 
     private void Start()
     {
+        GetComponent<Rigidbody2D>().gravityScale = 0f;
+
         Destroy(gameObject, m_LifeTime);
     }
 
@@ -31,7 +34,7 @@ public class Projectile : MonoBehaviour
         Debug.Log("Projectile: " + name + " is destroyed...");
     }
 
-    protected virtual void OnTriggerEnter2D(Collider2D Other)
+    private void OnTriggerEnter2D(Collider2D Other)
     {
         Ship Ship = Other.GetComponent<Ship>();
         if (Ship && Ship.Team != m_OwnerTeam)
