@@ -4,7 +4,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider2D))]
 [RequireComponent(typeof(Rigidbody2D))]
-public class Projectile : MonoBehaviour
+public class Projectile : CustomBehaviour
 {
     [SerializeField] protected float m_Damage = 5f;
     [SerializeField] protected float m_LifeTime = 5f;
@@ -14,7 +14,8 @@ public class Projectile : MonoBehaviour
 
     private void Start()
     {
-        GetComponent<Rigidbody2D>().gravityScale = 0f;
+        var Rigidbody = InitializeComponent<Rigidbody2D>();
+        Rigidbody.gravityScale = 0f;
 
         Destroy(gameObject, m_LifeTime);
     }

@@ -1,8 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class CustomBehaviour : MonoBehaviour
 {
@@ -67,7 +66,10 @@ public class CustomBehaviour : MonoBehaviour
             return ExistingComponent;
         }
 
-        return gameObject.AddComponent(RegisteredType);
+        Component NewComponent = gameObject.AddComponent(RegisteredType);
+        Assert.IsNotNull(NewComponent);
+
+        return NewComponent;
     }
 
     protected T InitializeComponent<T>() where T : Component

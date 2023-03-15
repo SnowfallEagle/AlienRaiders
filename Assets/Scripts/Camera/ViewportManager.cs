@@ -27,8 +27,8 @@ public class ViewportManager : MonoBehaviour
         }
         else
         {
-            float screenToTarget = TargetRatio / ScreenRatio;
-            Camera.orthographicSize = TargetYDivTwo * screenToTarget;
+            float ScreenToTarget = TargetRatio / ScreenRatio;
+            Camera.orthographicSize = TargetYDivTwo * ScreenToTarget;
         }
     }
 }

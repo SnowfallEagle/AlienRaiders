@@ -28,9 +28,6 @@ public class Ship : CustomBehaviour
         m_BoxCollider = InitializeComponent<BoxCollider2D>();
         m_HealthComponent = InitializeComponent<ShipHealthComponent>();
         m_WeaponComponent = InitializeComponent<ShipWeaponComponent>();
-
-        Assert.IsNotNull(m_HealthComponent);
-        Assert.IsNotNull(m_WeaponComponent);
     }
 
     private void LateUpdate()

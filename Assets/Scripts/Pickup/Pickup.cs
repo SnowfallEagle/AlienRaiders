@@ -2,17 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(BoxCollider2D))]
-[RequireComponent(typeof(Rigidbody2D))]
-public class Pickup : MonoBehaviour
+public class Pickup : CustomBehaviour
 {
     [SerializeField] protected float m_Speed = 2.5f;
 
     private void Start()
     {
-        GetComponent<Rigidbody2D>().gravityScale = 0f;
+        var Rigidbody = InitializeComponent<Rigidbody2D>();
+        Rigidbody.gravityScale = 0f;
 
-        // TODO: Later we need smth like services for level stuff like level bounds and ad service, but for now just destroy by time
+        InitializeComponent<BoxCollider2D>();
+        
+        // We should check for level boundaries
         Destroy(gameObject, 10f);
     }
 
