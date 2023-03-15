@@ -1,10 +1,10 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
 [RequireComponent(typeof(BoxCollider2D))]
-public class Ship : MonoBehaviour
+public class Ship : CustomBehaviour
 {
     public enum Team
     {
@@ -15,22 +15,26 @@ public class Ship : MonoBehaviour
     public virtual Team ShipTeam { get => Team.Player; }
 
     protected BoxCollider2D m_BoxCollider;
+
     protected ShipHealthComponent m_HealthComponent;
+    public ShipHealthComponent HealthComponent { get => m_HealthComponent; }
+
     protected ShipWeaponComponent m_WeaponComponent;
+    public ShipWeaponComponent WeaponComponent { get => m_WeaponComponent; }
 
     private List<BHTask> m_TaskList = new List<BHTask>();
 
     protected virtual void Start()
     {
         m_BoxCollider = GetComponent<BoxCollider2D>();
-        m_HealthComponent = GetComponent<ShipHealthComponent>();
-        m_WeaponComponent = GetComponent<ShipWeaponComponent>();
+        m_HealthComponent = GetCustomComponent<ShipHealthComponent>();
+        m_WeaponComponent = GetCustomComponent<ShipWeaponComponent>();
 
         Assert.IsNotNull(m_HealthComponent);
         Assert.IsNotNull(m_WeaponComponent);
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         UpdateTasks();
     }

@@ -8,7 +8,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] protected SpriteRenderer m_ScreenBounds;
 
     private Ship m_Ship;
-    private ShipWeaponComponent m_ShipWeaponComponent;
 
     private Vector3 m_LastControlledWorldPosition = Vector3.zero;
     private bool m_bControlled = false;
@@ -16,7 +15,6 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         m_Ship = GetComponent<Ship>();
-        m_ShipWeaponComponent = GetComponent<ShipWeaponComponent>();
 
         Assert.IsNotNull(m_Ship); // Ship check already asserts its components
         Assert.IsNotNull(m_ScreenBounds);
@@ -45,7 +43,7 @@ public class PlayerController : MonoBehaviour
             case TouchPhase.Began:
                 m_bControlled = true;
                 m_LastControlledWorldPosition = ScreenToWorldPosition(touch.position);
-                m_ShipWeaponComponent.StartFire();
+                m_Ship.AddTask(new BHTaskStartFire());
                 break;
 
             case TouchPhase.Stationary:
@@ -55,7 +53,7 @@ public class PlayerController : MonoBehaviour
             case TouchPhase.Canceled:
             case TouchPhase.Ended:
                 m_bControlled = false;
-                m_ShipWeaponComponent.StopFire();
+                m_Ship.AddTask(new BHTaskStopFire());
                 break;
 
             case TouchPhase.Moved:
@@ -74,7 +72,7 @@ public class PlayerController : MonoBehaviour
         {
             if (m_bControlled)
             {
-                m_ShipWeaponComponent.StopFire();
+                m_Ship.AddTask(new BHTaskStopFire());
                 m_bControlled = false;
             }
             return;
@@ -84,7 +82,7 @@ public class PlayerController : MonoBehaviour
         {
             m_LastControlledWorldPosition = ScreenToWorldPosition(Input.mousePosition);
             m_bControlled = true;
-            m_ShipWeaponComponent.StartFire();
+            m_Ship.AddTask(new BHTaskStartFire());
             return;
         }
 
