@@ -24,7 +24,7 @@ public class Pickup : MonoBehaviour
     private void OnTriggerStay2D(Collider2D Other)
     {
         Ship Ship = Other.GetComponent<Ship>();
-        if (Ship && Ship.Team == Team.Player)
+        if (Ship && Ship.ShipTeam == Ship.Team.Player)
         {
             if (GivePickup(Ship))
             {

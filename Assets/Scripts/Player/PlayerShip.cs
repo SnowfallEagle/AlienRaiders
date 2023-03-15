@@ -5,5 +5,5 @@ using UnityEngine.Assertions;
 
 public class PlayerShip : Ship
 {
-    public override Team Team { get => Team.Player; }
+    public override Team ShipTeam { get => Team.Player; }
 }

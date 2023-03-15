@@ -59,11 +59,11 @@ public class PlayerController : MonoBehaviour
                 break;
 
             case TouchPhase.Moved:
-                Vector3 currentTouchWorldPosition = ScreenToWorldPosition(touch.position);
-                Vector3 deltaPosition = currentTouchWorldPosition - m_LastControlledWorldPosition;
-                m_LastControlledWorldPosition = currentTouchWorldPosition;
+                Vector3 CurrentTouchWorldPosition = ScreenToWorldPosition(touch.position);
+                Vector3 DeltaPosition = CurrentTouchWorldPosition - m_LastControlledWorldPosition;
+                m_LastControlledWorldPosition = CurrentTouchWorldPosition;
 
-                transform.position += deltaPosition;
+                m_Ship.AddTask(new BHTaskMoveByDelta(DeltaPosition));
                 break;
         }
     }
@@ -92,7 +92,7 @@ public class PlayerController : MonoBehaviour
         Vector3 DeltaPosition = CurrentMouseWorldPosition - m_LastControlledWorldPosition;
         m_LastControlledWorldPosition = CurrentMouseWorldPosition;
 
-        transform.position += DeltaPosition;
+        m_Ship.AddTask(new BHTaskMoveByDelta(DeltaPosition));
     }
 
     private Vector3 ScreenToWorldPosition(Vector3 Position)

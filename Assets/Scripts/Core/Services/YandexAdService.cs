@@ -12,6 +12,8 @@ public class YandexAdService : AdService
 
         YandexGamesSdk.CallbackLogging = true;
         yield return YandexGamesSdk.Initialize();
+
+        PostInitialize();
     }
 
     private void Update()

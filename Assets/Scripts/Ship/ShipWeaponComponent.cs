@@ -49,7 +49,7 @@ public class ShipWeaponComponent : MonoBehaviour
         Position.y += gameObject.GetComponent<BoxCollider2D>().bounds.size.y * 0.5f;
 
         Projectile Projectile = Instantiate(m_Projectile, Position, Quaternion.identity);
-        Projectile.Initialize(gameObject.GetComponent<Ship>().Team);
+        Projectile.Initialize(gameObject.GetComponent<Ship>().ShipTeam);
     }
 
     public void StartFire()

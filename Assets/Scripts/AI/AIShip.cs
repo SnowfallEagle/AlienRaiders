@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class AIShip : Ship
 {
-    public override Team Team { get => Team.Enemy; }
+    public override Team ShipTeam { get => Team.Enemy; }
 }

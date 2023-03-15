@@ -15,7 +15,10 @@ public class GameManager : MonoBehaviour
 #endif
 
         var AdService = ServiceLocator.Instance.Get<AdService>();
-        AdService.ToggleStickyAd(true);
-        AdService.ShowFullscreenAd();
+        AdService.OnPostInitialization = () =>
+        {
+            AdService.ToggleStickyAd(true);
+            AdService.ShowFullscreenAd();
+        };
     }
 }

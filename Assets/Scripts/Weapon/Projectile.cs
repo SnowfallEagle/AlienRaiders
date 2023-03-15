@@ -10,7 +10,7 @@ public class Projectile : MonoBehaviour
     [SerializeField] protected float m_LifeTime = 5f;
     [SerializeField] protected float m_Speed = 5f;
 
-    Team m_OwnerTeam;
+    Ship.Team m_OwnerTeam;
 
     private void Start()
     {
@@ -24,7 +24,7 @@ public class Projectile : MonoBehaviour
         transform.Translate(0f, m_Speed * Time.deltaTime, 0f);
     }
 
-    public void Initialize(Team OwnerTeam)
+    public void Initialize(Ship.Team OwnerTeam)
     {
         m_OwnerTeam = OwnerTeam;
     }
@@ -37,7 +37,7 @@ public class Projectile : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D Other)
     {
         Ship Ship = Other.GetComponent<Ship>();
-        if (Ship && Ship.Team != m_OwnerTeam)
+        if (Ship && Ship.ShipTeam != m_OwnerTeam)
         {
             // TODO: Maybe spawn effect?
             Ship.GetComponent<ShipHealthComponent>().TakeDamage(m_Damage);

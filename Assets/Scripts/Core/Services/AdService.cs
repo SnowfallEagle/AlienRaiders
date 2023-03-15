@@ -3,6 +3,15 @@ using UnityEngine;
 
 public class AdService : MonoBehaviour
 {
+    private Action m_OnPostInitialization = null;
+    public Action OnPostInitialization { set => m_OnPostInitialization = value; }
+
+    // All derived classes have to call this method after initialization
+    protected virtual void PostInitialize()
+    {
+        m_OnPostInitialization?.Invoke();
+    }
+
     public virtual void ToggleStickyAd(bool bEnable)
     { }
 
