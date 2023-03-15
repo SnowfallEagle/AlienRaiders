@@ -27,8 +27,8 @@ public class Ship : CustomBehaviour
     protected virtual void Start()
     {
         m_BoxCollider = GetComponent<BoxCollider2D>();
-        m_HealthComponent = GetCustomComponent<ShipHealthComponent>();
-        m_WeaponComponent = GetCustomComponent<ShipWeaponComponent>();
+        m_HealthComponent = GetComponent<ShipHealthComponent>();
+        m_WeaponComponent = GetComponent<ShipWeaponComponent>();
 
         Assert.IsNotNull(m_HealthComponent);
         Assert.IsNotNull(m_WeaponComponent);

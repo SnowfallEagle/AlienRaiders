@@ -7,7 +7,11 @@ public class CustomBehaviour : MonoBehaviour
 {
     private Dictionary<Type, Type> m_CustomTypes = new Dictionary<Type, Type>();
 
-    public void AddBaseCustomComponent(Type ComponentType, Type BaseType)
+    /** Registration of base components
+        Base components registration don't override existing components.
+        Can be freely called by base classes to set component base classes.
+     */
+    public void RegisterBaseComponent(Type ComponentType, Type BaseType)
     {
         if (!m_CustomTypes.ContainsKey(ComponentType))
         {
@@ -15,43 +19,54 @@ public class CustomBehaviour : MonoBehaviour
         }
     }
 
-    public void AddBaseCustomComponent<TComponent, TBase>()
+    public void RegisterBaseComponent<TComponent, TBase>()
     {
-        AddBaseCustomComponent(typeof(TComponent), typeof(TBase));
+        RegisterBaseComponent(typeof(TComponent), typeof(TBase));
     }
 
-    public void OverrideCustomComponent(Type ComponentType, Type OverrideType)
+    /** Overridance of base components
+        Can be called freely to override/register components
+     */
+    public void OverrideComponent(Type ComponentType, Type OverrideType)
     {
         m_CustomTypes[ComponentType] = OverrideType;
     }
 
-    public void OverrideCustomComponent<TComponent, TOverride>()
+    public void OverrideComponent<TComponent, TOverride>()
     {
-        OverrideCustomComponent(typeof(TComponent), typeof(TOverride));
+        OverrideComponent(typeof(TComponent), typeof(TOverride));
     }
 
-    public Type GetCustomComponentType(Type ComponentType)
+    /** Getters for registered component type
+        Returns type of given ComponentType if component is not registered
+    */
+    public Type GetComponentType(Type ComponentType)
     {
         Type Type;
         return m_CustomTypes.TryGetValue(ComponentType, out Type) ? Type : ComponentType;
     }
 
-    public Type GetCustomComponentType<T>()
+    public Type GetComponentType<T>()
     {
-        return GetCustomComponentType(typeof(T));
+        return GetComponentType(typeof(T));
     }
 
-    public Component GetCustomComponent(Type ComponentType)
+    /* Redefinitions of Unity's GetComponent() methods */
+    new public Component GetComponent(Type ComponentType)
     {
-        return GetComponent(GetCustomComponentType(ComponentType));
+        return base.GetComponent(GetComponentType(ComponentType));
     }
 
-    public T GetCustomComponent<T>() where T : Component
+    new public T GetComponent<T>() where T : Component
     {
-        return (T)GetCustomComponent(typeof(T));
+        return (T)GetComponent(typeof(T));
     }
 
-    // TODO: Maybe redefine Unity's GetComponent() methods?
+    new public Component GetComponent(string ComponentTypeName)
+    {
+        return GetComponent(Type.GetType(ComponentTypeName));
+    }
 
     // TODO: InitializeComponent() that create new component and check if we have one already, so we don't break unity
 }
+

@@ -61,7 +61,7 @@ public class PlayerController : MonoBehaviour
                 Vector3 DeltaPosition = CurrentTouchWorldPosition - m_LastControlledWorldPosition;
                 m_LastControlledWorldPosition = CurrentTouchWorldPosition;
 
-                m_Ship.AddTask(new BHTaskMoveByDelta(DeltaPosition));
+                m_Ship.AddTask(new BHTaskRelativeMove(DeltaPosition));
                 break;
         }
     }
@@ -90,7 +90,7 @@ public class PlayerController : MonoBehaviour
         Vector3 DeltaPosition = CurrentMouseWorldPosition - m_LastControlledWorldPosition;
         m_LastControlledWorldPosition = CurrentMouseWorldPosition;
 
-        m_Ship.AddTask(new BHTaskMoveByDelta(DeltaPosition));
+        m_Ship.AddTask(new BHTaskRelativeMove(DeltaPosition));
     }
 
     private Vector3 ScreenToWorldPosition(Vector3 Position)

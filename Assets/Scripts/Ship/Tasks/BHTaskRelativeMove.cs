@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class BHTaskMoveByDelta : BHTask
+public class BHTaskRelativeMove : BHTask
 {
     private Vector3 m_DeltaPosition;
 
-    public BHTaskMoveByDelta(Vector3 DeltaPosition)
+    public BHTaskRelativeMove(Vector3 DeltaPosition)
     {
         m_DeltaPosition = DeltaPosition;
     }

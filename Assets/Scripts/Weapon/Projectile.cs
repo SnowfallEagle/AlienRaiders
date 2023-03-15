@@ -40,7 +40,7 @@ public class Projectile : MonoBehaviour
         if (Ship && Ship.ShipTeam != m_OwnerTeam)
         {
             // TODO: Maybe spawn effect?
-            Ship.GetCustomComponent<ShipHealthComponent>().TakeDamage(m_Damage);
+            Ship.GetComponent<ShipHealthComponent>().TakeDamage(m_Damage);
             Destroy(gameObject);
         }
     }
