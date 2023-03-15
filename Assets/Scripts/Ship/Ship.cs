@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-[RequireComponent(typeof(BoxCollider2D))]
 public class Ship : CustomBehaviour
 {
     public enum Team
@@ -26,9 +25,9 @@ public class Ship : CustomBehaviour
 
     protected virtual void Start()
     {
-        m_BoxCollider = GetComponent<BoxCollider2D>();
-        m_HealthComponent = GetComponent<ShipHealthComponent>();
-        m_WeaponComponent = GetComponent<ShipWeaponComponent>();
+        m_BoxCollider = InitializeComponent<BoxCollider2D>();
+        m_HealthComponent = InitializeComponent<ShipHealthComponent>();
+        m_WeaponComponent = InitializeComponent<ShipWeaponComponent>();
 
         Assert.IsNotNull(m_HealthComponent);
         Assert.IsNotNull(m_WeaponComponent);

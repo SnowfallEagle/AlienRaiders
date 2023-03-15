@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CustomBehaviour : MonoBehaviour
@@ -51,22 +52,27 @@ public class CustomBehaviour : MonoBehaviour
         return GetComponentType(typeof(T));
     }
 
-    /* Redefinitions of Unity's GetComponent() methods */
-    new public Component GetComponent(Type ComponentType)
+    /** Component initializaiton
+        It's safe to call it multiple times.
+        Only 1 component with this type'll be added to game object.
+        If component is not registered then ComponentType'll be used to initialize.
+    */
+    protected Component InitializeComponent(Type ComponentType)
     {
-        return base.GetComponent(GetComponentType(ComponentType));
+        Type RegisteredType = GetComponentType(ComponentType);
+
+        Component ExistingComponent = GetComponent(RegisteredType);
+        if (ExistingComponent)
+        {
+            return ExistingComponent;
+        }
+
+        return gameObject.AddComponent(RegisteredType);
     }
 
-    new public T GetComponent<T>() where T : Component
+    protected T InitializeComponent<T>() where T : Component
     {
-        return (T)GetComponent(typeof(T));
+        return (T)InitializeComponent(typeof(T));
     }
-
-    new public Component GetComponent(string ComponentTypeName)
-    {
-        return GetComponent(Type.GetType(ComponentTypeName));
-    }
-
-    // TODO: InitializeComponent() that create new component and check if we have one already, so we don't break unity
 }
 

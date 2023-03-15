@@ -42,8 +42,7 @@ public class ShipWeaponComponent : MonoBehaviour
         }
     }
 
-    // TODO: Make it virtual, so any weapon component can change it
-    protected void Fire()
+    protected virtual void Fire()
     {
         Vector3 Position = transform.position;
         Position.y += gameObject.GetComponent<BoxCollider2D>().bounds.size.y * 0.5f;

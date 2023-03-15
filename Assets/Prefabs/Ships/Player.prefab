@@ -12,8 +12,6 @@ GameObject:
   - component: {fileID: 7383781527495817325}
   - component: {fileID: 7383781527495817323}
   - component: {fileID: 7383781527495817302}
-  - component: {fileID: 7383781527495817300}
-  - component: {fileID: 7383781527495817303}
   - component: {fileID: 7383781527495817320}
   m_Layer: 7
   m_Name: Player
@@ -114,33 +112,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4e594e2c622d4f4db0c49e854b24f21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &7383781527495817300
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7383781527495817324}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd4ceebab6b75254199a8ba8e9eae58f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_MaxHealth: 100
---- !u!114 &7383781527495817303
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7383781527495817324}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fc808e213840f743a294ee1d606340a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Projectile: {fileID: 7162803005779952050, guid: f252172cd80cb3c4bb44fa4b8826a78a, type: 3}
-  m_FireRate: 1
 --- !u!61 &7383781527495817320
 BoxCollider2D:
   m_ObjectHideFlags: 0
