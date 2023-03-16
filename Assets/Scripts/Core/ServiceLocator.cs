@@ -47,13 +47,32 @@ public class ServiceLocator : Singleton<ServiceLocator>
         where TType : MonoBehaviour
         where TService : MonoBehaviour
     {
+        // Check if this service exists 
+        TType ExistingService = FindObjectOfType<TType>();
+        if (ExistingService)
+        {
+            // Take this service and return if that's right type
+            var ExistingAsNeeded = ExistingService as TService;
+            if (ExistingAsNeeded)
+            {
+                ExistingAsNeeded.transform.SetParent(transform);
+                ExistingAsNeeded.name = typeof(TService).Name;
+                m_Services[typeof(TType)] = ExistingAsNeeded;
+                return ExistingAsNeeded;
+            }
+
+            // So, delete previous service
+            Destroy(ExistingService.gameObject);
+        }
+
+        // Create new service
         GameObject ServiceObject = new GameObject();
         ServiceObject.name = typeof(TService).Name;
         ServiceObject.transform.SetParent(transform);
 
-        var Service = ServiceObject.AddComponent<TService>();
-        m_Services[typeof(TType)] = Service;
+        var NewService = ServiceObject.AddComponent<TService>();
+        m_Services[typeof(TType)] = NewService;
 
-        return Service;
+        return NewService;
     }
 }

@@ -4,5 +4,10 @@ using UnityEngine;
 
 public class AIShip : Ship
 {
-    public override Team ShipTeam { get => Team.Enemy; }
+    protected override void Start()
+    {
+        base.Start();
+
+        m_ShipTeam = Team.Enemy;
+    }
 }
