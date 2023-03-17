@@ -24,7 +24,7 @@ public class LauncherWeapon : Weapon
             return;
         }
 
-        Projectile Projectile = Instantiate(m_Projectile, transform.position, transform.rotation);
+        Projectile Projectile = SpawnInState(m_Projectile, transform.position, transform.rotation);
         Projectile.Initialize(m_Owner.ShipTeam);
     }
 }

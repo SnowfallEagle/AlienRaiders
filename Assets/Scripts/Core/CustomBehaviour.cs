@@ -76,5 +76,19 @@ public class CustomBehaviour : MonoBehaviour
     {
         return (T)InitializeComponent(typeof(T));
     }
+
+    protected static T SpawnInState<T>(T Object) where T : MonoBehaviour 
+    {
+        var Instance = Instantiate(Object);
+        ServiceLocator.Instance.Get<GameStateMachine>().CurrentState.ReferenceObject(Instance);
+        return Instance;
+    }
+
+    protected static T SpawnInState<T>(T Object, Vector3 Position, Quaternion Rotation) where T : MonoBehaviour
+    {
+        var Instance = Instantiate(Object, Position, Rotation);
+        ServiceLocator.Instance.Get<GameStateMachine>().CurrentState.ReferenceObject(Instance);
+        return Instance;
+    }
 }
 
