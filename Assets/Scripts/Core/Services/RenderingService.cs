@@ -12,10 +12,10 @@ public class RenderingService : MonoBehaviour
     [SerializeField] protected SpriteRenderer m_TargetSizeSprite;
 
     [SerializeField] protected Vector3 m_TargetSize = new Vector3(11.5f, 20f);
-    public Vector3 TargetSize { get => m_TargetSizeSprite ? m_TargetSizeSprite.bounds.size : m_TargetSize; }
+    public Vector3 TargetSize => m_TargetSizeSprite ? m_TargetSizeSprite.bounds.size : m_TargetSize;
 
     [SerializeField] protected Vector3 m_TargetCenter = Vector3.zero;
-    public Vector3 TargetCenter { get => m_TargetSizeSprite ? m_TargetSizeSprite.bounds.center : m_TargetCenter; }
+    public Vector3 TargetCenter => m_TargetSizeSprite ? m_TargetSizeSprite.bounds.center : m_TargetCenter;
 
     private void Start()
     {

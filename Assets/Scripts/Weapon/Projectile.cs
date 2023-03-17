@@ -41,7 +41,7 @@ public class Projectile : CustomBehaviour
         if (Ship && Ship.ShipTeam != m_OwnerTeam)
         {
             // TODO: Maybe spawn effect?
-            Ship.GetComponent<ShipHealthComponent>().TakeDamage(m_Damage);
+            Ship.HealthComponent.TakeDamage(m_Damage);
             Destroy(gameObject);
         }
     }

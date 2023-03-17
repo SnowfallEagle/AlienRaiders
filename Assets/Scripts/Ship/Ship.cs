@@ -12,25 +12,30 @@ public class Ship : CustomBehaviour
     }
 
     [SerializeField] protected Team m_ShipTeam = Team.Player;
-    public Team ShipTeam { get => m_ShipTeam; }
+    public Team ShipTeam => m_ShipTeam;
 
     [SerializeField] protected bool m_bCheckBounds = false;
+
+    private Type[] m_WeaponTypes = new Type[] { };
 
     private List<BHTask> m_TaskList = new List<BHTask>();
 
     protected BoxCollider2D m_BoxCollider;
 
     protected ShipHealthComponent m_HealthComponent;
-    public ShipHealthComponent HealthComponent { get => m_HealthComponent; }
+    public ShipHealthComponent HealthComponent => m_HealthComponent;
 
     protected ShipWeaponComponent m_WeaponComponent;
-    public ShipWeaponComponent WeaponComponent { get => m_WeaponComponent; }
+    public ShipWeaponComponent WeaponComponent => m_WeaponComponent;
 
     protected virtual void Start()
     {
         m_BoxCollider = InitializeComponent<BoxCollider2D>();
         m_HealthComponent = InitializeComponent<ShipHealthComponent>();
         m_WeaponComponent = InitializeComponent<ShipWeaponComponent>();
+
+        OnPreInitializeWeapons();
+        m_WeaponComponent.InitializeWeapons(m_WeaponTypes);
     }
 
     private void Update()
@@ -42,6 +47,55 @@ public class Ship : CustomBehaviour
     {
         UpdateTasks();
         CheckBounds();
+    }
+
+    /** Overridable ProcessInput() method
+        Should be overrided by derived classes.
+        Example: Player processes touch input, AI handle its behaviour.
+    */
+    protected virtual void ProcessInput()
+    { }
+
+    /** Overridable OnPreInitializeWeapons() method
+        Should be overrided by derived classes to set up weapons.
+        Derived class must use PreSetNumWeapons() and PreAddWeapon().
+    */
+    protected virtual void OnPreInitializeWeapons()
+    { }
+
+    protected void PreSetNumWeapons(int NumWeapons)
+    {
+        if (NumWeapons > 0)
+        {
+            Array.Resize(ref m_WeaponTypes, NumWeapons);
+        }
+    }
+
+    protected void PreAddWeapon<T>(int Index) where T : Weapon
+    {
+        if (Index >= 0 && Index < m_WeaponTypes.Length)
+        {
+            m_WeaponTypes[Index] = typeof(T);
+        }
+    }
+
+    public void AddTask(BHTask Task)
+    {
+        Task.Start(this);
+        if (!Task.bEnded)
+        {
+            m_TaskList.Add(Task);
+        }
+    }
+
+    private void UpdateTasks()
+    {
+        foreach (var Task in m_TaskList)
+        {
+            Task.Update(this);
+        }
+
+        m_TaskList.RemoveAll(Task => Task.bEnded);
     }
 
     private void CheckBounds()
@@ -70,29 +124,4 @@ public class Ship : CustomBehaviour
         transform.position = CurrentPosition;
     }
 
-    /** Overridable ProcessInput() method
-        Should be overrided by derived classes.
-        Example: Player processes touch input, AI handle its behaviour.
-    */
-    protected virtual void ProcessInput()
-    { }
-
-    public void AddTask(BHTask Task)
-    {
-        Task.Start(this);
-        if (!Task.bEnded)
-        {
-            m_TaskList.Add(Task);
-        }
-    }
-
-    private void UpdateTasks()
-    {
-        foreach (var Task in m_TaskList)
-        {
-            Task.Update(this);
-        }
-
-        m_TaskList.RemoveAll(Task => Task.bEnded);
-    }
 }

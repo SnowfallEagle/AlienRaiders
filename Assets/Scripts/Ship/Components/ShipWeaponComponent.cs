@@ -1,63 +1,47 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
-using UnityEngine.Assertions;
 
-public class ShipWeaponComponent : MonoBehaviour
+public class ShipWeaponComponent : CustomBehaviour
 {
-    // TODO: Later we should remove projectile from base class
-    [SerializeField] protected Projectile m_Projectile;
+    private Weapon[] m_Weapons;
+    private Weapon CurrentWeapon;
 
-    protected BoxCollider2D m_Collider;
-    protected Ship m_Owner;
-
-    [SerializeField] protected float m_FireRate = 0.1f;
-    private float m_TimeLeftToFire = 0f;
-    private bool m_bFiring = false;
-
-    private void Start()
+    public void InitializeWeapons(Type[] WeaponTypes)
     {
-        m_Collider = GetComponent<BoxCollider2D>();        
-        m_Owner = GetComponent<Ship>();
+        Array.Resize(ref m_Weapons, WeaponTypes.Length);
 
-        Assert.IsNotNull(m_Projectile);
-        Assert.IsNotNull(m_Owner);
-    }
-
-    private void Update()
-    {
-        m_TimeLeftToFire -= Time.deltaTime;
-
-        if (m_TimeLeftToFire <= 0f)
+        Weapon[] ChildrenWeapons = GetComponentsInChildren<Weapon>();
+        foreach (var ChildWeapon in ChildrenWeapons)
         {
-            if (m_bFiring)
+            for (int i = 0; i < WeaponTypes.Length; ++i)
             {
-                m_TimeLeftToFire = m_FireRate;
-                Fire();
-            }
-            else
-            {
-                m_TimeLeftToFire = 0f;
+                if (ChildWeapon.GetType() == WeaponTypes[i])
+                {
+                    m_Weapons[i] = ChildWeapon;
+                    Debug.Log(ChildWeapon + " is " + i);
+                    break;
+                }
             }
         }
-    }
 
-    protected virtual void Fire()
-    {
-        Vector3 Position = transform.position;
-        Position.y += gameObject.GetComponent<BoxCollider2D>().bounds.size.y * 0.5f;
-
-        Projectile Projectile = Instantiate(m_Projectile, Position, Quaternion.identity);
-        Projectile.Initialize(gameObject.GetComponent<Ship>().ShipTeam);
+        SwitchWeapon(0);
     }
 
     public void StartFire()
     {
-        m_bFiring = true;
+        CurrentWeapon?.StartFire();
     }
 
     public void StopFire()
     {
-        m_bFiring = false;
+        CurrentWeapon?.StopFire();
+    }
+
+    public void SwitchWeapon(int Index)
+    {
+        if (Index >= 0 && Index < m_Weapons.Length)
+        {
+            CurrentWeapon = m_Weapons[Index];
+        }
     }
 }

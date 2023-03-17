@@ -1,10 +1,15 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Assertions;
 
 public class PlayerShip : Ship
 {
+    private enum Weapons
+    {
+        Launcher,
+        MaxWeapons
+    }
+
     private Vector3 m_LastControlledWorldPosition = Vector3.zero;
     private bool m_bControlled = false;
 
@@ -26,6 +31,12 @@ public class PlayerShip : Ship
         {
             ProcessTouch();
         }
+    }
+
+    protected override void OnPreInitializeWeapons()
+    {
+        PreSetNumWeapons((int)Weapons.MaxWeapons);
+        PreAddWeapon<LauncherWeapon>((int)Weapons.Launcher);
     }
 
     private void ProcessTouch()
