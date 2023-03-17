@@ -4,20 +4,14 @@ using UnityEngine;
 
 public class GameState : CustomBehaviour
 {
-    // TODO: Make TimerService
-    private readonly float CleanupTimeRate = 3f;
-    private float TimeLeftToCleanup = 0f;
+    [SerializeField] protected float CleanupTimeRate = 3f;
 
-    private List<MonoBehaviour> m_RefObjects = new List<MonoBehaviour>();
+    private static readonly int InitialRefObjectsCapacity = 128;
+    private List<MonoBehaviour> m_RefObjects = new List<MonoBehaviour>(InitialRefObjectsCapacity);
 
-    private void Update()
+    private void Start()
     {
-        TimeLeftToCleanup -= Time.deltaTime;
-        if (TimeLeftToCleanup <= 0f)
-        {
-            Cleanup();
-            TimeLeftToCleanup = CleanupTimeRate;
-        }
+        ServiceLocator.Instance.Get<TimerService>().AddTimer(Cleanup, CleanupTimeRate, true);
     }
 
     private void OnDestroy()

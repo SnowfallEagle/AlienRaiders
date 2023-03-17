@@ -5,38 +5,28 @@ using UnityEngine;
 public class Weapon : CustomBehaviour
 {
     [SerializeField] protected float m_FireRate = 0.1f;
-    private float m_TimeLeftToFire = 0f;
+    private TimerService.Handle m_hFireTimer;
+
     private bool m_bFiring = false;
 
     protected virtual void Start()
     { }
 
     private void Update()
-    {
-        m_TimeLeftToFire -= Time.deltaTime;
-
-        if (m_TimeLeftToFire <= 0f)
-        {
-            if (m_bFiring)
-            {
-                m_TimeLeftToFire = m_FireRate;
-                Fire();
-            }
-            else
-            {
-                m_TimeLeftToFire = 0f;
-            }
-        }
-    }
+    { }
 
     public void StartFire()
     {
         m_bFiring = true;
+
+        m_hFireTimer = ServiceLocator.Instance.Get<TimerService>().AddTimer(Fire, m_FireRate, true);
     }
 
     public void StopFire()
     {
         m_bFiring = false;
+
+        ServiceLocator.Instance.Get<TimerService>().RemoveTimer(m_hFireTimer);
     }
 
     // Overridable method for derived weapons
