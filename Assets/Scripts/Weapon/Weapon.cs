@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Weapon : MonoBehaviour
+public class Weapon : CustomBehaviour
 {
     [SerializeField] protected float m_FireRate = 0.1f;
     private float m_TimeLeftToFire = 0f;

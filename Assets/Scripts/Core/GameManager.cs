@@ -2,13 +2,17 @@
     #define GAME_MODE_WEB
 #endif
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager : CustomBehaviour
 {
     private void Start()
+    {
+        InitializeAd();
+        InitializeGameStateMachine();
+    }
+
+    private void InitializeAd()
     {
 #if GAME_MODE_WEB
         ServiceLocator.Instance.Add<AdService, YandexAdService>();
@@ -20,5 +24,10 @@ public class GameManager : MonoBehaviour
             AdService.ToggleStickyAd(true);
             AdService.ShowFullscreenAd();
         };
+    }
+
+    private void InitializeGameStateMachine()
+    {
+        var GameStateMachine = ServiceLocator.Instance.Get<GameStateMachine>();
     }
 }

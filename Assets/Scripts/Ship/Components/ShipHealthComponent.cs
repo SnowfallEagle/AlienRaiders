@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShipHealthComponent : MonoBehaviour
+public class ShipHealthComponent : CustomBehaviour
 {
     private float m_Health;
     [SerializeField] protected float m_MaxHealth = 100f;
