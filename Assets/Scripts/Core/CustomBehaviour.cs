@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
+/* TODO:
+    - Change ending with "vior"
+    - Make virtual OnRegisterComponents()
+*/
 public class CustomBehaviour : MonoBehaviour
 {
     private Dictionary<Type, Type> m_CustomTypes = new Dictionary<Type, Type>();
@@ -77,18 +81,60 @@ public class CustomBehaviour : MonoBehaviour
         return (T)InitializeComponent(typeof(T));
     }
 
-    protected static T SpawnInState<T>(T Object) where T : MonoBehaviour 
+    // Spawn MonoBehaviour by original
+    protected static T SpawnInState<T>(T Component) where T : MonoBehaviour 
     {
-        var Instance = Instantiate(Object);
-        ServiceLocator.Instance.Get<GameStateMachine>().CurrentState.ReferenceObject(Instance);
+        var Instance = Instantiate(Component);
+        ReferenceInState(Instance);
         return Instance;
     }
 
-    protected static T SpawnInState<T>(T Object, Vector3 Position, Quaternion Rotation) where T : MonoBehaviour
+    // Spawn GameObject by original
+    protected static GameObject SpawnInState(GameObject Object) 
     {
-        var Instance = Instantiate(Object, Position, Rotation);
-        ServiceLocator.Instance.Get<GameStateMachine>().CurrentState.ReferenceObject(Instance);
+        var Instance = Instantiate(Object);
+        ReferenceInState(Instance);
         return Instance;
+    }
+
+    // Spawn empty GameObject
+    protected static GameObject SpawnInState() 
+    {
+        var Object = new GameObject();
+        ReferenceInState(Object);
+        return Object;
+    }
+
+    // Spawn Component by Type
+    protected static Component SpawnInState(Type ComponentType)
+    {
+        var GameObject = SpawnInState();
+        var Component = GameObject.AddComponent(ComponentType);
+        return Component;
+    }
+
+    // Spawn Component
+    protected static T SpawnInState<T>() where T : MonoBehaviour
+    {
+        return (T)SpawnInState(typeof(T));
+    }
+
+    // Spawn Component by Type
+    protected static T SpawnInState<T>(Type ComponentType) where T : MonoBehaviour
+    {
+        return (T)SpawnInState(ComponentType);
+    }
+
+    // Reference Component in GameState
+    protected static void ReferenceInState(MonoBehaviour Object)
+    {
+        ServiceLocator.Instance.Get<GameStateMachine>().CurrentState.ReferenceObject(Object);
+    }
+
+    // Reference GameObject in GameState
+    protected static void ReferenceInState(GameObject Object)
+    {
+        ServiceLocator.Instance.Get<GameStateMachine>().CurrentState.ReferenceObject(Object);
     }
 }
 

@@ -5,14 +5,18 @@ using UnityEngine;
 public class GameState : CustomBehaviour
 {
     [SerializeField] protected float CleanupTimeRate = 3f;
+    [SerializeField] protected int InitialRefObjectsCapacity = 128;
 
-    private static readonly int InitialRefObjectsCapacity = 128;
-    private List<MonoBehaviour> m_RefObjects = new List<MonoBehaviour>(InitialRefObjectsCapacity);
+    private List<GameObject> m_RefObjects;
 
-    private void Start()
+    protected virtual void Start()
     {
-        ServiceLocator.Instance.Get<TimerService>().AddTimer(Cleanup, CleanupTimeRate, true);
+        m_RefObjects = new List<GameObject>(InitialRefObjectsCapacity);
+        ServiceLocator.Instance.Get<TimerService>().AddTimer(Cleanup, CleanupTimeRate, true, 0f);
     }
+
+    protected virtual void Update()
+    { }
 
     private void OnDestroy()
     {
@@ -20,7 +24,7 @@ public class GameState : CustomBehaviour
         {
             if (Object)
             {
-                Destroy(Object.gameObject);
+                Destroy(Object);
             }
         }
 
@@ -29,16 +33,18 @@ public class GameState : CustomBehaviour
 
     private void Cleanup()
     {
-        for (int i = m_RefObjects.Count - 1; i >= 0; --i)
-        {
-            if (!m_RefObjects[i])
-            {
-                m_RefObjects.RemoveAt(i);
-            }
-        }
+        m_RefObjects.RemoveAll(Object => !Object);
     }
 
     public void ReferenceObject(MonoBehaviour Object)
+    {
+        if (Object)
+        {
+            m_RefObjects.Add(Object.gameObject);
+        }
+    }
+
+    public void ReferenceObject(GameObject Object)
     {
         if (Object)
         {

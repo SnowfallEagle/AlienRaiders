@@ -19,12 +19,10 @@ public class LauncherWeapon : Weapon
 
     protected override void Fire()
     {
-        if (!m_Projectile)
-        {
-            return;
-        }
+        Projectile Projectile = SpawnInState(m_Projectile);
+        Projectile.transform.position = transform.position;
+        Projectile.transform.rotation = transform.rotation;
 
-        Projectile Projectile = SpawnInState(m_Projectile, transform.position, transform.rotation);
         Projectile.Initialize(m_Owner.ShipTeam);
     }
 }

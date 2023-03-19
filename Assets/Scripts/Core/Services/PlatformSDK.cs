@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class AdService : CustomBehaviour
+public class PlatformSDK : CustomBehaviour
 {
     private Action m_OnPostInitialization = null;
     public Action OnPostInitialization { set => m_OnPostInitialization = value; }

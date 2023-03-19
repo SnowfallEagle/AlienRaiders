@@ -5,8 +5,28 @@ using UnityEngine;
 
 public class TimerService : CustomBehaviour
 {
+    public class Handle
+    {
+        private const int InvalidIndex = -1;
+
+        public int TimerIndex;
+        public bool bValid => TimerIndex != InvalidIndex;
+
+        public Handle(int InTimerIndex = InvalidIndex)
+        {
+            TimerIndex = InTimerIndex;
+        }
+
+        public void Invalidate()
+        {
+            TimerIndex = InvalidIndex;
+        }
+    }
+
     private class Timer
     {
+        public Handle Handle;
+
         public float TimeRate;
         public float TimeLeftToFire;
 
@@ -15,16 +35,6 @@ public class TimerService : CustomBehaviour
         public bool bLoop;
 
         public Action Callback;
-    }
-
-    public struct Handle
-    {
-        public int TimerIndex;
-
-        public Handle(int InTimerIndex = -1)
-        {
-            TimerIndex = InTimerIndex;
-        }
     }
 
     private List<Timer> m_Timers = new List<Timer>();
@@ -67,17 +77,24 @@ public class TimerService : CustomBehaviour
                 }
 
                 Timer.Callback?.Invoke();
-                m_Timers.RemoveAt(i);
+                RemoveTimer(Timer.Handle);
             }
         }
     }
 
-    /** Add timer that fire at time rate.
+    /** Add timer that fire at time rate, attach Timer to Handle.
         Set bLoop = true to loop timer.
         If FirstDelay < 0f then first time timer fires immediately.
     */
-    public Handle AddTimer(Action Callback, float TimeRate, bool bLoop = false, float FirstDelay = -1f)
+    public void AddTimer(Handle Handle, Action Callback, float TimeRate, bool bLoop = false, float FirstDelay = -1f)
     {
+        // Check if handle is already in use and remove this timer
+        if (Handle.bValid)
+        {
+            RemoveTimer(Handle);
+        }
+
+        // Add new timer
         m_Timers.Add(new Timer
         {
             TimeRate = TimeRate,
@@ -90,7 +107,20 @@ public class TimerService : CustomBehaviour
             Callback = Callback,
         });
 
-        return new Handle(m_Timers.Count - 1);
+        // Set up timer handle
+        int TimerIndex = m_Timers.Count - 1;
+
+        Handle.TimerIndex = TimerIndex;
+        m_Timers[TimerIndex].Handle = Handle;
+    }
+
+    /** Add timer that fire at time rate.
+        Set bLoop = true to loop timer.
+        If FirstDelay < 0f then first time timer fires immediately.
+    */
+    public void AddTimer(Action Callback, float TimeRate, bool bLoop = false, float FirstDelay = -1f)
+    {
+        AddTimer(new Handle(), Callback, TimeRate, bLoop, FirstDelay);
     }
 
     public void RemoveTimer(Handle Handle)
@@ -98,6 +128,7 @@ public class TimerService : CustomBehaviour
         if (Handle.TimerIndex >= 0 && Handle.TimerIndex < m_Timers.Count)
         {
             m_Timers.RemoveAt(Handle.TimerIndex);
+            Handle.Invalidate();
         }
     }
 }

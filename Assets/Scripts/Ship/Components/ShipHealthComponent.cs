@@ -4,15 +4,25 @@ using UnityEngine;
 
 public class ShipHealthComponent : CustomBehaviour
 {
+    public bool bDead => m_Health <= 0f;
+    public bool bAlive => m_Health > 0f;
+
     private float m_Health;
     [SerializeField] protected float m_MaxHealth = 100f;
 
-    public bool bDead => m_Health <= 0f;
-    public bool bAlive => m_Health > 0f;
+    private bool bNeedToDestroy = false;
 
     private void Start()
     {
         SetHealth(m_MaxHealth);
+    }
+
+    private void LateUpdate()
+    {
+        if (bNeedToDestroy)
+        {
+            Destroy(gameObject);
+        }
     }
 
     private void SetHealth(float NewHealth)
@@ -20,7 +30,7 @@ public class ShipHealthComponent : CustomBehaviour
         m_Health = NewHealth;
         if (m_Health <= 0f)
         {
-            Destroy(gameObject);
+            bNeedToDestroy = true;
         }
     }
 
@@ -29,5 +39,10 @@ public class ShipHealthComponent : CustomBehaviour
         Debug.Log(gameObject.name + " took " + Damage.ToString() + " damage");
 
         SetHealth(m_Health - Damage);
+    }
+
+    public void Kill()
+    {
+        SetHealth(-1f);
     }
 }

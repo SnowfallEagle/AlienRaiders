@@ -4,7 +4,7 @@ using UnityEngine;
 using Agava.WebUtility;
 using Agava.YandexGames;
 
-public class YandexAdService : AdService
+public class YandexSDK : PlatformSDK
 {
     private IEnumerator Start()
     {
@@ -18,6 +18,7 @@ public class YandexAdService : AdService
 
     private void Update()
     {
+        // DEBUG
         if (Input.GetKey(KeyCode.S)) StickyAd.Show();
         if (Input.GetKey(KeyCode.D)) StickyAd.Hide();
 

@@ -30,11 +30,6 @@ public class Projectile : CustomBehaviour
         m_OwnerTeam = OwnerTeam;
     }
 
-    private void OnDestroy()
-    {
-        Debug.Log("Projectile: " + name + " is destroyed...");
-    }
-
     private void OnTriggerEnter2D(Collider2D Other)
     {
         Ship Ship = Other.GetComponent<Ship>();

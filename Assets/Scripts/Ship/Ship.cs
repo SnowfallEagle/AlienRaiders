@@ -14,11 +14,11 @@ public class Ship : CustomBehaviour
     [SerializeField] protected Team m_ShipTeam = Team.Player;
     public Team ShipTeam => m_ShipTeam;
 
+    [SerializeField] protected float m_Speed = 2.5f;
+    public float Speed => m_Speed;
+
+    // TODO: Maybe it has more meaning to be only in PlayerShip class...
     [SerializeField] protected bool m_bCheckBounds = false;
-
-    private Type[] m_WeaponTypes = new Type[] { };
-
-    private List<BHTask> m_TaskList = new List<BHTask>();
 
     protected BoxCollider2D m_BoxCollider;
 
@@ -27,6 +27,10 @@ public class Ship : CustomBehaviour
 
     protected ShipWeaponComponent m_WeaponComponent;
     public ShipWeaponComponent WeaponComponent => m_WeaponComponent;
+
+    private Type[] m_WeaponTypes = new Type[] { };
+
+    private List<BHTask> m_TaskList = new List<BHTask>();
 
     protected virtual void Start()
     {
@@ -45,7 +49,7 @@ public class Ship : CustomBehaviour
 
     private void LateUpdate()
     {
-        UpdateTasks();
+        UpdateTasks(); // TODO: Move tasks in ShipBehaviorComponent
         CheckBounds();
     }
 

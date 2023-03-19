@@ -8,21 +8,21 @@ public class GameManager : CustomBehaviour
 {
     private void Start()
     {
-        InitializeAd();
+        InitializeSDK();
         InitializeGameStateMachine();
     }
 
-    private void InitializeAd()
+    private void InitializeSDK()
     {
 #if GAME_MODE_WEB
-        ServiceLocator.Instance.Add<AdService, YandexAdService>();
+        ServiceLocator.Instance.Add<PlatformSDK, YandexSDK>();
 #endif
 
-        var AdService = ServiceLocator.Instance.Get<AdService>();
-        AdService.OnPostInitialization = () =>
+        var SDK = ServiceLocator.Instance.Get<PlatformSDK>();
+        SDK.OnPostInitialization = () =>
         {
-            AdService.ToggleStickyAd(true);
-            AdService.ShowFullscreenAd();
+            SDK.ToggleStickyAd(true);
+            SDK.ShowFullscreenAd();
         };
     }
 
