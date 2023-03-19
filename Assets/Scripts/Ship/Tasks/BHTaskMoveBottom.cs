@@ -6,6 +6,6 @@ public class BHTaskMoveBottom : BHTask
 {
     public override void Update(Ship Owner)
     {
-        Owner.AddTask(new BHTaskRelativeMove(new Vector3(0f, -Owner.Speed * Time.deltaTime, 0f)));
+        Owner.BehaviorComponent.AddTask(new BHTaskRelativeMove(new Vector3(0f, -Owner.Speed * Time.deltaTime, 0f)));
     }
 }

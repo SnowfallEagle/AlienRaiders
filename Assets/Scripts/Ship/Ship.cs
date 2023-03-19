@@ -30,13 +30,15 @@ public class Ship : CustomBehavior
 
     private Type[] m_WeaponTypes = new Type[] { };
 
-    private List<BHTask> m_TaskList = new List<BHTask>();
+    protected ShipBehaviorComponent m_BehaviorComponent;
+    public ShipBehaviorComponent BehaviorComponent => m_BehaviorComponent;
 
     protected virtual void Start()
     {
         m_BoxCollider = InitializeComponent<BoxCollider2D>();
         m_HealthComponent = InitializeComponent<ShipHealthComponent>();
         m_WeaponComponent = InitializeComponent<ShipWeaponComponent>();
+        m_BehaviorComponent = InitializeComponent<ShipBehaviorComponent>();
 
         OnPreInitializeWeapons();
         m_WeaponComponent.InitializeWeapons(m_WeaponTypes);
@@ -49,7 +51,6 @@ public class Ship : CustomBehavior
 
     private void LateUpdate()
     {
-        UpdateTasks(); // TODO: Move tasks in ShipBehaviorComponent
         CheckBounds();
     }
 
@@ -83,25 +84,6 @@ public class Ship : CustomBehavior
         }
     }
 
-    public void AddTask(BHTask Task)
-    {
-        Task.Start(this);
-        if (!Task.bEnded)
-        {
-            m_TaskList.Add(Task);
-        }
-    }
-
-    private void UpdateTasks()
-    {
-        foreach (var Task in m_TaskList)
-        {
-            Task.Update(this);
-        }
-
-        m_TaskList.RemoveAll(Task => Task.bEnded);
-    }
-
     private void CheckBounds()
     {
         if (!m_bCheckBounds)
@@ -127,5 +109,4 @@ public class Ship : CustomBehavior
 
         transform.position = CurrentPosition;
     }
-
 }

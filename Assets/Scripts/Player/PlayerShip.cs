@@ -48,7 +48,7 @@ public class PlayerShip : Ship
             case TouchPhase.Began:
                 m_bControlled = true;
                 m_LastControlledWorldPosition = ScreenToWorldPosition(touch.position);
-                AddTask(new BHTaskStartFire());
+                BehaviorComponent.AddTask(new BHTaskStartFire());
                 break;
 
             case TouchPhase.Stationary:
@@ -58,7 +58,7 @@ public class PlayerShip : Ship
             case TouchPhase.Canceled:
             case TouchPhase.Ended:
                 m_bControlled = false;
-                AddTask(new BHTaskStopFire());
+                BehaviorComponent.AddTask(new BHTaskStopFire());
                 break;
 
             case TouchPhase.Moved:
@@ -66,7 +66,7 @@ public class PlayerShip : Ship
                 Vector3 DeltaPosition = CurrentTouchWorldPosition - m_LastControlledWorldPosition;
                 m_LastControlledWorldPosition = CurrentTouchWorldPosition;
 
-                AddTask(new BHTaskRelativeMove(DeltaPosition));
+                BehaviorComponent.AddTask(new BHTaskRelativeMove(DeltaPosition));
                 break;
         }
     }
@@ -77,7 +77,7 @@ public class PlayerShip : Ship
         {
             if (m_bControlled)
             {
-                AddTask(new BHTaskStopFire());
+                BehaviorComponent.AddTask(new BHTaskStopFire());
                 m_bControlled = false;
             }
             return;
@@ -87,7 +87,7 @@ public class PlayerShip : Ship
         {
             m_LastControlledWorldPosition = ScreenToWorldPosition(Input.mousePosition);
             m_bControlled = true;
-            AddTask(new BHTaskStartFire());
+            BehaviorComponent.AddTask(new BHTaskStartFire());
             return;
         }
 
@@ -95,7 +95,7 @@ public class PlayerShip : Ship
         Vector3 DeltaPosition = CurrentMouseWorldPosition - m_LastControlledWorldPosition;
         m_LastControlledWorldPosition = CurrentMouseWorldPosition;
 
-        AddTask(new BHTaskRelativeMove(DeltaPosition));
+        BehaviorComponent.AddTask(new BHTaskRelativeMove(DeltaPosition));
     }
 
     // TODO: Put it in CoreUtils

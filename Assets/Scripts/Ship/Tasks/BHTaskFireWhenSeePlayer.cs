@@ -16,7 +16,7 @@ public class BHTaskFireWhenSeePlayer : BHTask
         PlayerShip PlayerShip = ServiceLocator.Instance.Get<PlayerState>().PlayerShip;
         if (!PlayerShip)
         {
-            Owner.AddTask(new BHTaskStopFire());
+            Owner.BehaviorComponent.AddTask(new BHTaskStopFire());
             return;
         }
 
@@ -31,11 +31,11 @@ public class BHTaskFireWhenSeePlayer : BHTask
 
         if (Mathf.Abs(Angle) < m_FOV)
         {
-            Owner.AddTask(new BHTaskStartFire());
+            Owner.BehaviorComponent.AddTask(new BHTaskStartFire());
         }
         else
         {
-            Owner.AddTask(new BHTaskStopFire());
+            Owner.BehaviorComponent.AddTask(new BHTaskStopFire());
         }
     }
 }
