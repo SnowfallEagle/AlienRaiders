@@ -18,7 +18,7 @@ public class AIShip : Ship
 
         BehaviorComponent.AddTask(new BHTaskMoveBottom());
         BehaviorComponent.AddTask(new BHTaskDestroyWhenOutOfBottomBound());
-        BehaviorComponent.AddTask(new BHTaskFireWhenSeePlayer(180f));
+        BehaviorComponent.AddTask(new BHTaskFireWhenSeePlayer(90f));
     }
 
     protected override void OnPreInitializeWeapons()

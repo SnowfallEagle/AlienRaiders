@@ -7,23 +7,16 @@ public class TimerService : CustomBehavior
 {
     public class Handle
     {
-        private const int InvalidIndex = -1;
-
-        public int TimerIndex;
-        public bool bValid => TimerIndex != InvalidIndex;
-
-        public Handle(int InTimerIndex = InvalidIndex)
-        {
-            TimerIndex = InTimerIndex;
-        }
+        public Timer Timer;
+        public bool bValid => Timer != null;
 
         public void Invalidate()
         {
-            TimerIndex = InvalidIndex;
+            Timer = null;
         }
     }
 
-    private class Timer
+    public class Timer
     {
         public Handle Handle;
 
@@ -88,10 +81,14 @@ public class TimerService : CustomBehavior
     */
     public void AddTimer(Handle Handle, Action Callback, float TimeRate, bool bLoop = false, float FirstDelay = -1f)
     {
-        // Check if handle is already in use and remove this timer
-        if (Handle.bValid)
+        if (Handle != null)
         {
+            // Try to remove timer if handle is already in use
             RemoveTimer(Handle);
+        }
+        else
+        {
+            Handle = new Handle();
         }
 
         // Add new timer
@@ -108,10 +105,10 @@ public class TimerService : CustomBehavior
         });
 
         // Set up timer handle
-        int TimerIndex = m_Timers.Count - 1;
+        Timer Timer = m_Timers[m_Timers.Count - 1];
 
-        Handle.TimerIndex = TimerIndex;
-        m_Timers[TimerIndex].Handle = Handle;
+        Handle.Timer = Timer;
+        Timer.Handle = Handle;
     }
 
     /** Add timer that fire at time rate.
@@ -120,14 +117,14 @@ public class TimerService : CustomBehavior
     */
     public void AddTimer(Action Callback, float TimeRate, bool bLoop = false, float FirstDelay = -1f)
     {
-        AddTimer(new Handle(), Callback, TimeRate, bLoop, FirstDelay);
+        AddTimer(null, Callback, TimeRate, bLoop, FirstDelay);
     }
 
     public void RemoveTimer(Handle Handle)
     {
-        if (Handle.TimerIndex >= 0 && Handle.TimerIndex < m_Timers.Count)
+        if (Handle.bValid)
         {
-            m_Timers.RemoveAt(Handle.TimerIndex);
+            m_Timers.Remove(Handle.Timer);
             Handle.Invalidate();
         }
     }

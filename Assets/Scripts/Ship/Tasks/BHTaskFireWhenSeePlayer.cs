@@ -6,7 +6,7 @@ public class BHTaskFireWhenSeePlayer : BHTask
 {
     private float m_FOV;
 
-    public BHTaskFireWhenSeePlayer(float FOV)
+    public BHTaskFireWhenSeePlayer(float FOV = 180f)
     {
         m_FOV = FOV;
     }

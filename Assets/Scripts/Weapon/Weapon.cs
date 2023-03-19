@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Weapon : CustomBehavior
 {
-    [SerializeField] protected float m_FireRate = 0.1f;
+    [SerializeField] protected float m_FireRate = 0.5f;
     private TimerService.Handle m_hFireTimer = new TimerService.Handle();
 
     protected virtual void Start()
@@ -15,6 +15,7 @@ public class Weapon : CustomBehavior
 
     private void OnDestroy()
     {
+        Debug.Log(transform.parent.name + " destroying");
         StopFire();
     }
 

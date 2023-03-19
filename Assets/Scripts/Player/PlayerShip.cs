@@ -53,12 +53,12 @@ public class PlayerShip : Ship
         {
             case TouchPhase.Began:
                 m_bControlled = true;
-                m_LastControlledWorldPosition = ScreenToWorldPosition(touch.position);
+                m_LastControlledWorldPosition = CoreUtils.ScreenToWorldPosition(touch.position);
                 BehaviorComponent.AddTask(new BHTaskStartFire());
                 break;
 
             case TouchPhase.Stationary:
-                m_LastControlledWorldPosition = ScreenToWorldPosition(touch.position);
+                m_LastControlledWorldPosition = CoreUtils.ScreenToWorldPosition(touch.position);
                 break;
 
             case TouchPhase.Canceled:
@@ -68,7 +68,7 @@ public class PlayerShip : Ship
                 break;
 
             case TouchPhase.Moved:
-                Vector3 CurrentTouchWorldPosition = ScreenToWorldPosition(touch.position);
+                Vector3 CurrentTouchWorldPosition = CoreUtils.ScreenToWorldPosition(touch.position);
                 Vector3 DeltaPosition = CurrentTouchWorldPosition - m_LastControlledWorldPosition;
                 m_LastControlledWorldPosition = CurrentTouchWorldPosition;
 
@@ -91,13 +91,13 @@ public class PlayerShip : Ship
 
         if (!m_bControlled)
         {
-            m_LastControlledWorldPosition = ScreenToWorldPosition(Input.mousePosition);
+            m_LastControlledWorldPosition = CoreUtils.ScreenToWorldPosition(Input.mousePosition);
             m_bControlled = true;
             BehaviorComponent.AddTask(new BHTaskStartFire());
             return;
         }
 
-        Vector3 CurrentMouseWorldPosition = ScreenToWorldPosition(Input.mousePosition);
+        Vector3 CurrentMouseWorldPosition = CoreUtils.ScreenToWorldPosition(Input.mousePosition);
         Vector3 DeltaPosition = CurrentMouseWorldPosition - m_LastControlledWorldPosition;
         m_LastControlledWorldPosition = CurrentMouseWorldPosition;
 
@@ -128,11 +128,5 @@ public class PlayerShip : Ship
         if (CurrentPosition.x > BoundsTopRight.x) CurrentPosition.x = BoundsTopRight.x;
 
         transform.position = CurrentPosition;
-    }
-
-    // TODO: Put it in CoreUtils
-    private Vector3 ScreenToWorldPosition(Vector3 Position)
-    {
-        return Camera.main.ScreenToWorldPoint(Position);
     }
 }
