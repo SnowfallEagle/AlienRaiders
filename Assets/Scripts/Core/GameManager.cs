@@ -10,7 +10,7 @@ public class GameManager : CustomBehavior
 
     private void InitializePlatformSDK()
     {
-        if (GameEnvironment.SDKType == GameEnvironment.PlatformSDK.Yandex)
+        if (ServiceLocator.Instance.Get<GameEnvironment>().SDKType == GameEnvironment.PlatformSDK.Yandex)
         {
             ServiceLocator.Instance.Add<PlatformSDK, YandexSDK>();
         }

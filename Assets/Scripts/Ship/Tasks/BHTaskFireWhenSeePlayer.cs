@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// TODO: Move FOV -> Ship?
 public class BHTaskFireWhenSeePlayer : BHTask
 {
     private float m_FOV;
@@ -34,7 +35,7 @@ public class BHTaskFireWhenSeePlayer : BHTask
         }
 
         // DEBUG
-        if (GameEnvironment.bDebugDrawAI)
+        if (ServiceLocator.Instance.Get<GameEnvironment>().GetDebugOption<bool>("bDebugDrawAI"))
         {
             // Direction to player
             {
