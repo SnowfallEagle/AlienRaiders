@@ -4,7 +4,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider2D))]
 [RequireComponent(typeof(Rigidbody2D))]
-public class Projectile : CustomBehaviour
+public class Projectile : CustomBehavior
 {
     [SerializeField] protected float m_Damage = 5f;
     [SerializeField] protected float m_LifeTime = 5f;

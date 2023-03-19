@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pickup : CustomBehaviour
+public class Pickup : CustomBehavior
 {
     [SerializeField] protected float m_Speed = 2.5f;
 

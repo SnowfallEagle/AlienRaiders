@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameState : CustomBehaviour
+public class GameState : CustomBehavior
 {
     [SerializeField] protected float CleanupTimeRate = 3f;
     [SerializeField] protected int InitialRefObjectsCapacity = 128;

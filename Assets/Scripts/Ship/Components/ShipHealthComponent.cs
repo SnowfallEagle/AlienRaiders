@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShipHealthComponent : CustomBehaviour
+public class ShipHealthComponent : CustomBehavior
 {
     public bool bDead => m_Health <= 0f;
     public bool bAlive => m_Health > 0f;

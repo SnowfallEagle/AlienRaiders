@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class PlatformSDK : CustomBehaviour
+public class PlatformSDK : CustomBehavior
 {
     private Action m_OnPostInitialization = null;
     public Action OnPostInitialization { set => m_OnPostInitialization = value; }

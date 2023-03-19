@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class FightStage : CustomBehaviour
+public class FightStage : CustomBehavior
 {
     private void Start()
     {

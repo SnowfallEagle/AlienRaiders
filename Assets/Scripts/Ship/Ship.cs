@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-public class Ship : CustomBehaviour
+public class Ship : CustomBehavior
 {
     public enum Team
     {

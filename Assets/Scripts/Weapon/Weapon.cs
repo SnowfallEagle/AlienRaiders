@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Weapon : CustomBehaviour
+public class Weapon : CustomBehavior
 {
     [SerializeField] protected float m_FireRate = 0.1f;
     private TimerService.Handle m_hFireTimer = new TimerService.Handle();

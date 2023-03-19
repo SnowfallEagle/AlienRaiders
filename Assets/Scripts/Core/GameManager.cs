@@ -4,7 +4,7 @@
 
 using UnityEngine;
 
-public class GameManager : CustomBehaviour
+public class GameManager : CustomBehavior
 {
     private void Start()
     {

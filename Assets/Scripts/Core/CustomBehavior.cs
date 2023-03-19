@@ -3,11 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-/* TODO:
-    - Change ending with "vior"
-    - Make virtual OnRegisterComponents()
-*/
-public class CustomBehaviour : MonoBehaviour
+public class CustomBehavior : MonoBehaviour
 {
     private Dictionary<Type, Type> m_CustomTypes = new Dictionary<Type, Type>();
 

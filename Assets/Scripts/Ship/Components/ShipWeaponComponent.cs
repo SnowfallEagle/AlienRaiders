@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class ShipWeaponComponent : CustomBehaviour
+public class ShipWeaponComponent : CustomBehavior
 {
     private Weapon[] m_Weapons;
     private Weapon CurrentWeapon;
