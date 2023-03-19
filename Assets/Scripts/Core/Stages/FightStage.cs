@@ -4,9 +4,9 @@ public class FightStage : CustomBehavior
 {
     private void Start()
     {
-        var RenderingService = ServiceLocator.Instance.Get<RenderingService>();
-        Vector3 TargetSize = RenderingService.TargetSize;
-        Vector3 TargetCenter = RenderingService.TargetCenter;
+        var Renderer = RenderingService.Instance;
+        Vector3 TargetSize = Renderer.TargetSize;
+        Vector3 TargetCenter = Renderer.TargetCenter;
 
         var Alien = Resources.Load<GameObject>("Ships/Alien");
 
@@ -22,7 +22,7 @@ public class FightStage : CustomBehavior
         Alien.transform.position = SpawnPosition;
         Alien.transform.rotation = Quaternion.Euler(0f, 0f, 180f);
 
-        ServiceLocator.Instance.Get<TimerService>().AddTimer(() =>
+        TimerService.Instance.AddTimer(() =>
             {
                 SpawnInState(Alien);
 

@@ -111,10 +111,10 @@ public class PlayerShip : Ship
             return;
         }
 
-        var RenderingService = ServiceLocator.Instance.Get<RenderingService>();
+        var Renderer = RenderingService.Instance;
 
-        Vector3 BoundsCenter = RenderingService.TargetCenter;
-        Vector3 BoundsSizeDiv2 = RenderingService.TargetSize / 2;
+        Vector3 BoundsCenter = Renderer.TargetCenter;
+        Vector3 BoundsSizeDiv2 = Renderer.TargetSize / 2;
 
         Vector3 BoundsBottomLeft = BoundsCenter - BoundsSizeDiv2;
         Vector3 BoundsTopRight = BoundsCenter + BoundsSizeDiv2;

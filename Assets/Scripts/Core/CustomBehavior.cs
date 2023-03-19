@@ -124,13 +124,13 @@ public class CustomBehavior : MonoBehaviour
     // Reference Component in GameState
     protected static void ReferenceInState(MonoBehaviour Object)
     {
-        ServiceLocator.Instance.Get<GameStateMachine>().CurrentState.ReferenceObject(Object);
+        GameStateMachine.Instance.CurrentState.ReferenceObject(Object);
     }
 
     // Reference GameObject in GameState
     protected static void ReferenceInState(GameObject Object)
     {
-        ServiceLocator.Instance.Get<GameStateMachine>().CurrentState.ReferenceObject(Object);
+        GameStateMachine.Instance.CurrentState.ReferenceObject(Object);
     }
 }
 

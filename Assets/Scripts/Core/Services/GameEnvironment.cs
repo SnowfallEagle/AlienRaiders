@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameEnvironment : CustomBehavior
+public class GameEnvironment : Service<GameEnvironment>
 {
     public enum PlatformSDK
     {

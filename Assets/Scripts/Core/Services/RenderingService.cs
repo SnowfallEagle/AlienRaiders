@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RenderingService : CustomBehavior
+public class RenderingService : Service<RenderingService>
 {
     // Set up only on start
     public float ZNearClip = 0.1f;

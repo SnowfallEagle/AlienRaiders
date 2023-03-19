@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TimerService : CustomBehavior
+public class TimerService : Service<TimerService>
 {
     public class Handle
     {

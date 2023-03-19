@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameStateMachine : CustomBehavior
+public class GameStateMachine : Service<GameStateMachine>
 {
     [SerializeField] protected GameState m_InitialState;
 

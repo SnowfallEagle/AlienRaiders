@@ -12,7 +12,7 @@ public class GameState : CustomBehavior
     protected virtual void Start()
     {
         m_RefObjects = new List<GameObject>(InitialRefObjectsCapacity);
-        ServiceLocator.Instance.Get<TimerService>().AddTimer(Cleanup, CleanupTimeRate, true, 0f);
+        TimerService.Instance.AddTimer(Cleanup, CleanupTimeRate, true, 0f);
     }
 
     protected virtual void Update()

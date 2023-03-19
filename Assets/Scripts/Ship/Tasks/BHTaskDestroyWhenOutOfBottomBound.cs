@@ -8,8 +8,8 @@ public class BHTaskDestroyWhenOutOfBottomBound : BHTask
 
     public override void Start(Ship Owner)
     {
-        var RenderingService = ServiceLocator.Instance.Get<RenderingService>();
-        YBound = RenderingService.TargetCenter.y - (RenderingService.TargetSize.y * 0.6f);
+        var Renderer = RenderingService.Instance;
+        YBound = Renderer.TargetCenter.y - (Renderer.TargetSize.y * 0.6f);
     }
 
     public override void Update(Ship Owner)

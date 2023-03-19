@@ -10,12 +10,12 @@ public class GameManager : CustomBehavior
 
     private void InitializePlatformSDK()
     {
-        if (ServiceLocator.Instance.Get<GameEnvironment>().SDKType == GameEnvironment.PlatformSDK.Yandex)
+        if (GameEnvironment.Instance.SDKType == GameEnvironment.PlatformSDK.Yandex)
         {
             ServiceLocator.Instance.Add<PlatformSDK, YandexSDK>();
         }
 
-        var SDK = ServiceLocator.Instance.Get<PlatformSDK>();
+        var SDK = PlatformSDK.Instance;
         SDK.OnPostInitialization = () =>
         {
             SDK.ToggleStickyAd(true);
@@ -25,6 +25,6 @@ public class GameManager : CustomBehavior
 
     private void InitializeGameStateMachine()
     {
-        var GameStateMachine = ServiceLocator.Instance.Get<GameStateMachine>();
+        var StateMachine = GameStateMachine.Instance;
     }
 }

@@ -14,7 +14,7 @@ public class BHTaskFireWhenSeePlayer : BHTask
 
     public override void Update(Ship Owner)
     {
-        PlayerShip PlayerShip = ServiceLocator.Instance.Get<PlayerState>().PlayerShip;
+        PlayerShip PlayerShip = PlayerState.Instance.PlayerShip;
         if (!PlayerShip)
         {
             Owner.BehaviorComponent.AddTask(new BHTaskStopFire());
@@ -35,7 +35,7 @@ public class BHTaskFireWhenSeePlayer : BHTask
         }
 
         // DEBUG
-        if (ServiceLocator.Instance.Get<GameEnvironment>().GetDebugOption<bool>("bDebugDrawAI"))
+        if (GameEnvironment.Instance.GetDebugOption<bool>("bDebugDrawAI"))
         {
             // Direction to player
             {

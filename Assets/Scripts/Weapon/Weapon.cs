@@ -23,13 +23,13 @@ public class Weapon : CustomBehavior
     {
         if (!m_hFireTimer.bValid)
         {
-            ServiceLocator.Instance.Get<TimerService>().AddTimer(m_hFireTimer, Fire, m_FireRate, true);
+            TimerService.Instance.AddTimer(m_hFireTimer, Fire, m_FireRate, true);
         }
     }
 
     public void StopFire()
     {
-        ServiceLocator.Instance.Get<TimerService>().RemoveTimer(m_hFireTimer);
+        TimerService.Instance.RemoveTimer(m_hFireTimer);
     }
 
     // Overridable method for derived weapons

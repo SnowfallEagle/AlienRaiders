@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerState : CustomBehavior
+public class PlayerState : Service<PlayerState>
 {
     // NOTE: Can be null!
     private PlayerShip m_PlayerShip;
