@@ -17,9 +17,6 @@ public class Ship : CustomBehavior
     [SerializeField] protected float m_Speed = 2.5f;
     public float Speed => m_Speed;
 
-    // TODO: Maybe it has more meaning to be only in PlayerShip class...
-    [SerializeField] protected bool m_bCheckBounds = false;
-
     protected BoxCollider2D m_BoxCollider;
 
     protected ShipHealthComponent m_HealthComponent;
@@ -47,11 +44,6 @@ public class Ship : CustomBehavior
     private void Update()
     {
         ProcessInput();
-    }
-
-    private void LateUpdate()
-    {
-        CheckBounds();
     }
 
     /** Overridable ProcessInput() method
@@ -82,31 +74,5 @@ public class Ship : CustomBehavior
         {
             m_WeaponTypes[Index] = typeof(T);
         }
-    }
-
-    private void CheckBounds()
-    {
-        if (!m_bCheckBounds)
-        {
-            return;
-        }
-
-        var RenderingService = ServiceLocator.Instance.Get<RenderingService>();
-
-        Vector3 BoundsCenter = RenderingService.TargetCenter;
-        Vector3 BoundsSizeDiv2 = RenderingService.TargetSize / 2;
-
-        Vector3 BoundsBottomLeft = BoundsCenter - BoundsSizeDiv2;
-        Vector3 BoundsTopRight = BoundsCenter + BoundsSizeDiv2;
-
-        Vector3 CurrentPosition = transform.position;
-
-        if (CurrentPosition.x < BoundsBottomLeft.x) CurrentPosition.x = BoundsBottomLeft.x;
-        if (CurrentPosition.y < BoundsBottomLeft.y) CurrentPosition.y = BoundsBottomLeft.y;
-
-        if (CurrentPosition.y > BoundsTopRight.y) CurrentPosition.y = BoundsTopRight.y;
-        if (CurrentPosition.x > BoundsTopRight.x) CurrentPosition.x = BoundsTopRight.x;
-
-        transform.position = CurrentPosition;
     }
 }

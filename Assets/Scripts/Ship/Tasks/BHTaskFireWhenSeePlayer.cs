@@ -22,7 +22,7 @@ public class BHTaskFireWhenSeePlayer : BHTask
 
         Vector3 ToPlayerVector = Vector3.Normalize(PlayerShip.transform.position - Owner.transform.position);
         float CosAngle = Vector3.Dot(Owner.transform.up, ToPlayerVector);
-        float Angle = Mathf.Acos(CosAngle);
+        float Angle = Mathf.Rad2Deg * Mathf.Acos(CosAngle);
 
 #if UNITY_EDITOR && DEBUG
         Debug.DrawRay(Owner.transform.position, Owner.transform.up * 10f, Color.blue);
