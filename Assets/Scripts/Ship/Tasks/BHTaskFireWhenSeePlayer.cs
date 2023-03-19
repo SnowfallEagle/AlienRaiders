@@ -24,18 +24,45 @@ public class BHTaskFireWhenSeePlayer : BHTask
         float CosAngle = Vector3.Dot(Owner.transform.up, ToPlayerVector);
         float Angle = Mathf.Rad2Deg * Mathf.Acos(CosAngle);
 
-#if UNITY_EDITOR && DEBUG
-        Debug.DrawRay(Owner.transform.position, Owner.transform.up * 10f, Color.blue);
-        Debug.DrawRay(Owner.transform.position, PlayerShip.transform.position - Owner.transform.position, Color.red);
-#endif
-
-        if (Mathf.Abs(Angle) < m_FOV)
+        if (Mathf.Abs(Angle) < m_FOV * 0.5f)
         {
             Owner.BehaviorComponent.AddTask(new BHTaskStartFire());
         }
         else
         {
             Owner.BehaviorComponent.AddTask(new BHTaskStopFire());
+        }
+
+        // DEBUG
+        if (GameEnvironment.bDebugDrawAI)
+        {
+            // Direction to player
+            {
+                Debug.DrawRay(Owner.transform.position, PlayerShip.transform.position - Owner.transform.position, Color.red);
+            }
+
+            // FOV
+            {
+                float FOVDiv2Rad = Mathf.Deg2Rad * (m_FOV * 0.5f);
+
+                Vector3 TransformAngles = Mathf.Deg2Rad * Owner.transform.rotation.eulerAngles;
+                float SpriteZRotation = Mathf.PI * 0.5f;
+                float ZTransform = TransformAngles.z - SpriteZRotation;
+
+                Vector3 DirectionRight = new Vector3(
+                    Mathf.Cos(FOVDiv2Rad + ZTransform),
+                    -Mathf.Sin(FOVDiv2Rad + ZTransform),
+                    0f
+                ) * 5f;
+                Vector3 DirectionLeft = new Vector3(
+                    Mathf.Cos(-FOVDiv2Rad + ZTransform),
+                    -Mathf.Sin(-FOVDiv2Rad + ZTransform),
+                    0f
+                ) * 5f;
+
+                Debug.DrawRay(Owner.transform.position, DirectionLeft, Color.magenta);
+                Debug.DrawRay(Owner.transform.position, DirectionRight, Color.magenta);
+            }
         }
     }
 }

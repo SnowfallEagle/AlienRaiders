@@ -22,7 +22,6 @@ public class FightStage : CustomBehavior
         Alien.transform.position = SpawnPosition;
         Alien.transform.rotation = Quaternion.Euler(0f, 0f, 180f);
 
-#if null
         ServiceLocator.Instance.Get<TimerService>().AddTimer(() =>
             {
                 SpawnInState(Alien);
@@ -40,7 +39,6 @@ public class FightStage : CustomBehavior
             2f,
             true
         );
-#endif
     }
 
     private void Update()

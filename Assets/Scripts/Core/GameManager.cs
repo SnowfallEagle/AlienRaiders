@@ -1,22 +1,19 @@
-#if UNITY_WEBGL && !UNITY_EDITOR
-    #define GAME_MODE_WEB
-#endif
-
 using UnityEngine;
 
 public class GameManager : CustomBehavior
 {
     private void Start()
     {
-        InitializeSDK();
+        InitializePlatformSDK();
         InitializeGameStateMachine();
     }
 
-    private void InitializeSDK()
+    private void InitializePlatformSDK()
     {
-#if GAME_MODE_WEB
-        ServiceLocator.Instance.Add<PlatformSDK, YandexSDK>();
-#endif
+        if (GameEnvironment.SDKType == GameEnvironment.PlatformSDK.Yandex)
+        {
+            ServiceLocator.Instance.Add<PlatformSDK, YandexSDK>();
+        }
 
         var SDK = ServiceLocator.Instance.Get<PlatformSDK>();
         SDK.OnPostInitialization = () =>
