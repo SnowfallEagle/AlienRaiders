@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 public class FightGameState : GameState
 {
@@ -23,9 +24,10 @@ public class FightGameState : GameState
         State.name = State.GetType().Name;
     }
 
-    protected override void Update()
+    public void NextStage()
     {
-        base.Update();
+        Debug.Log("Next Stage");
+        // TODO: Start next stage
 
         /* TODO:
             Track when we're done with this lvl

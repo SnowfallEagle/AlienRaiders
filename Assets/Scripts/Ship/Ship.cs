@@ -18,6 +18,10 @@ public class Ship : CustomBehavior
     public float Speed => m_Speed;
 
     protected BoxCollider2D m_BoxCollider;
+    public BoxCollider2D BoxCollider => m_BoxCollider;
+
+    protected SpriteRenderer m_SpriteRenderer;
+    public SpriteRenderer SpriteRenderer => m_SpriteRenderer;
 
     protected ShipHealthComponent m_HealthComponent;
     public ShipHealthComponent HealthComponent => m_HealthComponent;
@@ -33,6 +37,7 @@ public class Ship : CustomBehavior
     protected virtual void Start()
     {
         m_BoxCollider = InitializeComponent<BoxCollider2D>();
+        m_SpriteRenderer = InitializeComponent<SpriteRenderer>();
         m_HealthComponent = InitializeComponent<ShipHealthComponent>();
         m_WeaponComponent = InitializeComponent<ShipWeaponComponent>();
         m_BehaviorComponent = InitializeComponent<ShipBehaviorComponent>();

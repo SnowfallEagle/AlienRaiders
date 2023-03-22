@@ -12,7 +12,7 @@ public class Service<T> : CustomBehavior where T : Service<T>
             if (!s_Instance)
             {
                 s_Instance = ServiceLocator.Instance.Get<T>();
-                s_Instance.OnInstantiation();
+                s_Instance.Initialize();
             }
             return s_Instance;
         }
@@ -21,6 +21,6 @@ public class Service<T> : CustomBehavior where T : Service<T>
     /** Derived classes should put their code that should be before Start() in MonoBehaviour
         Start() don't called immediately, so Service should use this method
     */
-    protected virtual void OnInstantiation()
+    protected virtual void Initialize()
     { }
 }

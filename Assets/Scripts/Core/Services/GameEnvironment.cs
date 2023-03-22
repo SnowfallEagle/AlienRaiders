@@ -12,15 +12,16 @@ public class GameEnvironment : Service<GameEnvironment>
 
     [SerializeField] public PlatformSDK SDKType =
 #if UNITY_EDITOR
-    PlatformSDK.Fake;
+        PlatformSDK.Fake;
 #else
-    PlatformSDK.Yandex;
+        PlatformSDK.Yandex;
 #endif
 
     [SerializeField] public bool bDebugMode = false;
     [SerializeField] public bool bDebugDrawAI = false;
+    [SerializeField] public bool bDebugGodMode = false;
 
-    protected override void OnInstantiation()
+    protected override void Initialize()
     {
         // Enforce values
 
@@ -52,6 +53,10 @@ public class GameEnvironment : Service<GameEnvironment>
         if (Input.GetKeyDown(KeyCode.Keypad1))
         {
             bDebugDrawAI ^= true;
+        }
+        if (Input.GetKeyDown(KeyCode.Keypad2))
+        {
+            bDebugGodMode ^= true;
         }
     }
 

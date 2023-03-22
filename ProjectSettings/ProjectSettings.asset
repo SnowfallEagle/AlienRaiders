@@ -315,7 +315,7 @@ PlayerSettings:
   openGLRequireES31AEP: 0
   openGLRequireES32: 0
   m_TemplateCustomTags:
-    RENDER_SCALE: 1.5
+    RENDER_SCALE: 2
   mobileMTRendering:
     Android: 1
     iPhone: 1

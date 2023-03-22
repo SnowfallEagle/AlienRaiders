@@ -23,4 +23,9 @@ public class GameStateMachine : Service<GameStateMachine>
 
         m_CurrentState = Instantiate(State);
     }
+
+    public T GetCurrentState<T>() where T: GameState
+    {
+        return (T)m_CurrentState;
+    }
 }

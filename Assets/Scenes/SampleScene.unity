@@ -576,5 +576,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SDKType: 1
-  bDebugMode: 0
+  bDebugMode: 1
   bDebugDrawAI: 0
+  bDebugGodMode: 1
