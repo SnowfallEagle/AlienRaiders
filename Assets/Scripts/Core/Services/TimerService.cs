@@ -77,7 +77,7 @@ public class TimerService : Service<TimerService>
 
     /** Add timer that fire at time rate, attach Timer to Handle.
         Set bLoop = true to loop timer.
-        If FirstDelay < 0f then first time timer fires immediately.
+        If FirstDelay < 0f and bLoop = true then first time timer fires immediately.
     */
     public void AddTimer(Handle Handle, Action Callback, float TimeRate, bool bLoop = false, float FirstDelay = -1f)
     {
@@ -95,7 +95,7 @@ public class TimerService : Service<TimerService>
         m_Timers.Add(new Timer
         {
             TimeRate = TimeRate,
-            TimeLeftToFire = FirstDelay >= 0f ? TimeRate : 0f,
+            TimeLeftToFire = bLoop && FirstDelay < 0f ? 0f : TimeRate,
 
             FirstDelay = FirstDelay,
             bNeedDelay = FirstDelay >= 0f,

@@ -15,12 +15,12 @@ public class Weapon : CustomBehavior
 
     private void OnDestroy()
     {
-        Debug.Log(transform.parent.name + " destroying");
         StopFire();
     }
 
     public void StartFire()
     {
+        // FIXME: We should set timers that'll fire when we can shoot again, because we can spam taps
         if (!m_hFireTimer.bValid)
         {
             TimerService.Instance.AddTimer(m_hFireTimer, Fire, m_FireRate, true);
