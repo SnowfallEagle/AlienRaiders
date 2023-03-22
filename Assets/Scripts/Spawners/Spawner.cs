@@ -36,28 +36,33 @@ public class Spawner : CustomBehavior
 
     protected Context m_Context;
 
-    public void Spawn(Config Config)
+    public GameObject[] Spawn(Config Config)
     {
         Assert.IsNotNull(Config);
 
         m_Context = new Context();
         m_Context.Config = Config;
 
-        OnSpawn();
-        // TODO: Get Ships from OnSpawn() and color them
-        // SetColors(Ships);
+        GameObject[] Ships = OnSpawn();
+        Assert.IsNotNull(Ships);
+
+        SetColors(Ships);
         Destroy(gameObject);
+
+        return Ships;
     }
 
     // Derived classes should put spawn logic here
-    protected virtual void OnSpawn()
-    { }
+    protected virtual GameObject[] OnSpawn()
+    {
+        return new GameObject[] { };
+    }
 
-    private void SetColors(Ship[] Ships)
+    private void SetColors(GameObject[] Ships)
     {
         foreach (var Ship in Ships)
         {
-            Ship.SpriteRenderer.color = m_Context.Config.ShipColor;
+            Ship.GetComponent<SpriteRenderer>().color = m_Context.Config.ShipColor;
         }
     }
 }

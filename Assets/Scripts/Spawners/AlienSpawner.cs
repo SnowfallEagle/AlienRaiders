@@ -32,7 +32,7 @@ public class AlienSpawner : Spawner
 
     private static GameObject s_AlienPrefab;
 
-    protected override void OnSpawn()
+    protected override GameObject[] OnSpawn()
     {
         if (!s_AlienPrefab)
         {
@@ -46,12 +46,13 @@ public class AlienSpawner : Spawner
 
         switch (SpawnPattern)
         {
-            case (int)Pattern.Single: SpawnSingle(); break;
-            case (int)Pattern.Triple: SpawnTriple(); break;
+            case (int)Pattern.Single: return SpawnSingle();
+            case (int)Pattern.Triple: return SpawnTriple();
+            default: return new GameObject[] { };
         }
     }
 
-    private void SpawnSingle()
+    private GameObject[] SpawnSingle()
     {
         GameObject Alien = SpawnInState(s_AlienPrefab);
 
@@ -61,9 +62,11 @@ public class AlienSpawner : Spawner
             m_Context.TargetCenter.y + m_Context.TargetSize.y * 0.6f,
             0f
         );
+
+        return new GameObject[] { Alien };
     }
 
-    private void SpawnTriple()
+    private GameObject[] SpawnTriple()
     {
         const int NumAliens = 3;
         const float SpaceBetweenAliens = 0.5f;
@@ -118,5 +121,7 @@ public class AlienSpawner : Spawner
                 0f
             );
         }
+
+        return Aliens;
     }
 }

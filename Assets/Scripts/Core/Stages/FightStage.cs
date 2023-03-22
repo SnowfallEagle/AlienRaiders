@@ -19,11 +19,12 @@ public class FightStage : CustomBehavior
         new SpawnerInfo
         {
             Type = typeof(AlienSpawner),
-            TimeToNext = 1f,
+            bWaitToEnd = true,
 
             Config = new Spawner.Config
             {
-                SpawnPattern = (int)AlienSpawner.Pattern.Single
+                SpawnPattern = (int)AlienSpawner.Pattern.Single,
+                ShipColor = Color.red
             }
         },
 
@@ -34,12 +35,16 @@ public class FightStage : CustomBehavior
 
             Config = new Spawner.Config
             {
-                SpawnPattern = (int)AlienSpawner.Pattern.Triple
+                SpawnPattern = (int)AlienSpawner.Pattern.Triple,
+                ShipColor = Color.blue
             }
         },
     };
 
-    private int m_CurrentSpawner = -1;
+    private int m_CurrentSpawnerIndex = -1;
+    private SpawnerInfo m_CurrentSpawnerInfo;
+
+    private GameObject[] m_CurrentShips;
 
     private void Start()
     {
@@ -48,27 +53,39 @@ public class FightStage : CustomBehavior
 
     private void Update()
     {
-        // TODO: Check if ships are destroyed
+        if (!m_CurrentSpawnerInfo.bWaitToEnd)
+        {
+            return;
+        }
+
+        foreach (var Ship in m_CurrentShips)
+        {
+            if (Ship)
+            {
+                return;
+            }
+        }
+
+        NextSpawner();
     }
 
     private void NextSpawner()
     {
-        if (++m_CurrentSpawner >= s_SpawnersInfo.Length)
+        if (++m_CurrentSpawnerIndex >= s_SpawnersInfo.Length)
         {
             GameStateMachine.Instance.GetCurrentState<FightGameState>().NextStage();
             return;
         }
 
-        SpawnerInfo Info = s_SpawnersInfo[m_CurrentSpawner];
-        var Spawner = SpawnInState<Spawner>(Info.Type);
-        Spawner.Spawn(Info.Config);
-        // TODO: Spawner can return its Ships and we can track them instead of using timer
+        m_CurrentSpawnerInfo = s_SpawnersInfo[m_CurrentSpawnerIndex];
+        var Spawner = SpawnInState<Spawner>(m_CurrentSpawnerInfo.Type);
+        m_CurrentShips = Spawner.Spawn(m_CurrentSpawnerInfo.Config);
 
-        if (Info.bWaitToEnd)
+        if (m_CurrentSpawnerInfo.bWaitToEnd)
         {
             return;
         }
 
-        TimerService.Instance.AddTimer(NextSpawner, Info.TimeToNext);
+        TimerService.Instance.AddTimer(NextSpawner, m_CurrentSpawnerInfo.TimeToNext);
     }
 }
