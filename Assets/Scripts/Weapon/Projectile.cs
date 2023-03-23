@@ -6,11 +6,14 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Projectile : CustomBehavior
 {
-    [SerializeField] protected float m_Damage = 5f;
+    [SerializeField] protected float m_DefaultSpeed = 5f;
+    [SerializeField] protected float m_DefaultDamage = 5f;
     [SerializeField] protected float m_LifeTime = 5f;
-    [SerializeField] protected float m_Speed = 5f;
 
-    Ship.Team m_OwnerTeam;
+    private float m_Damage = 5f;
+    private float m_Speed = 5f;
+
+    private Ship.Team m_OwnerTeam;
 
     private void Start()
     {
@@ -25,9 +28,12 @@ public class Projectile : CustomBehavior
         transform.Translate(0f, m_Speed * Time.deltaTime, 0f);
     }
 
-    public void Initialize(Ship.Team OwnerTeam)
+    public void Initialize(Ship.Team OwnerTeam, BuffMultipliers Buffs)
     {
         m_OwnerTeam = OwnerTeam;
+
+        m_Speed = m_DefaultSpeed * Buffs.ProjectileSpeed;
+        m_Damage = m_DefaultDamage * Buffs.ProjectileDamage;
     }
 
     private void OnTriggerEnter2D(Collider2D Other)

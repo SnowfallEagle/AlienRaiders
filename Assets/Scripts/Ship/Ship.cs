@@ -14,8 +14,11 @@ public class Ship : CustomBehavior
     [SerializeField] protected Team m_ShipTeam = Team.Player;
     public Team ShipTeam => m_ShipTeam;
 
-    [SerializeField] protected float m_Speed = 2.5f;
+    [SerializeField] protected float m_DefaultSpeed = 2.5f;
+    private float m_Speed;
     public float Speed => m_Speed;
+
+    private Type[] m_WeaponTypes = new Type[] { };
 
     protected BoxCollider2D m_BoxCollider;
     public BoxCollider2D BoxCollider => m_BoxCollider;
@@ -29,21 +32,25 @@ public class Ship : CustomBehavior
     protected ShipWeaponComponent m_WeaponComponent;
     public ShipWeaponComponent WeaponComponent => m_WeaponComponent;
 
-    private Type[] m_WeaponTypes = new Type[] { };
-
     protected ShipBehaviorComponent m_BehaviorComponent;
     public ShipBehaviorComponent BehaviorComponent => m_BehaviorComponent;
 
-    protected virtual void Start()
+    public virtual void Initialize(BuffMultipliers Buffs)
     {
+        Assert.IsNotNull(Buffs);
+
         m_BoxCollider = InitializeComponent<BoxCollider2D>();
         m_SpriteRenderer = InitializeComponent<SpriteRenderer>();
-        m_HealthComponent = InitializeComponent<ShipHealthComponent>();
-        m_WeaponComponent = InitializeComponent<ShipWeaponComponent>();
         m_BehaviorComponent = InitializeComponent<ShipBehaviorComponent>();
 
+        m_HealthComponent = InitializeComponent<ShipHealthComponent>();
+        m_HealthComponent.Initialize(Buffs);
+
+        m_WeaponComponent = InitializeComponent<ShipWeaponComponent>();
         OnPreInitializeWeapons();
-        m_WeaponComponent.InitializeWeapons(m_WeaponTypes);
+        m_WeaponComponent.Initialize(Buffs, m_WeaponTypes);
+
+        UseBuffs(Buffs);
     }
 
     private void Update()
@@ -79,5 +86,10 @@ public class Ship : CustomBehavior
         {
             m_WeaponTypes[Index] = typeof(T);
         }
+    }
+
+    private void UseBuffs(BuffMultipliers Buffs)
+    {
+        m_Speed = m_DefaultSpeed * Buffs.ShipSpeed;
     }
 }

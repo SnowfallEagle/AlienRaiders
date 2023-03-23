@@ -15,12 +15,15 @@ public class Spawner : CustomBehavior
 
         public int ShipPattern = AnyParam; // TODO: Zig-Zag, Just Bottom, etc...
         public Color ShipColor = Color.white;
+
+        public BuffMultipliers Buffs = new BuffMultipliers();
     }
 
     protected class Context
     {
         public Config Config;
 
+        // TODO: Maybe remove context, make static struct for this
         // Some precomputed stuff
         public Vector3 TargetSize;
         public Vector3 TargetCenter;
@@ -45,8 +48,8 @@ public class Spawner : CustomBehavior
 
         GameObject[] Ships = OnSpawn();
         Assert.IsNotNull(Ships);
+        InitializeShips(Ships);
 
-        SetColors(Ships);
         Destroy(gameObject);
 
         return Ships;
@@ -58,10 +61,15 @@ public class Spawner : CustomBehavior
         return new GameObject[] { };
     }
 
-    private void SetColors(GameObject[] Ships)
+    private void InitializeShips(GameObject[] Ships)
     {
+        BuffMultipliers Buffs =
+            m_Context.Config.Buffs *
+            GameStateMachine.Instance.GetCurrentState<FightGameState>().EnemyBuffs;
+
         foreach (var Ship in Ships)
         {
+            Ship.GetComponent<Ship>().Initialize(Buffs);
             Ship.GetComponent<SpriteRenderer>().color = m_Context.Config.ShipColor;
         }
     }

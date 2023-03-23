@@ -10,9 +10,9 @@ public class AIShip : Ship
         MaxWeapons
     }
 
-    protected override void Start()
+    public override void Initialize(BuffMultipliers Buffs)
     {
-        base.Start();
+        base.Initialize(Buffs);
 
         m_ShipTeam = Team.Enemy;
 

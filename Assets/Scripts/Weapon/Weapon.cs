@@ -7,6 +7,13 @@ public class Weapon : CustomBehavior
     [SerializeField] protected float m_FireRate = 0.5f;
     private TimerService.Handle m_hFireTimer = new TimerService.Handle();
 
+    protected BuffMultipliers m_Buffs;
+
+    public void Initialize(BuffMultipliers Buffs)
+    {
+        m_Buffs = Buffs;
+    }
+
     protected virtual void Start()
     { }
 

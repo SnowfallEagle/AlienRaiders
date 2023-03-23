@@ -6,10 +6,10 @@ public class FightStage : CustomBehavior
     private class SpawnerInfo
     {
         public Type Type = typeof(AlienSpawner);
-        public float TimeToNext = 5f;
-        public bool bWaitToEnd = false;
-
         public Spawner.Config Config = new Spawner.Config();
+
+        public float TimeToNext = 5f; // If bWaitToEnd = true then this shows delay after destroying ships
+        public bool bWaitToEnd = false;
 
         // TODO: Iterations count?
     }
@@ -19,25 +19,26 @@ public class FightStage : CustomBehavior
         new SpawnerInfo
         {
             Type = typeof(AlienSpawner),
-            bWaitToEnd = true,
-
             Config = new Spawner.Config
             {
                 SpawnPattern = (int)AlienSpawner.Pattern.Single,
-                ShipColor = Color.red
-            }
+                ShipColor = Color.red,
+            },
+
+            bWaitToEnd = true,
+            TimeToNext = 2.5f
         },
 
         new SpawnerInfo
         {
             Type = typeof(AlienSpawner),
-            TimeToNext = 1f,
-
             Config = new Spawner.Config
             {
                 SpawnPattern = (int)AlienSpawner.Pattern.Triple,
                 ShipColor = Color.blue
-            }
+            },
+
+            TimeToNext = 1f,
         },
     };
 
@@ -66,7 +67,7 @@ public class FightStage : CustomBehavior
             }
         }
 
-        NextSpawner();
+        TimerService.Instance.AddTimer(NextSpawner, m_CurrentSpawnerInfo.TimeToNext);
     }
 
     private void NextSpawner()

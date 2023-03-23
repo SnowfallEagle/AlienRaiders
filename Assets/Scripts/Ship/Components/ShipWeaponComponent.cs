@@ -6,7 +6,31 @@ public class ShipWeaponComponent : CustomBehavior
     private Weapon[] m_Weapons;
     private Weapon CurrentWeapon;
 
-    public void InitializeWeapons(Type[] WeaponTypes)
+    public void Initialize(BuffMultipliers Buffs, Type[] WeaponTypes)
+    {
+        InitializeWeapons(WeaponTypes);
+        UseBuffs(Buffs);
+    }
+
+    public void StartFire()
+    {
+        CurrentWeapon?.StartFire();
+    }
+
+    public void StopFire()
+    {
+        CurrentWeapon?.StopFire();
+    }
+
+    public void SwitchWeapon(int Index)
+    {
+        if (Index >= 0 && Index < m_Weapons.Length)
+        {
+            CurrentWeapon = m_Weapons[Index];
+        }
+    }
+
+    private void InitializeWeapons(Type[] WeaponTypes)
     {
         Array.Resize(ref m_Weapons, WeaponTypes.Length);
 
@@ -27,21 +51,11 @@ public class ShipWeaponComponent : CustomBehavior
         SwitchWeapon(0);
     }
 
-    public void StartFire()
+    private void UseBuffs(BuffMultipliers Buffs)
     {
-        CurrentWeapon?.StartFire();
-    }
-
-    public void StopFire()
-    {
-        CurrentWeapon?.StopFire();
-    }
-
-    public void SwitchWeapon(int Index)
-    {
-        if (Index >= 0 && Index < m_Weapons.Length)
+        foreach (var Weapon in m_Weapons)
         {
-            CurrentWeapon = m_Weapons[Index];
+            Weapon.Initialize(Buffs);
         }
     }
 }

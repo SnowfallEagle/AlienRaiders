@@ -7,14 +7,15 @@ public class ShipHealthComponent : CustomBehavior
     public bool bDead => m_Health <= 0f;
     public bool bAlive => m_Health > 0f;
 
+    [SerializeField] protected float m_DefaultHealth = 100f;
     private float m_Health;
-    [SerializeField] protected float m_MaxHealth = 100f;
 
     private bool bNeedToDestroy = false;
 
-    private void Start()
+    // Must be called from Ship
+    public void Initialize(BuffMultipliers Buffs)
     {
-        SetHealth(m_MaxHealth);
+        SetHealth(m_DefaultHealth * Buffs.ShipHealth);
     }
 
     private void LateUpdate()
