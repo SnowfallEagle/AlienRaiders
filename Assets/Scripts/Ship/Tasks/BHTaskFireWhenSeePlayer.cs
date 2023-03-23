@@ -35,7 +35,7 @@ public class BHTaskFireWhenSeePlayer : BHTask
         }
 
         // DEBUG
-        if (GameEnvironment.Instance.GetDebugOption<bool>("bDebugDrawAI"))
+        if (GameEnvironment.Instance.GetDebugOption<bool>("DebugAI.bDrawEyesight"))
         {
             // Direction to player
             {

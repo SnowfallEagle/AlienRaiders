@@ -12,7 +12,7 @@ public class FightGameState : GameState
     private class LevelInfo
     {
         public StageInfo[] Stages = new StageInfo[] { };
-        // TODO: Maybe in future we may want to have buffs for levels to reuse them
+        public BuffMultipliers EnemyBuffs = new BuffMultipliers();
     }
 
     private static LevelInfo[] s_LevelsInfo = new LevelInfo[]
@@ -40,11 +40,16 @@ public class FightGameState : GameState
     private int m_CurrentStage = 0;
 
     // I don't think that PlayerBuffs is good idea, because it's better to make a new ship
-    public BuffMultipliers EnemyBuffs => s_LevelsInfo[m_CurrentLevel].Stages[m_CurrentStage].EnemyBuffs;
+    private BuffMultipliers m_EnemyBuffs;
+    public BuffMultipliers EnemyBuffs => m_EnemyBuffs;
 
     protected override void Start()
     {
         base.Start();
+
+        m_EnemyBuffs =
+            s_LevelsInfo[m_CurrentLevel].EnemyBuffs *
+            s_LevelsInfo[m_CurrentLevel].Stages[m_CurrentStage].EnemyBuffs;
 
         var State = SpawnInState(s_LevelsInfo[m_CurrentLevel].Stages[m_CurrentStage].StageType);
         State.name = State.GetType().Name;

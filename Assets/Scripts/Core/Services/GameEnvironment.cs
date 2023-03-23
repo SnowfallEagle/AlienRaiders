@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,34 @@ public class GameEnvironment : Service<GameEnvironment>
         Yandex
     }
 
+    [Serializable]
+    public class DebugInfo
+    {
+        [SerializeField] public bool bEnabled = false;
+    }
+
+    [Serializable]
+    public class DebugLevelInfo : DebugInfo
+    {
+        [SerializeField] public bool bSpecificLevel = false;
+        [SerializeField] public int Level = 0;
+
+        [SerializeField] public bool bSpecificStage = false;
+        [SerializeField] public int Stage = 0;
+    }
+
+    [Serializable]
+    public class DebugPlayerInfo : DebugInfo
+    {
+        [SerializeField] public bool bGodMode = false;
+    }
+
+    [Serializable]
+    public class DebugAIInfo : DebugInfo
+    {
+        [SerializeField] public bool bDrawEyesight = false;
+    }
+
     [SerializeField] public PlatformSDK SDKType =
 #if UNITY_EDITOR
         PlatformSDK.Fake;
@@ -18,8 +47,10 @@ public class GameEnvironment : Service<GameEnvironment>
 #endif
 
     [SerializeField] public bool bDebugMode = false;
-    [SerializeField] public bool bDebugDrawAI = false;
-    [SerializeField] public bool bDebugGodMode = false;
+
+    [SerializeField] public DebugLevelInfo DebugLevel = new DebugLevelInfo();
+    [SerializeField] public DebugPlayerInfo DebugPlayer = new DebugPlayerInfo();
+    [SerializeField] public DebugAIInfo DebugAI = new DebugAIInfo();
 
     protected override void Initialize()
     {
@@ -40,6 +71,8 @@ public class GameEnvironment : Service<GameEnvironment>
         return;
     #endif
 
+        // TODO: Bindings
+
         if (Input.GetKeyDown(KeyCode.Keypad0))
         {
             bDebugMode ^= true;
@@ -52,11 +85,11 @@ public class GameEnvironment : Service<GameEnvironment>
 
         if (Input.GetKeyDown(KeyCode.Keypad1))
         {
-            bDebugDrawAI ^= true;
+            DebugAI.bDrawEyesight ^= true;
         }
         if (Input.GetKeyDown(KeyCode.Keypad2))
         {
-            bDebugGodMode ^= true;
+            DebugPlayer.bGodMode ^= true;
         }
     }
 
@@ -68,12 +101,29 @@ public class GameEnvironment : Service<GameEnvironment>
             return default(T);
         }
 
-        var Field = GetType().GetField(OptionName);
-        if (Field == null)
+        string[] Options = OptionName.Split('.');
+
+        Type CurrentType = GetType();
+        object CurrentValue = this;
+
+        foreach (var Option in Options)
         {
-            return default(T);
+            System.Reflection.FieldInfo Field = CurrentType.GetField(Option);
+            if (Field == null)
+            {
+                return default(T);
+            }
+
+            CurrentValue = Field.GetValue(CurrentValue);
+            CurrentType = CurrentValue.GetType();
+
+            var CurrentValueAsDebugInfo = CurrentValue as DebugInfo;
+            if (CurrentValueAsDebugInfo != null && !CurrentValueAsDebugInfo.bEnabled)
+            {
+                return default(T);
+            }
         }
 
-        return (T)Field.GetValue(this);
+        return CurrentValue != null && CurrentType == typeof(T) ? (T)CurrentValue : default(T);
     }
 }

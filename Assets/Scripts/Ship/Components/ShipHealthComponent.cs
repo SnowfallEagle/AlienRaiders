@@ -39,7 +39,7 @@ public class ShipHealthComponent : CustomBehavior
     {
         Debug.Log(gameObject.name + " took " + Damage.ToString() + " damage");
 
-        if (GameEnvironment.Instance.GetDebugOption<bool>("bDebugGodMode") && GetComponent<PlayerShip>())
+        if (GameEnvironment.Instance.GetDebugOption<bool>("DebugPlayer.bGodMode") && GetComponent<PlayerShip>())
         {
             return;
         }
