@@ -1,3 +1,9 @@
+#if !UNITY_EDITOR && UNITY_WEBGL
+    #define NDEBUG
+#else
+    #define _DEBUG
+#endif
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -39,11 +45,17 @@ public class GameEnvironment : Service<GameEnvironment>
         [SerializeField] public bool bDrawEyesight = false;
     }
 
+    private class DebugOptionBinding
+    {
+        public ConstValueRef<bool> bEnabled;
+        public ValueRef<bool> bOption;
+    }
+
     [SerializeField] public PlatformSDK SDKType =
-#if UNITY_EDITOR
-        PlatformSDK.Fake;
-#else
+#if NDEBUG
         PlatformSDK.Yandex;
+#else
+        PlatformSDK.Fake;
 #endif
 
     [SerializeField] public bool bDebugMode = false;
@@ -52,45 +64,21 @@ public class GameEnvironment : Service<GameEnvironment>
     [SerializeField] public DebugPlayerInfo DebugPlayer = new DebugPlayerInfo();
     [SerializeField] public DebugAIInfo DebugAI = new DebugAIInfo();
 
+    private Dictionary<KeyCode, DebugOptionBinding> InputBindings;
+
     protected override void Initialize()
     {
-        // Enforce values
-
-#if UNITY_EDITOR
-        SDKType = PlatformSDK.Fake;
-#endif
-
-#if !UNITY_EDITOR && UNITY_WEBGL
-        bDebugMode = false;
-#endif
+        EnforceEnvironment();
+        SetBindings();
     }
-
+ 
     private void Update()
     {
-    #if !UNITY_EDITOR && UNITY_WEBGL
+#if NDEBUG
         return;
-    #endif
+#endif
 
-        // TODO: Bindings
-
-        if (Input.GetKeyDown(KeyCode.Keypad0))
-        {
-            bDebugMode ^= true;
-        }
-
-        if (!bDebugMode)
-        {
-            return;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Keypad1))
-        {
-            DebugAI.bDrawEyesight ^= true;
-        }
-        if (Input.GetKeyDown(KeyCode.Keypad2))
-        {
-            DebugPlayer.bGodMode ^= true;
-        }
+        ProcessInput();
     }
 
     // Get debug option if game is in debug mode
@@ -125,5 +113,100 @@ public class GameEnvironment : Service<GameEnvironment>
         }
 
         return CurrentValue != null && CurrentType == typeof(T) ? (T)CurrentValue : default(T);
+    }
+
+    private void EnforceEnvironment()
+    {
+#if _DEBUG
+        SDKType = PlatformSDK.Fake;
+#else
+        bDebugMode = false;
+#endif
+    }
+
+    private void SetBindings()
+    {
+        InputBindings = new Dictionary<KeyCode, DebugOptionBinding>
+        {
+            // AI
+            { KeyCode.Keypad7, // bEnabled
+                new DebugOptionBinding
+                {
+                    bEnabled = new ConstValueRef<bool>(() => true),
+                    bOption = new ValueRef<bool>(() => DebugAI.bEnabled, Value => DebugAI.bEnabled = Value)
+                }
+            },
+            { KeyCode.Keypad1, // bDrawEyesight
+                new DebugOptionBinding
+                {
+                    bEnabled = new ConstValueRef<bool>(() => DebugAI.bEnabled),
+                    bOption = new ValueRef<bool>(() => DebugAI.bDrawEyesight, Value => DebugAI.bDrawEyesight = Value)
+                }
+            },
+
+            // Player
+            { KeyCode.Keypad8, // bEnabled
+                new DebugOptionBinding
+                {
+                    bEnabled = new ConstValueRef<bool>(() => true),
+                    bOption = new ValueRef<bool>(() => DebugPlayer.bEnabled, Value => DebugPlayer.bEnabled = Value)
+                }
+            },
+            { KeyCode.Keypad2, // bGodMode
+                new DebugOptionBinding
+                {
+                    bEnabled = new ConstValueRef<bool>(() => DebugPlayer.bEnabled),
+                    bOption = new ValueRef<bool>(() => DebugPlayer.bGodMode, Value => DebugPlayer.bGodMode = Value)
+                }
+            },
+
+            // Level
+            { KeyCode.Keypad9, // bEnabled
+                new DebugOptionBinding
+                {
+                    bEnabled = new ConstValueRef<bool>(() => true),
+                    bOption = new ValueRef<bool>(() => DebugLevel.bEnabled, Value => DebugLevel.bEnabled = Value)
+                }
+            },
+            { KeyCode.Keypad4, // bSpecificLevel
+                new DebugOptionBinding
+                {
+                    bEnabled = new ConstValueRef<bool>(() => DebugLevel.bEnabled),
+                    bOption = new ValueRef<bool>(() => DebugLevel.bSpecificLevel, Value => DebugLevel.bSpecificLevel = Value)
+                }
+            },
+            { KeyCode.Keypad5, // bSpecificStage
+                new DebugOptionBinding
+                {
+                    bEnabled = new ConstValueRef<bool>(() => DebugLevel.bEnabled),
+                    bOption = new ValueRef<bool>(() => DebugLevel.bSpecificStage, Value => DebugLevel.bSpecificStage = Value)
+                }
+            },
+        };
+    }
+
+    private void ProcessInput()
+    {
+        if (Input.GetKeyDown(KeyCode.Keypad0))
+        {
+            bDebugMode ^= true;
+        }
+
+        if (!bDebugMode)
+        {
+            return;
+        }
+
+        foreach (var InputBinding in InputBindings)
+        {
+            if (Input.GetKeyDown(InputBinding.Key))
+            {
+                DebugOptionBinding Bind = InputBinding.Value;
+                if (Bind.bEnabled.Value)
+                {
+                    Bind.bOption.Value = !Bind.bOption.Value;
+                }
+            }
+        }
     }
 }
