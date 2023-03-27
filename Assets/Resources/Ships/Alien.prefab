@@ -102,7 +102,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ShipTeam: 0
-  m_Speed: 2
+  m_DefaultSpeed: 2.5
+  m_DamageOnCollide: 10
 --- !u!61 &2322615566326916059
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -113,7 +114,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.0020412952, y: 0.007144451}
@@ -141,7 +142,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd4ceebab6b75254199a8ba8e9eae58f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MaxHealth: 100
+  m_DefaultHealth: 100
 --- !u!114 &2322615566326916061
 MonoBehaviour:
   m_ObjectHideFlags: 0

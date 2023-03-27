@@ -25,6 +25,8 @@ public class PlayerShip : Ship
     {
         base.Initialize(Buffs);
 
+        gameObject.layer = LayerMask.NameToLayer("Player");
+
         m_ShipTeam = Team.Player;
     }
 

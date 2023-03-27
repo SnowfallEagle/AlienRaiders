@@ -76,34 +76,34 @@ public class Spawner : CustomBehavior
 
     protected int GetPattern(int MaxPatterns)
     {
-        if (m_Config.SpecificSpawnPattern == Config.AnyParam)
+        if (m_Config.SpecificSpawnPattern != Config.AnyParam)
         {
-            int From = m_Config.FromSpawnPattern == Config.AnyParam ? 0           : m_Config.FromSpawnPattern;
-            int To   = m_Config.ToSpawnPattern   == Config.AnyParam ? MaxPatterns : m_Config.ToSpawnPattern + 1;
-            return UnityEngine.Random.Range(From, To);
+            return m_Config.SpecificSpawnPattern;
         }
 
-        return m_Config.SpecificSpawnPattern;
+        int From = m_Config.FromSpawnPattern == Config.AnyParam ? 0           : m_Config.FromSpawnPattern;
+        int To   = m_Config.ToSpawnPattern   == Config.AnyParam ? MaxPatterns : m_Config.ToSpawnPattern + 1;
+        return UnityEngine.Random.Range(From, To);
     }
 
     protected int GetSubpattern(int MaxPatterns)
     {
-        if (m_Config.SpecificSpawnSubpattern == Config.AnyParam)
+        if (m_Config.SpecificSpawnSubpattern != Config.AnyParam && m_Config.SpecificSpawnPattern != Config.AnyParam)
         {
-            int From = m_Config.FromSpawnSubpattern == Config.AnyParam ? 0           : m_Config.FromSpawnSubpattern;
-            int To   = m_Config.ToSpawnSubpattern   == Config.AnyParam ? MaxPatterns : m_Config.ToSpawnSubpattern + 1;
-            return UnityEngine.Random.Range(From, To);
+            return m_Config.SpecificSpawnSubpattern;
         }
 
-        return m_Config.SpecificSpawnSubpattern;
+        int From = m_Config.FromSpawnSubpattern == Config.AnyParam ? 0           : m_Config.FromSpawnSubpattern;
+        int To   = m_Config.ToSpawnSubpattern   == Config.AnyParam ? MaxPatterns : m_Config.ToSpawnSubpattern + 1;
+        return UnityEngine.Random.Range(From, To);
     }
 
     protected int GetShipPattern(int MaxPatterns)
     {
         if (m_Config.SpecificShipPattern == Config.AnyParam)
         {
-            int From = m_Config.FromShipPattern == Config.AnyParam ? 0 : m_Config.FromShipPattern;
-            int To = m_Config.ToShipPattern == Config.AnyParam ? MaxPatterns : m_Config.ToShipPattern + 1;
+            int From = m_Config.FromShipPattern == Config.AnyParam ? 0           : m_Config.FromShipPattern;
+            int To   = m_Config.ToShipPattern   == Config.AnyParam ? MaxPatterns : m_Config.ToShipPattern + 1;
             return UnityEngine.Random.Range(From, To);
         }
 

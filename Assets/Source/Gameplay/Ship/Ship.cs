@@ -21,6 +21,9 @@ public class Ship : CustomBehavior
     protected BoxCollider2D m_BoxCollider;
     public BoxCollider2D BoxCollider => m_BoxCollider;
 
+    protected Rigidbody2D m_RigidBody;
+    public Rigidbody2D RigidBody => m_RigidBody;
+
     protected SpriteRenderer m_SpriteRenderer;
     public SpriteRenderer SpriteRenderer => m_SpriteRenderer;
 
@@ -40,6 +43,9 @@ public class Ship : CustomBehavior
         m_BoxCollider = InitializeComponent<BoxCollider2D>();
         m_SpriteRenderer = InitializeComponent<SpriteRenderer>();
         m_BehaviorComponent = InitializeComponent<ShipBehaviorComponent>();
+
+        m_RigidBody = InitializeComponent<Rigidbody2D>();
+        m_RigidBody.gravityScale = 0f;
 
         m_HealthComponent = InitializeComponent<ShipHealthComponent>();
         m_HealthComponent.Initialize(Buffs);

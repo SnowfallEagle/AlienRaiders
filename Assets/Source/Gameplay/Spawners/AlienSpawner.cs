@@ -16,11 +16,8 @@ public class AlienSpawner : Spawner
     {
         Left,
         Right,
-        /* TODO:
-        Center,
         Row,
         Column,
-        */
 
         MaxPatterns
     }
@@ -77,7 +74,6 @@ public class AlienSpawner : Spawner
             0f
         );
 
-        // TODO: Diff can be f(i) -> float
         float XDiff = 0f;
         float YDiff = 0f;
 
@@ -95,6 +91,18 @@ public class AlienSpawner : Spawner
                 YDiff = AlienSize.y + SpaceBetweenAliens;
 
                 FirstPosition.x += Random.Range(-XDiff * (NumAliens - 1), s_Precomputed.TargetSize.x + XDiff * NumAliens);
+                break;
+
+            case (int)TripleSubpattern.Column:
+                XDiff = AlienSize.x + SpaceBetweenAliens;
+
+                FirstPosition.x += Random.Range(0f, s_Precomputed.TargetSize.x - AlienSize.x * (NumAliens - 1));
+                break;
+
+            case (int)TripleSubpattern.Row:
+                YDiff = AlienSize.y + SpaceBetweenAliens;
+
+                FirstPosition.x += Random.Range(0f, s_Precomputed.TargetSize.x - AlienSize.x);
                 break;
         }
 

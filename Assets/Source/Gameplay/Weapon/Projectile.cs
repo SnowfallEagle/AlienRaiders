@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(BoxCollider2D))]
-[RequireComponent(typeof(Rigidbody2D))]
 public class Projectile : CustomBehavior
 {
     [SerializeField] protected float m_DefaultSpeed = 5f;
@@ -17,8 +15,13 @@ public class Projectile : CustomBehavior
 
     private void Start()
     {
+        gameObject.layer = LayerMask.NameToLayer("Bullet");
+
         var Rigidbody = InitializeComponent<Rigidbody2D>();
         Rigidbody.gravityScale = 0f;
+
+        var BoxCollider = InitializeComponent<BoxCollider2D>();
+        BoxCollider.isTrigger = true;
 
         Destroy(gameObject, m_LifeTime);
     }
