@@ -29,9 +29,9 @@ public class ShipBehaviorComponent : CustomBehavior
 
     private void UpdateTasks()
     {
-        foreach (var Task in m_TaskList)
+        for (int i = m_TaskList.Count - 1; i >= 0; --i)
         {
-            Task.Update(m_Owner);
+            m_TaskList[i].Update(m_Owner);
         }
 
         m_TaskList.RemoveAll(Task => Task.bEnded);

@@ -39,10 +39,14 @@ public class ShipHealthComponent : CustomBehavior
     {
         Debug.Log(gameObject.name + " took " + Damage.ToString() + " damage");
 
+        // TODO: Move this logic in PlayerHealthComponent
         if (GameEnvironment.Instance.GetDebugOption<bool>("DebugPlayer.bGodMode") && GetComponent<PlayerShip>())
         {
             return;
         }
+
+        // TODO: Move this logic in AIShip
+        GetComponent<ShipBehaviorComponent>().AddTask(new BHTaskAnimateSpriteColor(Color.red, bPulse: true));
 
         SetHealth(m_Health - Damage);
     }
