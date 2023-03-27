@@ -8,11 +8,15 @@ public class TimerService : Service<TimerService>
     public class Handle
     {
         public Timer Timer;
-        public bool bValid => Timer != null;
+
+        public UnityEngine.Object Owner;
+        public bool bOwned;
+
+        public bool bValid => (!bOwned || Owner) && Timer != null;
 
         public void Invalidate()
         {
-            Timer = null;
+            TimerService.Instance.RemoveTimer(this);
         }
     }
 
@@ -36,8 +40,16 @@ public class TimerService : Service<TimerService>
     {
         for (int i = m_Timers.Count - 1; i >= 0; --i)
         {
-            var Timer = m_Timers[i];
+            Timer Timer = m_Timers[i];
 
+            // Check if we lost reference
+            if (!Timer.Handle.bValid)
+            {
+                RemoveTimer(Timer.Handle);
+                continue;
+            }
+
+            // Process delay
             if (Timer.bNeedDelay)
             {
                 Timer.FirstDelay -= Time.deltaTime;
@@ -50,7 +62,9 @@ public class TimerService : Service<TimerService>
                 continue;
             }
 
+            // Process time left to fire
             Timer.TimeLeftToFire -= Time.deltaTime;
+
             if (Timer.TimeLeftToFire <= 0f)
             {
                 if (Timer.bLoop)
@@ -75,15 +89,17 @@ public class TimerService : Service<TimerService>
         }
     }
 
-    /** Add timer that fire at time rate, attach Timer to Handle.
+    /** Add timer that fire at time rate.
+        Attach Timer to Handle with ownership if Handle and Owner != null.
         Set bLoop = true to loop timer.
         If FirstDelay < 0f and bLoop = true then first time timer fires immediately.
+        With delay timer can fire only on second Update() after adding.
     */
-    public void AddTimer(Handle Handle, Action Callback, float TimeRate, bool bLoop = false, float FirstDelay = -1f)
+    public void AddTimer(Handle Handle, UnityEngine.Object Owner, Action Callback, float TimeRate, bool bLoop = false, float FirstDelay = -1f)
     {
+        // Check given handle
         if (Handle != null)
         {
-            // Try to remove timer if handle is already in use
             RemoveTimer(Handle);
         }
         else
@@ -109,15 +125,17 @@ public class TimerService : Service<TimerService>
 
         Handle.Timer = Timer;
         Timer.Handle = Handle;
+
+        Handle.Owner = Owner;
+        Handle.bOwned = Owner ? true : false;
     }
 
-    /** Add timer that fire at time rate.
-        Set bLoop = true to loop timer.
-        If FirstDelay < 0f then first time timer fires immediately.
+    /** Add timer without ownership.
+        Dangerous! Timer can call Action with this == null.
     */
     public void AddTimer(Action Callback, float TimeRate, bool bLoop = false, float FirstDelay = -1f)
     {
-        AddTimer(null, Callback, TimeRate, bLoop, FirstDelay);
+        AddTimer(null, null, Callback, TimeRate, bLoop, FirstDelay);
     }
 
     public void RemoveTimer(Handle Handle)
@@ -125,7 +143,10 @@ public class TimerService : Service<TimerService>
         if (Handle.bValid)
         {
             m_Timers.Remove(Handle.Timer);
-            Handle.Invalidate();
+
+            Handle.Timer = null;
+            Handle.Owner = null;
+            Handle.bOwned = false;
         }
     }
 }

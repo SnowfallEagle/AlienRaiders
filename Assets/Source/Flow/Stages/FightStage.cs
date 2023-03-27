@@ -64,6 +64,8 @@ public class FightStage : CustomBehavior
     private GameObject[] m_CurrentShips;
     private Spawner m_CurrentSpawner;
 
+    private TimerService.Handle m_hIterationTimer = new TimerService.Handle();
+
     private void Start()
     {
         // TODO: Implement DebugLevel
@@ -86,7 +88,7 @@ public class FightStage : CustomBehavior
             }
         }
 
-        TimerService.Instance.AddTimer(NextIteration, m_CurrentSpawnerInfo.TimeToNext);
+        TimerService.Instance.AddTimer(m_hIterationTimer, this, NextIteration, m_CurrentSpawnerInfo.TimeToNext);
     }
 
     private void NextIteration()
@@ -102,7 +104,7 @@ public class FightStage : CustomBehavior
 
         if (!m_CurrentSpawnerInfo.bWaitToEnd)
         {
-            TimerService.Instance.AddTimer(NextIteration, m_CurrentSpawnerInfo.TimeToNext);
+            TimerService.Instance.AddTimer(m_hIterationTimer, this, NextIteration, m_CurrentSpawnerInfo.TimeToNext);
         }
     }
 
