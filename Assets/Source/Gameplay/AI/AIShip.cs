@@ -20,9 +20,9 @@ public class AIShip : Ship
         base.Initialize(Buffs);
 
         gameObject.layer = LayerMask.NameToLayer("Enemy");
+        m_ShipTeam = Team.Enemy;
 
         m_BoxCollider.isTrigger = true;
-        m_ShipTeam = Team.Enemy;
 
         BehaviorComponent.AddTask(new BHTaskMoveBottom());
         BehaviorComponent.AddTask(new BHTaskDestroyWhenOutOfBottomBound());
@@ -34,6 +34,14 @@ public class AIShip : Ship
         Type[] WeaponTypes = new Type[(int)Weapons.MaxWeapons];
         WeaponTypes[(int)Weapons.Launcher] = typeof(LauncherWeapon);
         return WeaponTypes;
+    }
+
+    protected override void OnDamageTaken(float NewHealth, float DeltaHealth)
+    {
+        base.OnDamageTaken(NewHealth, DeltaHealth);
+
+        // TODO: Later we can make config for this animation
+        m_BehaviorComponent.AddTask(new BHTaskAnimateSpriteColor(Color.red, Duration: 0.15f, bPulse: true));
     }
 
     private void OnTriggerEnter2D(Collider2D Other)

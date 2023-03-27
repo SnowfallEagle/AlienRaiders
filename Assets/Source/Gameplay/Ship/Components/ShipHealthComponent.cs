@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class ShipHealthComponent : CustomBehavior
 {
+    public delegate void OnDamageTakenSignature(float NewHealth, float DeltaHealth);
+
+    public OnDamageTakenSignature OnDamageTaken;
+
     public bool bDead => m_Health <= 0f;
     public bool bAlive => m_Health > 0f;
 
@@ -12,7 +16,8 @@ public class ShipHealthComponent : CustomBehavior
 
     private bool bNeedToDestroy = false;
 
-    // Must be called from Ship
+    /** Must be called from Ship
+    */
     public void Initialize(BuffMultipliers Buffs)
     {
         SetHealth(m_DefaultHealth * Buffs.ShipHealth);
@@ -28,8 +33,15 @@ public class ShipHealthComponent : CustomBehavior
 
     private void SetHealth(float NewHealth)
     {
+        float OldHealth = m_Health;
         m_Health = NewHealth;
-        if (m_Health <= 0f)
+
+        if (NewHealth < OldHealth)
+        {
+            OnDamageTaken?.Invoke(NewHealth, NewHealth - OldHealth);
+        }
+
+        if (NewHealth <= 0f)
         {
             bNeedToDestroy = true;
         }
@@ -37,16 +49,11 @@ public class ShipHealthComponent : CustomBehavior
 
     public void TakeDamage(float Damage)
     {
-        Debug.Log(gameObject.name + " took " + Damage.ToString() + " damage");
-
-        // TODO: Move this logic in PlayerHealthComponent
+        // TODO: Move this logic in PlayerHealthComponent.CanBeDamaged()
         if (GameEnvironment.Instance.GetDebugOption<bool>("DebugPlayer.bGodMode") && GetComponent<PlayerShip>())
         {
             return;
         }
-
-        // TODO: Move this logic in AIShip
-        GetComponent<ShipBehaviorComponent>().AddTask(new BHTaskAnimateSpriteColor(Color.red, bPulse: true));
 
         SetHealth(m_Health - Damage);
     }

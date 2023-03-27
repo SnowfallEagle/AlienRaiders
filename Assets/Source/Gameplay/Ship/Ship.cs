@@ -49,6 +49,7 @@ public class Ship : CustomBehavior
 
         m_HealthComponent = InitializeComponent<ShipHealthComponent>();
         m_HealthComponent.Initialize(Buffs);
+        m_HealthComponent.OnDamageTaken += OnDamageTaken;
 
         m_WeaponComponent = InitializeComponent<ShipWeaponComponent>();
         Type[] WeaponTypes = OnPreInitializeWeapons();
@@ -76,6 +77,11 @@ public class Ship : CustomBehavior
     {
         return new Type[] { };
     }
+
+    /** Overridable method
+    */
+    protected virtual void OnDamageTaken(float NewHealth, float DeltaHealth)
+    { }
 
     private void UseBuffs(BuffMultipliers Buffs)
     {

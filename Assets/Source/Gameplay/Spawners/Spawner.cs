@@ -68,7 +68,8 @@ public class Spawner : CustomBehavior
         return Ships;
     }
 
-    // Derived classes should put spawn logic here
+    /** Derived classes should put spawn logic here
+    */
     protected virtual GameObject[] OnSpawn()
     {
         return new GameObject[] { };

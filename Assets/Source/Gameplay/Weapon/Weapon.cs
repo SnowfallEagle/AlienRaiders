@@ -34,7 +34,8 @@ public class Weapon : CustomBehavior
         m_hFireTimer.Invalidate();
     }
 
-    // Overridable method for derived weapons
+    /** Overridable method for derived weapons
+    */
     protected virtual void Fire()
     { }
 }
