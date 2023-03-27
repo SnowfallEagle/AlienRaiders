@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,9 +22,10 @@ public class AIShip : Ship
         BehaviorComponent.AddTask(new BHTaskFireWhenSeePlayer(90f));
     }
 
-    protected override void OnPreInitializeWeapons()
+    protected override Type[] OnPreInitializeWeapons()
     {
-        PreSetNumWeapons((int)Weapons.MaxWeapons);
-        PreAddWeapon<LauncherWeapon>((int)Weapons.Launcher);
+        Type[] WeaponTypes = new Type[(int)Weapons.MaxWeapons];
+        WeaponTypes[(int)Weapons.Launcher] = typeof(LauncherWeapon);
+        return WeaponTypes;
     }
 }

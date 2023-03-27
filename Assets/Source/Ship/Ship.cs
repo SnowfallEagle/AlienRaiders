@@ -18,8 +18,6 @@ public class Ship : CustomBehavior
     private float m_Speed;
     public float Speed => m_Speed;
 
-    private Type[] m_WeaponTypes = new Type[] { };
-
     protected BoxCollider2D m_BoxCollider;
     public BoxCollider2D BoxCollider => m_BoxCollider;
 
@@ -47,8 +45,8 @@ public class Ship : CustomBehavior
         m_HealthComponent.Initialize(Buffs);
 
         m_WeaponComponent = InitializeComponent<ShipWeaponComponent>();
-        OnPreInitializeWeapons();
-        m_WeaponComponent.Initialize(Buffs, m_WeaponTypes);
+        Type[] WeaponTypes = OnPreInitializeWeapons();
+        m_WeaponComponent.Initialize(Buffs, WeaponTypes);
 
         UseBuffs(Buffs);
     }
@@ -67,25 +65,10 @@ public class Ship : CustomBehavior
 
     /** Overridable OnPreInitializeWeapons() method
         Should be overrided by derived classes to set up weapons.
-        Derived class must use PreSetNumWeapons() and PreAddWeapon().
     */
-    protected virtual void OnPreInitializeWeapons()
-    { }
-
-    protected void PreSetNumWeapons(int NumWeapons)
+    protected virtual Type[] OnPreInitializeWeapons()
     {
-        if (NumWeapons > 0)
-        {
-            Array.Resize(ref m_WeaponTypes, NumWeapons);
-        }
-    }
-
-    protected void PreAddWeapon<T>(int Index) where T : Weapon
-    {
-        if (Index >= 0 && Index < m_WeaponTypes.Length)
-        {
-            m_WeaponTypes[Index] = typeof(T);
-        }
+        return new Type[] { };
     }
 
     private void UseBuffs(BuffMultipliers Buffs)

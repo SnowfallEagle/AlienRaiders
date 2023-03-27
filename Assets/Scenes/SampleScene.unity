@@ -577,5 +577,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SDKType: 1
   bDebugMode: 1
-  bDebugDrawAI: 0
-  bDebugGodMode: 1
+  DebugLevel:
+    bEnabled: 0
+    bSpecificLevel: 0
+    Level: 0
+    bSpecificStage: 0
+    Stage: 0
+  DebugPlayer:
+    bEnabled: 1
+    bGodMode: 1
+  DebugAI:
+    bEnabled: 1
+    bDrawEyesight: 1

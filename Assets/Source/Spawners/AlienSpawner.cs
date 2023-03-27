@@ -40,8 +40,8 @@ public class AlienSpawner : Spawner
             s_AlienPrefab.transform.rotation = Quaternion.Euler(0f, 0f, 180f);
         }
 
-        int SpawnPattern = m_Context.Config.SpawnPattern != Config.AnyParam ?
-            m_Context.Config.SpawnPattern :
+        int SpawnPattern = m_Config.SpawnPattern != Config.AnyParam ?
+            m_Config.SpawnPattern :
             Random.Range((int)Pattern.First, (int)Pattern.MaxPatterns);
 
         switch (SpawnPattern)
@@ -56,10 +56,10 @@ public class AlienSpawner : Spawner
     {
         GameObject Alien = SpawnInState(s_AlienPrefab);
 
-        float XRange = m_Context.TargetSize.x * 0.5f;
+        float XRange = s_Precomputed.TargetSize.x * 0.5f;
         Alien.transform.position = new Vector3(
             Random.Range(-XRange, XRange),
-            m_Context.TargetCenter.y + m_Context.TargetSize.y * 0.6f,
+            s_Precomputed.TargetCenter.y + s_Precomputed.TargetSize.y * 0.6f,
             0f
         );
 
@@ -81,8 +81,8 @@ public class AlienSpawner : Spawner
         // Set up config
         Vector3 AlienSize = Aliens[0].GetComponent<BoxCollider2D>().bounds.size;
         Vector3 FirstPosition = new Vector3(
-            m_Context.TargetCenter.x - m_Context.TargetSize.x * 0.5f,
-            m_Context.TargetCenter.y + m_Context.TargetSize.y * 0.6f,
+            s_Precomputed.TargetCenter.x - s_Precomputed.TargetSize.x * 0.5f,
+            s_Precomputed.TargetCenter.y + s_Precomputed.TargetSize.y * 0.6f,
             0f
         );
 
@@ -91,8 +91,8 @@ public class AlienSpawner : Spawner
         float YDiff = 0f;
 
         // Choose values for pattern
-        int SpawnSubpattern = m_Context.Config.SpawnSubpattern != Config.AnyParam ?
-            m_Context.Config.SpawnSubpattern :
+        int SpawnSubpattern = m_Config.SpawnSubpattern != Config.AnyParam ?
+            m_Config.SpawnSubpattern :
             Random.Range((int)TripleSubpattern.First, (int)TripleSubpattern.MaxPatterns);
 
         switch (SpawnSubpattern)
@@ -101,14 +101,14 @@ public class AlienSpawner : Spawner
                 XDiff = AlienSize.x + SpaceBetweenAliens;
                 YDiff = AlienSize.y + SpaceBetweenAliens;
 
-                FirstPosition.x += Random.Range(0f, m_Context.TargetSize.x - XDiff * NumAliens);
+                FirstPosition.x += Random.Range(0f, s_Precomputed.TargetSize.x - XDiff * NumAliens);
                 break;
 
             case (int)TripleSubpattern.Left:
                 XDiff = -(AlienSize.x + SpaceBetweenAliens);
                 YDiff = AlienSize.y + SpaceBetweenAliens;
 
-                FirstPosition.x += Random.Range(-XDiff * (NumAliens - 1), m_Context.TargetSize.x + XDiff * NumAliens);
+                FirstPosition.x += Random.Range(-XDiff * (NumAliens - 1), s_Precomputed.TargetSize.x + XDiff * NumAliens);
                 break;
         }
 

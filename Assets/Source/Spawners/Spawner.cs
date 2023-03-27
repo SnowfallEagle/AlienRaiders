@@ -19,17 +19,15 @@ public class Spawner : CustomBehavior
         public BuffMultipliers Buffs = new BuffMultipliers();
     }
 
-    protected class Context
+    protected struct PrecomputedStuff
     {
-        public Config Config;
+        public bool bPrecomputed;
 
-        // TODO: Maybe remove context, make static struct for this
-        // Some precomputed stuff
         public Vector3 TargetSize;
         public Vector3 TargetCenter;
         public Vector3 LeftTop;
 
-        public Context()
+        public void Precompute()
         {
             TargetSize = RenderingService.Instance.TargetSize;
             TargetCenter = RenderingService.Instance.TargetCenter;
@@ -37,14 +35,21 @@ public class Spawner : CustomBehavior
         }
     }
 
-    protected Context m_Context;
+    protected Config m_Config;
+    static protected PrecomputedStuff s_Precomputed = new PrecomputedStuff();
+    static private bool s_bPrecomputed = false;
 
     public GameObject[] Spawn(Config Config)
     {
+        if (!s_bPrecomputed)
+        {
+            s_Precomputed.Precompute();
+            s_bPrecomputed = true;
+        }
+
         Assert.IsNotNull(Config);
 
-        m_Context = new Context();
-        m_Context.Config = Config;
+        m_Config = Config;
 
         GameObject[] Ships = OnSpawn();
         Assert.IsNotNull(Ships);
@@ -64,13 +69,13 @@ public class Spawner : CustomBehavior
     private void InitializeShips(GameObject[] Ships)
     {
         BuffMultipliers Buffs =
-            m_Context.Config.Buffs *
+            m_Config.Buffs *
             GameStateMachine.Instance.GetCurrentState<FightGameState>().EnemyBuffs;
 
         foreach (var Ship in Ships)
         {
             Ship.GetComponent<Ship>().Initialize(Buffs);
-            Ship.GetComponent<SpriteRenderer>().color = m_Context.Config.ShipColor;
+            Ship.GetComponent<SpriteRenderer>().color = m_Config.ShipColor;
         }
     }
 }

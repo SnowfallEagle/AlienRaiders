@@ -45,12 +45,6 @@ public class GameEnvironment : Service<GameEnvironment>
         [SerializeField] public bool bDrawEyesight = false;
     }
 
-    private class DebugOptionBinding
-    {
-        public ConstValueRef<bool> bEnabled;
-        public ValueRef<bool> bOption;
-    }
-
     [SerializeField] public PlatformSDK SDKType =
 #if NDEBUG
         PlatformSDK.Yandex;
@@ -64,7 +58,7 @@ public class GameEnvironment : Service<GameEnvironment>
     [SerializeField] public DebugPlayerInfo DebugPlayer = new DebugPlayerInfo();
     [SerializeField] public DebugAIInfo DebugAI = new DebugAIInfo();
 
-    private Dictionary<KeyCode, DebugOptionBinding> InputBindings;
+    private Dictionary<KeyCode, ValueRef<bool>> InputBindings;
 
     protected override void Initialize()
     {
@@ -126,61 +120,40 @@ public class GameEnvironment : Service<GameEnvironment>
 
     private void SetBindings()
     {
-        InputBindings = new Dictionary<KeyCode, DebugOptionBinding>
+        InputBindings = new Dictionary<KeyCode, ValueRef<bool>>
         {
             // AI
-            { KeyCode.Keypad7, // bEnabled
-                new DebugOptionBinding
-                {
-                    bEnabled = new ConstValueRef<bool>(() => true),
-                    bOption = new ValueRef<bool>(() => DebugAI.bEnabled, Value => DebugAI.bEnabled = Value)
-                }
+            { // bEnabled
+                KeyCode.Keypad7,
+                new ValueRef<bool>(() => DebugAI.bEnabled, Value => DebugAI.bEnabled = Value)
             },
-            { KeyCode.Keypad1, // bDrawEyesight
-                new DebugOptionBinding
-                {
-                    bEnabled = new ConstValueRef<bool>(() => DebugAI.bEnabled),
-                    bOption = new ValueRef<bool>(() => DebugAI.bDrawEyesight, Value => DebugAI.bDrawEyesight = Value)
-                }
+            { // bDrawEyesight
+                KeyCode.Keypad1,
+                new ValueRef<bool>(() => DebugAI.bDrawEyesight, Value => DebugAI.bDrawEyesight = Value)
             },
 
             // Player
-            { KeyCode.Keypad8, // bEnabled
-                new DebugOptionBinding
-                {
-                    bEnabled = new ConstValueRef<bool>(() => true),
-                    bOption = new ValueRef<bool>(() => DebugPlayer.bEnabled, Value => DebugPlayer.bEnabled = Value)
-                }
+            { // bEnabled
+                KeyCode.Keypad8,
+                new ValueRef<bool>(() => DebugPlayer.bEnabled, Value => DebugPlayer.bEnabled = Value)
             },
-            { KeyCode.Keypad2, // bGodMode
-                new DebugOptionBinding
-                {
-                    bEnabled = new ConstValueRef<bool>(() => DebugPlayer.bEnabled),
-                    bOption = new ValueRef<bool>(() => DebugPlayer.bGodMode, Value => DebugPlayer.bGodMode = Value)
-                }
+            { // bGodMode
+                KeyCode.Keypad2,
+                new ValueRef<bool>(() => DebugPlayer.bGodMode, Value => DebugPlayer.bGodMode = Value)
             },
 
             // Level
-            { KeyCode.Keypad9, // bEnabled
-                new DebugOptionBinding
-                {
-                    bEnabled = new ConstValueRef<bool>(() => true),
-                    bOption = new ValueRef<bool>(() => DebugLevel.bEnabled, Value => DebugLevel.bEnabled = Value)
-                }
+            { // bEnabled
+                KeyCode.Keypad9,
+                new ValueRef<bool>(() => DebugLevel.bEnabled, Value => DebugLevel.bEnabled = Value)
             },
-            { KeyCode.Keypad4, // bSpecificLevel
-                new DebugOptionBinding
-                {
-                    bEnabled = new ConstValueRef<bool>(() => DebugLevel.bEnabled),
-                    bOption = new ValueRef<bool>(() => DebugLevel.bSpecificLevel, Value => DebugLevel.bSpecificLevel = Value)
-                }
+            { // bSpecificLevel
+                KeyCode.Keypad4,
+                new ValueRef<bool>(() => DebugLevel.bSpecificLevel, Value => DebugLevel.bSpecificLevel = Value)
             },
-            { KeyCode.Keypad5, // bSpecificStage
-                new DebugOptionBinding
-                {
-                    bEnabled = new ConstValueRef<bool>(() => DebugLevel.bEnabled),
-                    bOption = new ValueRef<bool>(() => DebugLevel.bSpecificStage, Value => DebugLevel.bSpecificStage = Value)
-                }
+            { // bSpecificStage
+                KeyCode.Keypad5,
+                new ValueRef<bool>(() => DebugLevel.bSpecificStage, Value => DebugLevel.bSpecificStage = Value)
             },
         };
     }
@@ -201,11 +174,7 @@ public class GameEnvironment : Service<GameEnvironment>
         {
             if (Input.GetKeyDown(InputBinding.Key))
             {
-                DebugOptionBinding Bind = InputBinding.Value;
-                if (Bind.bEnabled.Value)
-                {
-                    Bind.bOption.Value = !Bind.bOption.Value;
-                }
+                InputBinding.Value.Value ^= true;
             }
         }
     }
