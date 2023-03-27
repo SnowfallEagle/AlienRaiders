@@ -6,10 +6,7 @@ public class AlienSpawner : Spawner
 {
     public enum Pattern
     {
-        First,
-
-        Single = First,
-        // TODO: Double,
+        Single,
         Triple,
 
         MaxPatterns
@@ -17,9 +14,7 @@ public class AlienSpawner : Spawner
 
     public enum TripleSubpattern
     {
-        First,
-
-        Left = First,
+        Left,
         Right,
         /* TODO:
         Center,
@@ -40,11 +35,7 @@ public class AlienSpawner : Spawner
             s_AlienPrefab.transform.rotation = Quaternion.Euler(0f, 0f, 180f);
         }
 
-        int SpawnPattern = m_Config.SpawnPattern != Config.AnyParam ?
-            m_Config.SpawnPattern :
-            Random.Range((int)Pattern.First, (int)Pattern.MaxPatterns);
-
-        switch (SpawnPattern)
+        switch (GetPattern((int)Pattern.MaxPatterns))
         {
             case (int)Pattern.Single: return SpawnSingle();
             case (int)Pattern.Triple: return SpawnTriple();
@@ -90,12 +81,7 @@ public class AlienSpawner : Spawner
         float XDiff = 0f;
         float YDiff = 0f;
 
-        // Choose values for pattern
-        int SpawnSubpattern = m_Config.SpawnSubpattern != Config.AnyParam ?
-            m_Config.SpawnSubpattern :
-            Random.Range((int)TripleSubpattern.First, (int)TripleSubpattern.MaxPatterns);
-
-        switch (SpawnSubpattern)
+        switch (GetSubpattern((int)TripleSubpattern.MaxPatterns))
         {
             case (int)TripleSubpattern.Right:
                 XDiff = AlienSize.x + SpaceBetweenAliens;
