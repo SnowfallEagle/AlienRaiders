@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class FightStage : CustomBehavior
 {
@@ -8,10 +9,10 @@ public class FightStage : CustomBehavior
         public Type Type = typeof(AlienSpawner);
         public Spawner.Config Config = new Spawner.Config();
 
-        public float TimeToNext = 5f; // If bWaitToEnd = true then this shows delay after destroying ships
+        public float TimeToNext = 0f; // If bWaitToEnd = true then this shows delay after destroying ships
         public bool bWaitToEnd = false;
 
-        // TODO: Iterations count?
+        public int Iterations = 1;
     }
 
     private SpawnerInfo[] s_SpawnersInfo = new SpawnerInfo[]
@@ -27,7 +28,8 @@ public class FightStage : CustomBehavior
             },
 
             bWaitToEnd = true,
-            TimeToNext = 2.5f
+
+            Iterations = 2
         },
 
         new SpawnerInfo
@@ -47,6 +49,7 @@ public class FightStage : CustomBehavior
     private SpawnerInfo m_CurrentSpawnerInfo;
 
     private GameObject[] m_CurrentShips;
+    private Spawner m_CurrentSpawner;
 
     private void Start()
     {
@@ -55,7 +58,7 @@ public class FightStage : CustomBehavior
 
     private void Update()
     {
-        if (!m_CurrentSpawnerInfo.bWaitToEnd)
+        if (m_CurrentSpawnerInfo == null || !m_CurrentSpawnerInfo.bWaitToEnd)
         {
             return;
         }
@@ -68,7 +71,24 @@ public class FightStage : CustomBehavior
             }
         }
 
-        TimerService.Instance.AddTimer(NextSpawner, m_CurrentSpawnerInfo.TimeToNext);
+        TimerService.Instance.AddTimer(NextIteration, m_CurrentSpawnerInfo.TimeToNext);
+    }
+
+    private void NextIteration()
+    {
+        if (--m_CurrentSpawnerInfo.Iterations < 0)
+        {
+            Destroy(m_CurrentSpawner);
+            NextSpawner();
+            return;
+        }
+
+        m_CurrentShips = m_CurrentSpawner.Spawn(m_CurrentSpawnerInfo.Config);
+
+        if (!m_CurrentSpawnerInfo.bWaitToEnd)
+        {
+            TimerService.Instance.AddTimer(NextIteration, m_CurrentSpawnerInfo.TimeToNext);
+        }
     }
 
     private void NextSpawner()
@@ -80,14 +100,8 @@ public class FightStage : CustomBehavior
         }
 
         m_CurrentSpawnerInfo = s_SpawnersInfo[m_CurrentSpawnerIndex];
-        var Spawner = SpawnInState<Spawner>(m_CurrentSpawnerInfo.Type);
-        m_CurrentShips = Spawner.Spawn(m_CurrentSpawnerInfo.Config);
+        m_CurrentSpawner = SpawnInState<Spawner>(m_CurrentSpawnerInfo.Type);
 
-        if (m_CurrentSpawnerInfo.bWaitToEnd)
-        {
-            return;
-        }
-
-        TimerService.Instance.AddTimer(NextSpawner, m_CurrentSpawnerInfo.TimeToNext);
+        NextIteration();
     }
 }

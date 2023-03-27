@@ -65,8 +65,6 @@ public class Spawner : CustomBehavior
         Assert.IsNotNull(Ships);
         InitializeShips(Ships);
 
-        Destroy(gameObject);
-
         return Ships;
     }
 
