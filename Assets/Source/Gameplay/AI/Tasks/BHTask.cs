@@ -7,9 +7,7 @@ public class BHTask
         Failed
     }
 
-    protected TaskState m_State = TaskState.InProgress;
-    public TaskState State => m_State;
-
+    public TaskState State = TaskState.InProgress;
     protected BehaviorComponent m_Owner;
 
     public bool bEnded => State == TaskState.Done || State == TaskState.Failed;

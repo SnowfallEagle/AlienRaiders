@@ -40,7 +40,7 @@ public class BHShipTask_AnimateSpriteColor : BHTask
         if (m_Elapsed > m_Duration)
         {
             m_SpriteRenderer.color = m_DesiredColor;
-            m_State = TaskState.Done;
+            State = TaskState.Done;
 
             if (m_bPulse)
             {

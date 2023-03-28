@@ -10,7 +10,10 @@ public class Projectile : CustomBehavior
     public BehaviorComponent BehaviorComponent => m_BehaviorComponent;
 
     protected float m_Damage = 5f;
+    public float Damage => m_Damage;
+
     protected float m_Speed = 5f;
+    public float Speed => m_Speed;
 
     protected Ship m_Owner;
 
@@ -42,8 +45,8 @@ public class Projectile : CustomBehavior
         Ship Ship = Other.GetComponent<Ship>();
         if (Ship && Ship.ShipTeam != m_Owner.ShipTeam)
         {
-            // TODO: Maybe spawn effect?
             Ship.HealthComponent.TakeDamage(m_Damage);
+            // TODO: Maybe spawn effect on OnDestroy()?
             Destroy(gameObject);
         }
     }

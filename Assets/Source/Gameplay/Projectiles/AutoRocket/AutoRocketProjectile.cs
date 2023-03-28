@@ -1,13 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+// TODO: Implement auto rocket support for player
 public class AutoRocketProjectile : Projectile
 {
     protected override void Start()
     {
         base.Start();
 
-        // TODO: Add some special stuff
+        m_BehaviorComponent.AddTask(new BHAutoRocketTask_MoveVertical());
     }
 }

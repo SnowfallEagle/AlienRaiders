@@ -12,10 +12,10 @@ TagManager:
   - 
   - Water
   - UI
-  - Hidden Wall
+  - 
   - Player
-  - Enemy
-  - Bullet
+  - Alien
+  - Projectile
   - Pickup
   - 
   - 

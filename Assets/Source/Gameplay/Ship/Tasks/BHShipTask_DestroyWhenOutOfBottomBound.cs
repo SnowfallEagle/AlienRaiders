@@ -13,7 +13,7 @@ public class BHShipTask_DestroyWhenOutOfBottomBound : BHTask
         if (m_Owner.transform.position.y < YBound)
         {
             m_Owner.GetComponent<ShipHealthComponent>().Kill();
-            m_State = TaskState.Done;
+            State = TaskState.Done;
         }
     }
 }

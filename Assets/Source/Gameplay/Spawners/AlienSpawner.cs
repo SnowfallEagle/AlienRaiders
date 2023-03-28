@@ -28,7 +28,9 @@ public class AlienSpawner : Spawner
     {
         if (!s_AlienPrefab)
         {
-            s_AlienPrefab = Resources.Load<GameObject>("Ships/Alien");
+            // DEBUG
+            // s_AlienPrefab = Resources.Load<GameObject>("Ships/Alien");
+            s_AlienPrefab = Resources.Load<GameObject>("Ships/Rocketer");
             s_AlienPrefab.transform.rotation = Quaternion.Euler(0f, 0f, 180f);
         }
 

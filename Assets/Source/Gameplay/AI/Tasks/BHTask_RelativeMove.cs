@@ -12,6 +12,6 @@ public class BHTask_RelativeMove : BHTask
     public override void Start()
     {
         m_Owner.transform.position += m_DeltaPosition;
-        m_State = TaskState.Done;
+        State = TaskState.Done;
     }
 }

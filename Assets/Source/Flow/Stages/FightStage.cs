@@ -22,6 +22,18 @@ public class FightStage : CustomBehavior
             Type = typeof(AlienSpawner),
             Config = new Spawner.Config
             {
+                SpecificSpawnPattern = (int)AlienSpawner.Pattern.Single,
+                ShipColor = Color.magenta,
+            },
+
+            bWaitToEnd = true,
+        },
+
+        new SpawnerInfo
+        {
+            Type = typeof(AlienSpawner),
+            Config = new Spawner.Config
+            {
                 SpecificSpawnPattern = (int)AlienSpawner.Pattern.Triple,
                 SpecificSpawnSubpattern = (int)AlienSpawner.TripleSubpattern.Column,
                 ShipColor = Color.magenta,

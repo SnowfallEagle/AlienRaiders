@@ -28,7 +28,6 @@ public class FightGameState : GameState
                     {
                         ShipHealth = 0.1f,
 
-                        ProjectileSpeed = 10f,
                         ProjectileDamage = 10f
                     }
                 }
