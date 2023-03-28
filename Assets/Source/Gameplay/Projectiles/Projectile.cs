@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Projectile : CustomBehavior
@@ -18,7 +16,7 @@ public class Projectile : CustomBehavior
 
     protected virtual void Start()
     {
-        gameObject.layer = LayerMask.NameToLayer("Bullet");
+        gameObject.layer = LayerMask.NameToLayer("Projectile");
 
         var Rigidbody = InitializeComponent<Rigidbody2D>();
         Rigidbody.gravityScale = 0f;

@@ -1,8 +1,7 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+// TODO: We need to make base alien class from it
 public class AlienShip : Ship
 {
     private enum Weapons
@@ -19,7 +18,7 @@ public class AlienShip : Ship
     {
         base.Initialize(Buffs);
 
-        gameObject.layer = LayerMask.NameToLayer("Enemy");
+        gameObject.layer = LayerMask.NameToLayer("Alien");
         m_ShipTeam = Team.Enemy;
 
         m_BoxCollider.isTrigger = true;
