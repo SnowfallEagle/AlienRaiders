@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+// TODO: Make base HealthComponent
 public class ShipHealthComponent : CustomBehavior
 {
     public delegate void OnDamageTakenSignature(float NewHealth, float DeltaHealth);
@@ -14,7 +13,7 @@ public class ShipHealthComponent : CustomBehavior
     [SerializeField] protected float m_DefaultHealth = 100f;
     private float m_Health;
 
-    private bool bNeedToDestroy = false;
+    private bool m_bNeedToDestroy = false;
 
     /** Must be called from Ship
     */
@@ -25,7 +24,7 @@ public class ShipHealthComponent : CustomBehavior
 
     private void LateUpdate()
     {
-        if (bNeedToDestroy)
+        if (m_bNeedToDestroy)
         {
             Destroy(gameObject);
         }
@@ -43,7 +42,7 @@ public class ShipHealthComponent : CustomBehavior
 
         if (NewHealth <= 0f)
         {
-            bNeedToDestroy = true;
+            m_bNeedToDestroy = true;
         }
     }
 

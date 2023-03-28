@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 // TODO: Move FOV -> Ship?
@@ -25,11 +26,10 @@ public class BHShipTask_FireWhenSeePlayer : BHTask
             return;
         }
 
-        Vector3 ToPlayerVector = Vector3.Normalize(PlayerShip.transform.position - m_Owner.transform.position);
-        float CosAngle = Vector3.Dot(m_Owner.transform.up, ToPlayerVector);
-        float Angle = Mathf.Rad2Deg * Mathf.Acos(CosAngle);
+        Vector3 ToPlayerVector = (PlayerShip.transform.position - m_Owner.transform.position).normalized;
+        float Angle = Mathf.Rad2Deg * MathF.Acos(Vector3.Dot(m_Owner.transform.up, ToPlayerVector));
 
-        if (Mathf.Abs(Angle) < m_FOV * 0.5f)
+        if (MathF.Abs(Angle) < m_FOV * 0.5f)
         {
             m_BehaviorComponent.AddTask(new BHShipTask_StartFire());
         }
@@ -51,17 +51,17 @@ public class BHShipTask_FireWhenSeePlayer : BHTask
                 float FOVDiv2Rad = Mathf.Deg2Rad * (m_FOV * 0.5f);
 
                 Vector3 TransformAngles = Mathf.Deg2Rad * m_Owner.transform.rotation.eulerAngles;
-                float SpriteZRotation = Mathf.PI * 0.5f;
+                float SpriteZRotation = MathF.PI * 0.5f;
                 float ZTransform = TransformAngles.z - SpriteZRotation;
 
                 Vector3 DirectionRight = new Vector3(
-                    Mathf.Cos(FOVDiv2Rad + ZTransform),
-                    -Mathf.Sin(FOVDiv2Rad + ZTransform),
+                    MathF.Cos(FOVDiv2Rad + ZTransform),
+                    -MathF.Sin(FOVDiv2Rad + ZTransform),
                     0f
                 ) * 5f;
                 Vector3 DirectionLeft = new Vector3(
-                    Mathf.Cos(-FOVDiv2Rad + ZTransform),
-                    -Mathf.Sin(-FOVDiv2Rad + ZTransform),
+                    MathF.Cos(-FOVDiv2Rad + ZTransform),
+                    -MathF.Sin(-FOVDiv2Rad + ZTransform),
                     0f
                 ) * 5f;
 

@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// TODO: Make it owner agnostic...
 public class BHAutoRocketTask_MoveVertical : BHTask
 {
     public override void Start()
@@ -15,11 +16,13 @@ public class BHAutoRocketTask_MoveVertical : BHTask
 
         TimerService.Instance.AddTimer(null, m_Owner, () =>
             {
-                State = TaskState.Done;
                 InternalMoveTask.State = TaskState.Done;
-                // TODO: m_Owner.AddTask(new BHAutoRocketTask_FollowPlayer());
+                State = TaskState.Done;
+
+                // TODO: Player support, make it after implementing sequence-like stuff
+                m_Owner.AddTask(new BHTask_FollowTarget(PlayerState.Instance.PlayerShip));
             },
-            1f
+            1f // TODO: Make field for it
         );
     }
 }
