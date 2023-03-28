@@ -33,8 +33,8 @@ public class Ship : CustomBehavior
     protected ShipWeaponComponent m_WeaponComponent;
     public ShipWeaponComponent WeaponComponent => m_WeaponComponent;
 
-    protected ShipBehaviorComponent m_BehaviorComponent;
-    public ShipBehaviorComponent BehaviorComponent => m_BehaviorComponent;
+    protected BehaviorComponent m_BehaviorComponent;
+    public BehaviorComponent BehaviorComponent => m_BehaviorComponent;
 
     public virtual void Initialize(BuffMultipliers Buffs)
     {
@@ -42,7 +42,9 @@ public class Ship : CustomBehavior
 
         m_BoxCollider = InitializeComponent<BoxCollider2D>();
         m_SpriteRenderer = InitializeComponent<SpriteRenderer>();
-        m_BehaviorComponent = InitializeComponent<ShipBehaviorComponent>();
+
+        m_BehaviorComponent = InitializeComponent<BehaviorComponent>();
+        m_BehaviorComponent.Initialize(this);
 
         m_RigidBody = InitializeComponent<Rigidbody2D>();
         m_RigidBody.gravityScale = 0f;

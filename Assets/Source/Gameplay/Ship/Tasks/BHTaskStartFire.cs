@@ -1,8 +1,10 @@
+using UnityEngine;
+
 public class BHTaskStartFire : BHTask
 {
-    public override void Start(Ship Owner)
+    public override void Start(MonoBehaviour Owner)
     {
-        Owner.WeaponComponent.StartFire();
+        Owner.GetComponent<ShipWeaponComponent>().StartFire();
         m_State = TaskState.Done;
     }
 }

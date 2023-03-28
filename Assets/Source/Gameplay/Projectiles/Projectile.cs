@@ -13,7 +13,7 @@ public class Projectile : CustomBehavior
 
     private Ship.Team m_OwnerTeam;
 
-    private void Start()
+    protected virtual void Start()
     {
         gameObject.layer = LayerMask.NameToLayer("Bullet");
 
@@ -23,11 +23,14 @@ public class Projectile : CustomBehavior
         var BoxCollider = InitializeComponent<BoxCollider2D>();
         BoxCollider.isTrigger = true;
 
+        // TODO: Behavior component
+
         Destroy(gameObject, m_LifeTime);
     }
 
     private void Update()
     {
+        // TODO: Put in BasicProjectile's task
         transform.Translate(0f, m_Speed * Time.deltaTime, 0f);
     }
 

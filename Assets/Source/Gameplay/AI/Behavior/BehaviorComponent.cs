@@ -1,16 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
-public class ShipBehaviorComponent : CustomBehavior
+public class BehaviorComponent : CustomBehavior
 {
-    private Ship m_Owner;
+    private MonoBehaviour m_Owner;
 
     private List<BHTask> m_TaskList = new List<BHTask>();
 
-    private void Start()
+    public void Initialize(MonoBehaviour Owner)
     {
-        m_Owner = GetComponent<Ship>();
+        m_Owner = Owner;
     }
 
     private void LateUpdate()

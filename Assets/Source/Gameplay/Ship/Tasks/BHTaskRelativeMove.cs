@@ -9,7 +9,7 @@ public class BHTaskRelativeMove : BHTask
         m_DeltaPosition = DeltaPosition;
     }
 
-    public override void Start(Ship Owner)
+    public override void Start(MonoBehaviour Owner)
     {
         Owner.transform.position += m_DeltaPosition;
         m_State = TaskState.Done;

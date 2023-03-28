@@ -6,13 +6,13 @@ public class BHTaskDestroyWhenOutOfBottomBound : BHTask
 {
     private float YBound;
 
-    public override void Start(Ship Owner)
+    public override void Start(MonoBehaviour Owner)
     {
         var Renderer = RenderingService.Instance;
         YBound = Renderer.TargetCenter.y - (Renderer.TargetSize.y * 0.6f);
     }
 
-    public override void Update(Ship Owner)
+    public override void Update(MonoBehaviour Owner)
     {
         if (Owner.transform.position.y < YBound)
         {

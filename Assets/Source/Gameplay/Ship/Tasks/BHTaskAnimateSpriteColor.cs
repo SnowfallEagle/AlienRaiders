@@ -14,6 +14,7 @@ public class BHTaskAnimateSpriteColor : BHTask
     private bool m_bLoop;
 
     private SpriteRenderer m_SpriteRenderer;
+    private BehaviorComponent m_BehaviorComponent;
 
     /** bLoop worls only with bPulse = true
     */
@@ -28,13 +29,14 @@ public class BHTaskAnimateSpriteColor : BHTask
         m_bLoop = bLoop;
     }
 
-    public override void Start(Ship Owner)
+    public override void Start(MonoBehaviour Owner)
     {
-        m_SpriteRenderer = Owner.SpriteRenderer;
+        m_SpriteRenderer = Owner.GetComponent<SpriteRenderer>();
+        m_BehaviorComponent = Owner.GetComponent<BehaviorComponent>();
         m_SavedColor = m_SpriteRenderer.color;
     }
 
-    public override void Update(Ship Owner)
+    public override void Update(MonoBehaviour Owner)
     {
         m_Elapsed += Time.deltaTime;
         if (m_Elapsed > m_Duration)
@@ -44,7 +46,7 @@ public class BHTaskAnimateSpriteColor : BHTask
 
             if (m_bPulse)
             {
-                Owner.BehaviorComponent.AddTask(new BHTaskAnimateSpriteColor(m_SavedColor, m_Duration, bPulse: m_bLoop, bLoop: m_bLoop));
+                m_BehaviorComponent.AddTask(new BHTaskAnimateSpriteColor(m_SavedColor, m_Duration, bPulse: m_bLoop, bLoop: m_bLoop));
             }
             return;
         }

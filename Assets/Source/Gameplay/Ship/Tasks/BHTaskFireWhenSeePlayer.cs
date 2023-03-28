@@ -6,18 +6,24 @@ using UnityEngine;
 public class BHTaskFireWhenSeePlayer : BHTask
 {
     private float m_FOV;
+    private BehaviorComponent m_BehaviorComponent;
 
     public BHTaskFireWhenSeePlayer(float FOV = 180f)
     {
         m_FOV = FOV;
     }
 
-    public override void Update(Ship Owner)
+    public override void Start(MonoBehaviour Owner)
+    {
+        m_BehaviorComponent = Owner.GetComponent<BehaviorComponent>();
+    }
+
+    public override void Update(MonoBehaviour Owner)
     {
         PlayerShip PlayerShip = PlayerState.Instance.PlayerShip;
         if (!PlayerShip)
         {
-            Owner.BehaviorComponent.AddTask(new BHTaskStopFire());
+            m_BehaviorComponent.AddTask(new BHTaskStopFire());
             return;
         }
 
@@ -27,11 +33,11 @@ public class BHTaskFireWhenSeePlayer : BHTask
 
         if (Mathf.Abs(Angle) < m_FOV * 0.5f)
         {
-            Owner.BehaviorComponent.AddTask(new BHTaskStartFire());
+            m_BehaviorComponent.AddTask(new BHTaskStartFire());
         }
         else
         {
-            Owner.BehaviorComponent.AddTask(new BHTaskStopFire());
+            m_BehaviorComponent.AddTask(new BHTaskStopFire());
         }
 
         // DEBUG
