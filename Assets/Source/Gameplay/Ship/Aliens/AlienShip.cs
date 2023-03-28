@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AIShip : Ship
+public class AlienShip : Ship
 {
     private enum Weapons
     {
@@ -24,9 +24,9 @@ public class AIShip : Ship
 
         m_BoxCollider.isTrigger = true;
 
-        BehaviorComponent.AddTask(new BHTaskMoveBottom());
-        BehaviorComponent.AddTask(new BHTaskDestroyWhenOutOfBottomBound());
-        BehaviorComponent.AddTask(new BHTaskFireWhenSeePlayer(90f));
+        BehaviorComponent.AddTask(new BHShipTask_MoveBottom());
+        BehaviorComponent.AddTask(new BHShipTask_DestroyWhenOutOfBottomBound());
+        BehaviorComponent.AddTask(new BHShipTask_FireWhenSeePlayer(90f));
     }
 
     protected override Type[] OnPreInitializeWeapons()
@@ -41,7 +41,7 @@ public class AIShip : Ship
         base.OnDamageTaken(NewHealth, DeltaHealth);
 
         // TODO: Later we can make config for this animation
-        m_BehaviorComponent.AddTask(new BHTaskAnimateSpriteColor(Color.red, Duration: 0.15f, bPulse: true));
+        m_BehaviorComponent.AddTask(new BHShipTask_AnimateSpriteColor(Color.red, Duration: 0.15f, bPulse: true));
     }
 
     private void OnTriggerEnter2D(Collider2D Other)
@@ -49,7 +49,7 @@ public class AIShip : Ship
         var PlayerShip = Other.GetComponent<PlayerShip>();
         if (PlayerShip)
         {
-            PlayerShip.GetComponent<ShipHealthComponent>().TakeDamage(m_DamageOnCollide);
+            PlayerShip.HealthComponent.TakeDamage(m_DamageOnCollide);
         }
     }
 }

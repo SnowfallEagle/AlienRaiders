@@ -8,10 +8,13 @@ public class Projectile : CustomBehavior
     [SerializeField] protected float m_DefaultDamage = 5f;
     [SerializeField] protected float m_LifeTime = 5f;
 
-    private float m_Damage = 5f;
-    private float m_Speed = 5f;
+    protected BehaviorComponent m_BehaviorComponent;
+    public BehaviorComponent BehaviorComponent => m_BehaviorComponent;
 
-    private Ship.Team m_OwnerTeam;
+    protected float m_Damage = 5f;
+    protected float m_Speed = 5f;
+
+    protected Ship m_Owner;
 
     protected virtual void Start()
     {
@@ -23,20 +26,15 @@ public class Projectile : CustomBehavior
         var BoxCollider = InitializeComponent<BoxCollider2D>();
         BoxCollider.isTrigger = true;
 
-        // TODO: Behavior component
+        m_BehaviorComponent = InitializeComponent<BehaviorComponent>();
+        m_BehaviorComponent.Initialize(this);
 
         Destroy(gameObject, m_LifeTime);
     }
 
-    private void Update()
+    public void Initialize(Ship Owner, BuffMultipliers Buffs)
     {
-        // TODO: Put in BasicProjectile's task
-        transform.Translate(0f, m_Speed * Time.deltaTime, 0f);
-    }
-
-    public void Initialize(Ship.Team OwnerTeam, BuffMultipliers Buffs)
-    {
-        m_OwnerTeam = OwnerTeam;
+        m_Owner = Owner;
 
         m_Speed = m_DefaultSpeed * Buffs.ProjectileSpeed;
         m_Damage = m_DefaultDamage * Buffs.ProjectileDamage;
@@ -45,7 +43,7 @@ public class Projectile : CustomBehavior
     private void OnTriggerEnter2D(Collider2D Other)
     {
         Ship Ship = Other.GetComponent<Ship>();
-        if (Ship && Ship.ShipTeam != m_OwnerTeam)
+        if (Ship && Ship.ShipTeam != m_Owner.ShipTeam)
         {
             // TODO: Maybe spawn effect?
             Ship.HealthComponent.TakeDamage(m_Damage);

@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // TODO: Move FOV -> Ship?
-public class BHTaskFireWhenSeePlayer : BHTask
+public class BHShipTask_FireWhenSeePlayer : BHTask
 {
     private float m_FOV;
     private BehaviorComponent m_BehaviorComponent;
 
-    public BHTaskFireWhenSeePlayer(float FOV = 180f)
+    public BHShipTask_FireWhenSeePlayer(float FOV = 180f)
     {
         m_FOV = FOV;
     }
@@ -23,7 +23,7 @@ public class BHTaskFireWhenSeePlayer : BHTask
         PlayerShip PlayerShip = PlayerState.Instance.PlayerShip;
         if (!PlayerShip)
         {
-            m_BehaviorComponent.AddTask(new BHTaskStopFire());
+            m_BehaviorComponent.AddTask(new BHShipTask_StopFire());
             return;
         }
 
@@ -33,11 +33,11 @@ public class BHTaskFireWhenSeePlayer : BHTask
 
         if (Mathf.Abs(Angle) < m_FOV * 0.5f)
         {
-            m_BehaviorComponent.AddTask(new BHTaskStartFire());
+            m_BehaviorComponent.AddTask(new BHShipTask_StartFire());
         }
         else
         {
-            m_BehaviorComponent.AddTask(new BHTaskStopFire());
+            m_BehaviorComponent.AddTask(new BHShipTask_StopFire());
         }
 
         // DEBUG

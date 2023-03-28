@@ -23,6 +23,6 @@ public class LauncherWeapon : Weapon
         Projectile.transform.position = transform.position;
         Projectile.transform.rotation = transform.rotation;
 
-        Projectile.Initialize(m_Owner.ShipTeam, m_Buffs);
+        Projectile.Initialize(m_Owner, m_Buffs);
     }
 }

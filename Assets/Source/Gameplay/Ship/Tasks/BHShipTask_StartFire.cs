@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BHTaskStartFire : BHTask
+public class BHShipTask_StartFire : BHTask
 {
     public override void Start(MonoBehaviour Owner)
     {

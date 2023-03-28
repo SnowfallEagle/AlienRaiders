@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BHTaskAnimateSpriteColor : BHTask
+public class BHShipTask_AnimateSpriteColor : BHTask
 {
     private Color m_DesiredColor;
     private Color m_SavedColor;
@@ -18,7 +18,7 @@ public class BHTaskAnimateSpriteColor : BHTask
 
     /** bLoop worls only with bPulse = true
     */
-    public BHTaskAnimateSpriteColor(Color Desired, float Duration = 1f, float StartTime = 0f, bool bPulse = false, bool bLoop = false)
+    public BHShipTask_AnimateSpriteColor(Color Desired, float Duration = 1f, float StartTime = 0f, bool bPulse = false, bool bLoop = false)
     {
         m_DesiredColor = Desired;
 
@@ -46,7 +46,7 @@ public class BHTaskAnimateSpriteColor : BHTask
 
             if (m_bPulse)
             {
-                m_BehaviorComponent.AddTask(new BHTaskAnimateSpriteColor(m_SavedColor, m_Duration, bPulse: m_bLoop, bLoop: m_bLoop));
+                m_BehaviorComponent.AddTask(new BHShipTask_AnimateSpriteColor(m_SavedColor, m_Duration, bPulse: m_bLoop, bLoop: m_bLoop));
             }
             return;
         }

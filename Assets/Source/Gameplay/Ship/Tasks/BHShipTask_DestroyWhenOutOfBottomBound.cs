@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BHTaskDestroyWhenOutOfBottomBound : BHTask
+public class BHShipTask_DestroyWhenOutOfBottomBound : BHTask
 {
     private float YBound;
 

@@ -166,6 +166,10 @@ PrefabInstance:
       propertyPath: m_FireRate
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: -6110140553614665388, guid: c0ff77313b4b230419d4b8b29633346f, type: 3}
+      propertyPath: m_Projectile
+      value: 
+      objectReference: {fileID: 1569002348374814494, guid: f252172cd80cb3c4bb44fa4b8826a78a, type: 3}
     - target: {fileID: 2650527419972250271, guid: c0ff77313b4b230419d4b8b29633346f, type: 3}
       propertyPath: m_Name
       value: LauncherWeapon

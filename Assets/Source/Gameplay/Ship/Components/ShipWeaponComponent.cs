@@ -42,7 +42,6 @@ public class ShipWeaponComponent : CustomBehavior
                 if (ChildWeapon.GetType() == WeaponTypes[i])
                 {
                     m_Weapons[i] = ChildWeapon;
-                    Debug.Log(ChildWeapon + " is " + i);
                     break;
                 }
             }

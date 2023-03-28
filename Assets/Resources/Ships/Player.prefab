@@ -141,7 +141,7 @@ PrefabInstance:
     - target: {fileID: -6110140553614665388, guid: c0ff77313b4b230419d4b8b29633346f, type: 3}
       propertyPath: m_Projectile
       value: 
-      objectReference: {fileID: 7162803005779952050, guid: 72d832093c3c0b341921ffed15f548fe, type: 3}
+      objectReference: {fileID: 1225012329746979498, guid: 72d832093c3c0b341921ffed15f548fe, type: 3}
     - target: {fileID: 2650527419972250271, guid: c0ff77313b4b230419d4b8b29633346f, type: 3}
       propertyPath: m_Name
       value: LauncherWeapon

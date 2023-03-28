@@ -63,7 +63,7 @@ public class PlayerShip : Ship
             case TouchPhase.Began:
                 m_bControlled = true;
                 m_LastControlledWorldPosition = CoreUtils.ScreenToWorldPosition(touch.position);
-                BehaviorComponent.AddTask(new BHTaskStartFire());
+                BehaviorComponent.AddTask(new BHShipTask_StartFire());
                 break;
 
             case TouchPhase.Stationary:
@@ -73,7 +73,7 @@ public class PlayerShip : Ship
             case TouchPhase.Canceled:
             case TouchPhase.Ended:
                 m_bControlled = false;
-                BehaviorComponent.AddTask(new BHTaskStopFire());
+                BehaviorComponent.AddTask(new BHShipTask_StopFire());
                 break;
 
             case TouchPhase.Moved:
@@ -81,7 +81,7 @@ public class PlayerShip : Ship
                 Vector3 DeltaPosition = CurrentTouchWorldPosition - m_LastControlledWorldPosition;
                 m_LastControlledWorldPosition = CurrentTouchWorldPosition;
 
-                BehaviorComponent.AddTask(new BHTaskRelativeMove(DeltaPosition));
+                BehaviorComponent.AddTask(new BHTask_RelativeMove(DeltaPosition));
                 break;
         }
     }
@@ -92,7 +92,7 @@ public class PlayerShip : Ship
         {
             if (m_bControlled)
             {
-                BehaviorComponent.AddTask(new BHTaskStopFire());
+                BehaviorComponent.AddTask(new BHShipTask_StopFire());
                 m_bControlled = false;
             }
             return;
@@ -102,7 +102,7 @@ public class PlayerShip : Ship
         {
             m_LastControlledWorldPosition = CoreUtils.ScreenToWorldPosition(Input.mousePosition);
             m_bControlled = true;
-            BehaviorComponent.AddTask(new BHTaskStartFire());
+            BehaviorComponent.AddTask(new BHShipTask_StartFire());
             return;
         }
 
@@ -110,7 +110,7 @@ public class PlayerShip : Ship
         Vector3 DeltaPosition = CurrentMouseWorldPosition - m_LastControlledWorldPosition;
         m_LastControlledWorldPosition = CurrentMouseWorldPosition;
 
-        BehaviorComponent.AddTask(new BHTaskRelativeMove(DeltaPosition));
+        BehaviorComponent.AddTask(new BHTask_RelativeMove(DeltaPosition));
     }
 
     private void CheckBounds()
