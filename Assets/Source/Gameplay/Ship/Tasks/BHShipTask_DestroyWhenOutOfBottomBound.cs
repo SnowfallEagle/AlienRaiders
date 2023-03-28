@@ -1,22 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class BHShipTask_DestroyWhenOutOfBottomBound : BHTask
 {
     private float YBound;
 
-    public override void Start(MonoBehaviour Owner)
+    public override void Start()
     {
         var Renderer = RenderingService.Instance;
         YBound = Renderer.TargetCenter.y - (Renderer.TargetSize.y * 0.6f);
     }
 
-    public override void Update(MonoBehaviour Owner)
+    public override void Update()
     {
-        if (Owner.transform.position.y < YBound)
+        if (m_Owner.transform.position.y < YBound)
         {
-            Owner.GetComponent<ShipHealthComponent>().Kill();
+            m_Owner.GetComponent<ShipHealthComponent>().Kill();
             m_State = TaskState.Done;
         }
     }

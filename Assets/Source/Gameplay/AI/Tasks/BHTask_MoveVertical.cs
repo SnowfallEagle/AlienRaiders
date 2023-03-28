@@ -12,12 +12,12 @@ public class BHTask_MoveVertical : BHTask
         m_Speed = Speed;
     }
 
-    public override void Start(MonoBehaviour Owner)
+    public override void Start()
     {
-        m_BehaviorComponent = Owner.GetComponent<BehaviorComponent>();
+        m_BehaviorComponent = m_Owner.GetComponent<BehaviorComponent>();
     }
 
-    public override void Update(MonoBehaviour Owner)
+    public override void Update()
     {
         m_BehaviorComponent.AddTask(new BHTask_RelativeMove(new Vector3(0f, m_Speed * Time.deltaTime, 0f)));
     }

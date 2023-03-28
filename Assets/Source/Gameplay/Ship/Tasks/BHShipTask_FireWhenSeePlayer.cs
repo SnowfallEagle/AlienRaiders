@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 // TODO: Move FOV -> Ship?
@@ -13,12 +11,12 @@ public class BHShipTask_FireWhenSeePlayer : BHTask
         m_FOV = FOV;
     }
 
-    public override void Start(MonoBehaviour Owner)
+    public override void Start()
     {
-        m_BehaviorComponent = Owner.GetComponent<BehaviorComponent>();
+        m_BehaviorComponent = m_Owner.GetComponent<BehaviorComponent>();
     }
 
-    public override void Update(MonoBehaviour Owner)
+    public override void Update()
     {
         PlayerShip PlayerShip = PlayerState.Instance.PlayerShip;
         if (!PlayerShip)
@@ -27,8 +25,8 @@ public class BHShipTask_FireWhenSeePlayer : BHTask
             return;
         }
 
-        Vector3 ToPlayerVector = Vector3.Normalize(PlayerShip.transform.position - Owner.transform.position);
-        float CosAngle = Vector3.Dot(Owner.transform.up, ToPlayerVector);
+        Vector3 ToPlayerVector = Vector3.Normalize(PlayerShip.transform.position - m_Owner.transform.position);
+        float CosAngle = Vector3.Dot(m_Owner.transform.up, ToPlayerVector);
         float Angle = Mathf.Rad2Deg * Mathf.Acos(CosAngle);
 
         if (Mathf.Abs(Angle) < m_FOV * 0.5f)
@@ -45,14 +43,14 @@ public class BHShipTask_FireWhenSeePlayer : BHTask
         {
             // Direction to player
             {
-                Debug.DrawRay(Owner.transform.position, PlayerShip.transform.position - Owner.transform.position, Color.red);
+                Debug.DrawRay(m_Owner.transform.position, PlayerShip.transform.position - m_Owner.transform.position, Color.red);
             }
 
             // FOV
             {
                 float FOVDiv2Rad = Mathf.Deg2Rad * (m_FOV * 0.5f);
 
-                Vector3 TransformAngles = Mathf.Deg2Rad * Owner.transform.rotation.eulerAngles;
+                Vector3 TransformAngles = Mathf.Deg2Rad * m_Owner.transform.rotation.eulerAngles;
                 float SpriteZRotation = Mathf.PI * 0.5f;
                 float ZTransform = TransformAngles.z - SpriteZRotation;
 
@@ -67,8 +65,8 @@ public class BHShipTask_FireWhenSeePlayer : BHTask
                     0f
                 ) * 5f;
 
-                Debug.DrawRay(Owner.transform.position, DirectionLeft, Color.magenta);
-                Debug.DrawRay(Owner.transform.position, DirectionRight, Color.magenta);
+                Debug.DrawRay(m_Owner.transform.position, DirectionLeft, Color.magenta);
+                Debug.DrawRay(m_Owner.transform.position, DirectionRight, Color.magenta);
             }
         }
     }

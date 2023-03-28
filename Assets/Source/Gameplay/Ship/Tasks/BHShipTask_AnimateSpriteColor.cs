@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BHShipTask_AnimateSpriteColor : BHTask
@@ -29,14 +27,14 @@ public class BHShipTask_AnimateSpriteColor : BHTask
         m_bLoop = bLoop;
     }
 
-    public override void Start(MonoBehaviour Owner)
+    public override void Start()
     {
-        m_SpriteRenderer = Owner.GetComponent<SpriteRenderer>();
-        m_BehaviorComponent = Owner.GetComponent<BehaviorComponent>();
+        m_SpriteRenderer = m_Owner.GetComponent<SpriteRenderer>();
+        m_BehaviorComponent = m_Owner.GetComponent<BehaviorComponent>();
         m_SavedColor = m_SpriteRenderer.color;
     }
 
-    public override void Update(MonoBehaviour Owner)
+    public override void Update()
     {
         m_Elapsed += Time.deltaTime;
         if (m_Elapsed > m_Duration)

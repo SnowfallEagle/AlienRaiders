@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 
 public class BehaviorComponent : CustomBehavior
@@ -21,7 +19,9 @@ public class BehaviorComponent : CustomBehavior
 
     public void AddTask(BHTask Task)
     {
-        Task.Start(m_Owner);
+        Task.InternalInitialize(this);
+
+        Task.Start();
         if (!Task.bEnded)
         {
             m_TaskList.Add(Task);
@@ -32,7 +32,7 @@ public class BehaviorComponent : CustomBehavior
     {
         for (int i = m_TaskList.Count - 1; i >= 0; --i)
         {
-            m_TaskList[i].Update(m_Owner);
+            m_TaskList[i].Update();
         }
 
         m_TaskList.RemoveAll(Task => Task.bEnded);

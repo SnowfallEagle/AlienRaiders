@@ -9,9 +9,9 @@ public class BHTask_RelativeMove : BHTask
         m_DeltaPosition = DeltaPosition;
     }
 
-    public override void Start(MonoBehaviour Owner)
+    public override void Start()
     {
-        Owner.transform.position += m_DeltaPosition;
+        m_Owner.transform.position += m_DeltaPosition;
         m_State = TaskState.Done;
     }
 }
