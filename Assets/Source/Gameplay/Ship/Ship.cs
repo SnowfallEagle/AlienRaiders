@@ -42,9 +42,7 @@ public class Ship : CustomBehavior
 
         m_BoxCollider = InitializeComponent<BoxCollider2D>();
         m_SpriteRenderer = InitializeComponent<SpriteRenderer>();
-
         m_BehaviorComponent = InitializeComponent<BehaviorComponent>();
-        m_BehaviorComponent.Initialize(this);
 
         m_RigidBody = InitializeComponent<Rigidbody2D>();
         m_RigidBody.gravityScale = 0f;

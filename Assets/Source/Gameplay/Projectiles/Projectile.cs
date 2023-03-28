@@ -25,7 +25,6 @@ public class Projectile : CustomBehavior
         BoxCollider.isTrigger = true;
 
         m_BehaviorComponent = InitializeComponent<BehaviorComponent>();
-        m_BehaviorComponent.Initialize(this);
 
         Destroy(gameObject, m_LifeTime);
     }

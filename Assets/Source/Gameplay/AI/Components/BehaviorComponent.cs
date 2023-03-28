@@ -3,14 +3,7 @@ using UnityEngine;
 
 public class BehaviorComponent : CustomBehavior
 {
-    private MonoBehaviour m_Owner;
-
     private List<BHTask> m_TaskList = new List<BHTask>();
-
-    public void Initialize(MonoBehaviour Owner)
-    {
-        m_Owner = Owner;
-    }
 
     private void LateUpdate()
     {
