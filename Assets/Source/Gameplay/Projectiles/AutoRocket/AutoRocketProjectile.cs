@@ -19,12 +19,12 @@ public class AutoRocketProjectile : Projectile
                 .AddTask(new BHTask_LoopCommand(new BHCommand_MoveForward(m_Speed * 2f))
                     .AddOnNodeEnded((_) => { })
                 )
-                .AddTask(new BHTask_LimitNodeTime(1f))
+                .AddTask(new BHTask_SetNodeLifeTime(1f))
             )
 
             .AddNode(new BHNode()
                 .AddTask(new BHTask_LoopCommand(new BHCommand_MoveForward(-m_Speed)))
-                .AddTask(new BHTask_LimitNodeTime(0.5f))
+                .AddTask(new BHTask_SetNodeLifeTime(0.5f))
             )
         );
 

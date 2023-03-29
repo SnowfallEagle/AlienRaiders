@@ -1,8 +1,8 @@
-public class BHTask_LimitNodeTime : BHTaskNode
+public class BHTask_SetNodeLifeTime : BHTaskNode
 {
     private float m_TimeLimit;
 
-    public BHTask_LimitNodeTime(float TimeLimit)
+    public BHTask_SetNodeLifeTime(float TimeLimit)
     {
         m_TimeLimit = TimeLimit;
     }
