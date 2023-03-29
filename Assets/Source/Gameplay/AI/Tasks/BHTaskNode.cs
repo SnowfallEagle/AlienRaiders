@@ -1,14 +1,12 @@
 public class BHTaskNode : BHNode
 {
+    // TODO: Maybe make NodeState?
     public enum TaskState
     {
         InProgress,
         Done,
         Failed
     }
-
-    public delegate void OnTaskEndedSignature(BHTaskNode Task);
-    OnTaskEndedSignature OnTaskEnded;
 
     private TaskState m_State = TaskState.InProgress;
     public TaskState State
@@ -22,22 +20,6 @@ public class BHTaskNode : BHNode
                 Stop();
             }
         }
-    }
-
-    public override void Stop()
-    {
-        base.Stop();
-
-        OnTaskEnded?.Invoke(this);
-    }
-
-    public BHTaskNode AddOnTaskEnded(OnTaskEndedSignature Callback)
-    {
-        if (Callback != null)
-        {
-            OnTaskEnded += Callback;
-        }
-        return this;
     }
 }
 

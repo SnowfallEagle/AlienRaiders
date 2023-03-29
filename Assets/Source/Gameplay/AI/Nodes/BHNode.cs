@@ -6,29 +6,29 @@ public class BHNode
     private bool m_bActive = false;
     public bool bActive => m_bActive;
 
+    public delegate void OnNodeEndedSignature(BHNode Task);
+    private OnNodeEndedSignature m_OnNodeEnded;
+
     protected Temp.BehaviorComponent m_Owner;
     protected BHNode m_Parent;
 
     protected List<BHTaskNode> m_Tasks = new List<BHTaskNode>();
 
-    public void Initialize(Temp.BehaviorComponent Owner, BHNode Parent)
+    /** FlowNodes must call Start() on their children
+    */
+    public virtual void Start(Temp.BehaviorComponent Owner, BHNode Parent)
     {
         Assert.IsNotNull(Owner);
         // Parent is null for RootNode
 
         m_Owner = Owner;
         m_Parent = Parent;
-    }
 
-    /** FlowNodes must call Start() on their children
-    */
-    public virtual void Start()
-    {
         m_bActive = true;
 
         foreach (var Task in m_Tasks)
         {
-            Task.Start();
+            Task.Start(Owner, Parent);
         }
     }
 
@@ -37,6 +37,7 @@ public class BHNode
     public virtual void Stop()
     {
         m_bActive = false;
+        m_OnNodeEnded?.Invoke(this);
 
         foreach (var Task in m_Tasks)
         {
@@ -64,9 +65,17 @@ public class BHNode
     {
         Assert.IsNotNull(Task);
 
-        Task.Initialize(m_Owner, this);
         m_Tasks.Add(Task);
 
+        return this;
+    }
+
+    public BHNode AddOnNodeEnded(OnNodeEndedSignature Callback)
+    {
+        if (Callback != null)
+        {
+            m_OnNodeEnded += Callback;
+        }
         return this;
     }
 }

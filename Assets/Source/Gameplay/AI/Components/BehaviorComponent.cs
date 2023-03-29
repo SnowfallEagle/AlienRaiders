@@ -9,8 +9,7 @@ public class BehaviorComponent : CustomBehavior
     */
     public void Initialize()
     {
-        RootNode.Initialize(this, null);
-        RootNode.Start();
+        RootNode.Start(this, null);
     }
 
     private void LateUpdate()

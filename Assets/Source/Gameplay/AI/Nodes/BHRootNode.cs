@@ -12,7 +12,7 @@ public class BHRootNode : BHFlowNode
 
         if (m_Child != null && m_Child.bActive)
         {
-            m_Child?.Stop();
+            m_Child.Stop();
         }
     }
 
@@ -22,7 +22,7 @@ public class BHRootNode : BHFlowNode
 
         if (m_Child != null && m_Child.bActive)
         {
-            m_Child?.Update();
+            m_Child.Update();
         }
     }
 
@@ -34,8 +34,8 @@ public class BHRootNode : BHFlowNode
             Since RootNode starts and runs until BehaviorComponent is not destroyed,
             we need to call Start() on our node manually
         */
+        Node.Start(m_Owner, this);
         m_Child = Node;
-        m_Child.Start();
 
         return base.AddNode(Node);
     }
@@ -48,7 +48,7 @@ public class BHRootNode : BHFlowNode
             Since RootNode starts and runs until BehaviorComponent is not destroyed,
             we need to call Start() every new task manually
         */
-        Task.Start();
+        Task.Start(m_Owner, this);
 
         return this;
     }

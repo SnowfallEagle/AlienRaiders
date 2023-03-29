@@ -8,14 +8,11 @@ public class BehaviorComponent : CustomBehavior
 
     private void Start()
     {
-        m_RootNode.Start();
     }
 
     private void LateUpdate()
     {
         UpdateTasks();
-
-        m_RootNode.Update();
     }
 
     /** Add task that'll start immediately and update every frame

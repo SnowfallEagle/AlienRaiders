@@ -11,11 +11,13 @@ public class AutoRocketProjectile : Projectile
 
         m_TempBehaviorComponent = InitializeComponent<Temp.BehaviorComponent>();
         m_TempBehaviorComponent.Initialize();
-        m_TempBehaviorComponent.RootNode
-            .AddTask(new BHTask_LoopCommand(new BHCommand_MoveForward(m_Speed))
-                .AddOnTaskEnded((_) => { Debug.Log("Ended"); })
+
+        m_TempBehaviorComponent.RootNode.AddNode(new BHSequenceNode()
+            .AddTask((BHTaskNode)new BHTask_LoopCommand(new BHCommand_MoveForward(m_Speed))
+                .AddOnNodeEnded((_) => { })
             )
-            .AddTask(new BHTask_LimitNodeTime(1f));
+            .AddTask(new BHTask_LimitNodeTime(1f))
+        );
 
         /*
         m_TempBehaviorComponent.RootNode.AddNode(new BHSequenceNode()
