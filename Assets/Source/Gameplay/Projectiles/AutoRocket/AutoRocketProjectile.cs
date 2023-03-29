@@ -12,11 +12,20 @@ public class AutoRocketProjectile : Projectile
         m_TempBehaviorComponent = InitializeComponent<Temp.BehaviorComponent>();
         m_TempBehaviorComponent.Initialize();
 
+        // TODO: Add check for nodes like AnyActiveNodes() to Restart() them
+        // TODO: Remove manual restart from Root and Sequence
         m_TempBehaviorComponent.RootNode.AddNode(new BHSequenceNode()
-            .AddTask((BHTaskNode)new BHTask_LoopCommand(new BHCommand_MoveForward(m_Speed))
-                .AddOnNodeEnded((_) => { })
+            .AddNode(new BHNode()
+                .AddTask(new BHTask_LoopCommand(new BHCommand_MoveForward(m_Speed * 2f))
+                    .AddOnNodeEnded((_) => { })
+                )
+                .AddTask(new BHTask_LimitNodeTime(1f))
             )
-            .AddTask(new BHTask_LimitNodeTime(1f))
+
+            .AddNode(new BHNode()
+                .AddTask(new BHTask_LoopCommand(new BHCommand_MoveForward(-m_Speed)))
+                .AddTask(new BHTask_LimitNodeTime(0.5f))
+            )
         );
 
         /*

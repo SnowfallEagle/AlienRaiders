@@ -4,7 +4,12 @@ public class BHRootNode : BHFlowNode
 {
     private BHNode m_Child;
 
-    // NOTE: Doesn't override Start(), because it must to has no children on start
+    public override void Start(Temp.BehaviorComponent Owner, BHNode Parent)
+    {
+        base.Start(Owner, Parent);
+
+        m_Child?.Start(Owner, this);
+    }
 
     public override void Stop()
     {
@@ -20,9 +25,18 @@ public class BHRootNode : BHFlowNode
     {
         base.Update();
 
-        if (m_Child != null && m_Child.bActive)
+        if (m_Child == null)
+        {
+            return;
+        }
+
+        if (m_Child.bActive)
         {
             m_Child.Update();
+        }
+        else
+        {
+            Restart();
         }
     }
 
@@ -40,7 +54,7 @@ public class BHRootNode : BHFlowNode
         return base.AddNode(Node);
     }
 
-    public override BHNode AddTask(BHTaskNode Task)
+    public override BHNode AddTask(BHNode Task)
     {
         base.AddTask(Task);
 

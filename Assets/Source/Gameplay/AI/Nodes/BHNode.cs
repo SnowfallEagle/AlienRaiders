@@ -14,8 +14,6 @@ public class BHNode
 
     protected List<BHTaskNode> m_Tasks = new List<BHTaskNode>();
 
-    /** FlowNodes must call Start() on their children
-    */
     public virtual void Start(Temp.BehaviorComponent Owner, BHNode Parent)
     {
         Assert.IsNotNull(Owner);
@@ -28,12 +26,11 @@ public class BHNode
 
         foreach (var Task in m_Tasks)
         {
-            Task.Start(Owner, Parent);
+            Task.Start(Owner, this);
         }
     }
 
-    /** FlowNodes must call Stop() on their children
-    */
+    // TODO: Maybe make enum StopReason: Ended, Restarted?
     public virtual void Stop()
     {
         m_bActive = false;
@@ -48,8 +45,12 @@ public class BHNode
         }
     }
 
-    /** FlowNodes must call Update() on their children
-    */
+    public virtual void Restart()
+    {
+        Stop();
+        Start(m_Owner, m_Parent);
+    }
+
     public virtual void Update()
     {
         foreach (var Task in m_Tasks)
@@ -61,11 +62,15 @@ public class BHNode
         }
     }
 
-    public virtual BHNode AddTask(BHTaskNode Task)
+    /** Task must be BHTaskNode
+        BHNode here because otherwise we may have to cast argument explicitly to
+        BHTaskNode (e.g. after calling .AddOnNodeEnded())
+    */
+    public virtual BHNode AddTask(BHNode Task)
     {
-        Assert.IsNotNull(Task);
+        Assert.IsNotNull(Task as BHTaskNode);
 
-        m_Tasks.Add(Task);
+        m_Tasks.Add((BHTaskNode)Task);
 
         return this;
     }
