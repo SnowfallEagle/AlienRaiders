@@ -12,7 +12,6 @@ public class BHShipTask_AnimateSpriteColor : BHTask
     private bool m_bLoop;
 
     private SpriteRenderer m_SpriteRenderer;
-    private BehaviorComponent m_BehaviorComponent;
 
     /** bLoop worls only with bPulse = true
     */
@@ -30,7 +29,6 @@ public class BHShipTask_AnimateSpriteColor : BHTask
     public override void Start()
     {
         m_SpriteRenderer = m_Owner.GetComponent<SpriteRenderer>();
-        m_BehaviorComponent = m_Owner.GetComponent<BehaviorComponent>();
         m_SavedColor = m_SpriteRenderer.color;
     }
 
@@ -44,7 +42,7 @@ public class BHShipTask_AnimateSpriteColor : BHTask
 
             if (m_bPulse)
             {
-                m_BehaviorComponent.AddTask(new BHShipTask_AnimateSpriteColor(m_SavedColor, m_Duration, bPulse: m_bLoop, bLoop: m_bLoop));
+                m_Owner.AddTask(new BHShipTask_AnimateSpriteColor(m_SavedColor, m_Duration, bPulse: m_bLoop, bLoop: m_bLoop));
             }
             return;
         }

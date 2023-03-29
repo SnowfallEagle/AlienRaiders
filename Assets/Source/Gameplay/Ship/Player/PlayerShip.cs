@@ -27,7 +27,7 @@ public class PlayerShip : Ship
 
         gameObject.layer = LayerMask.NameToLayer("Player");
 
-        m_ShipTeam = Team.Player;
+        m_Team = ShipTeam.Player;
     }
 
     private void LateUpdate()

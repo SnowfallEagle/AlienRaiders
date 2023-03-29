@@ -43,7 +43,7 @@ public class Projectile : CustomBehavior
     private void OnTriggerEnter2D(Collider2D Other)
     {
         Ship Ship = Other.GetComponent<Ship>();
-        if (Ship && Ship.ShipTeam != m_Owner.ShipTeam)
+        if (Ship && Ship.Team != m_Owner.Team)
         {
             Ship.HealthComponent.TakeDamage(m_Damage);
             // TODO: Maybe spawn effect on OnDestroy()?

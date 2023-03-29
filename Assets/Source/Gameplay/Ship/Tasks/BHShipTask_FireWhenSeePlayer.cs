@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-// TODO: Move FOV -> Ship?
+// TODO: Move FOV -> AlienShip?
 public class BHShipTask_FireWhenSeePlayer : BHTask
 {
     private float m_FOV;

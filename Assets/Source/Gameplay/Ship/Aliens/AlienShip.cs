@@ -19,7 +19,7 @@ public class AlienShip : Ship
         base.Initialize(Buffs);
 
         gameObject.layer = LayerMask.NameToLayer("Alien");
-        m_ShipTeam = Team.Enemy;
+        m_Team = ShipTeam.Enemy;
 
         m_BoxCollider.isTrigger = true;
 

@@ -48,7 +48,7 @@ public class ShipHealthComponent : CustomBehavior
 
     public void TakeDamage(float Damage)
     {
-        // TODO: Move this logic in PlayerHealthComponent.CanBeDamaged()
+        // TODO: Move this logic in PlayerShipHealthComponent.CanBeDamaged()
         if (GameEnvironment.Instance.GetDebugOption<bool>("DebugPlayer.bGodMode") && GetComponent<PlayerShip>())
         {
             return;

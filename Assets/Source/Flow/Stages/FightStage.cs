@@ -107,7 +107,7 @@ public class FightStage : CustomBehavior
     {
         if (--m_CurrentSpawnerInfo.Iterations < 0)
         {
-            Destroy(m_CurrentSpawner);
+            Destroy(m_CurrentSpawner.gameObject);
             NextSpawner();
             return;
         }

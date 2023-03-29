@@ -5,14 +5,14 @@ using UnityEngine.Assertions;
 
 public class Ship : CustomBehavior
 {
-    public enum Team
+    public enum ShipTeam
     {
         Player,
         Enemy
     }
 
-    [SerializeField] protected Team m_ShipTeam = Team.Player;
-    public Team ShipTeam => m_ShipTeam;
+    [SerializeField] protected ShipTeam m_Team = ShipTeam.Player;
+    public ShipTeam Team => m_Team;
 
     [SerializeField] protected float m_DefaultSpeed = 2.5f;
     private float m_Speed;
