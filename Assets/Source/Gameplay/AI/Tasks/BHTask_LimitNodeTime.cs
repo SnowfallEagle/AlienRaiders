@@ -14,7 +14,7 @@ public class BHTask_LimitNodeTime : BHTaskNode
         TimerService.Instance.AddTimer(null, m_Owner,
             () =>
             {
-                m_Parent.bActive = false;
+                m_Parent.Stop();
             },
             m_TimeLimit
         );

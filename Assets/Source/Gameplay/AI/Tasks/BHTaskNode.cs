@@ -7,6 +7,9 @@ public class BHTaskNode : BHNode
         Failed
     }
 
+    public delegate void OnTaskEndedSignature(BHTaskNode Task);
+    OnTaskEndedSignature OnTaskEnded;
+
     private TaskState m_State = TaskState.InProgress;
     public TaskState State
     {
@@ -16,10 +19,25 @@ public class BHTaskNode : BHNode
             m_State = value;
             if (m_State == TaskState.Done || m_State == TaskState.Failed)
             {
-                bActive = false;
-                // TODO: OnTaskEnded?.Invoke();
+                Stop();
             }
         }
+    }
+
+    public override void Stop()
+    {
+        base.Stop();
+
+        OnTaskEnded?.Invoke(this);
+    }
+
+    public BHTaskNode AddOnTaskEnded(OnTaskEndedSignature Callback)
+    {
+        if (Callback != null)
+        {
+            OnTaskEnded += Callback;
+        }
+        return this;
     }
 }
 

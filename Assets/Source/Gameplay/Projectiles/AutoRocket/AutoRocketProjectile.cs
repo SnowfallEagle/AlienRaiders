@@ -12,7 +12,9 @@ public class AutoRocketProjectile : Projectile
         m_TempBehaviorComponent = InitializeComponent<Temp.BehaviorComponent>();
         m_TempBehaviorComponent.Initialize();
         m_TempBehaviorComponent.RootNode
-            .AddTask(new BHTask_MoveForward(m_Speed))
+            .AddTask(new BHTask_LoopCommand(new BHCommand_MoveForward(m_Speed))
+                .AddOnTaskEnded((_) => { Debug.Log("Ended"); })
+            )
             .AddTask(new BHTask_LimitNodeTime(1f));
 
         /*
