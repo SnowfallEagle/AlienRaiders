@@ -10,7 +10,7 @@ public class BHRootNode : BHFlowNode
         m_bUseDecorators = false;
     }
 
-    protected override ChildResult GetNextChild(out BHNode Child, ChildResult PrevResult)
+    protected override ChildResult GetNextChild(out BHActionNode Child, ChildResult PrevResult)
     {
         Child = m_Children[0];
         Assert.IsNotNull(Child);
@@ -43,7 +43,7 @@ public class BHRootNode : BHFlowNode
         base.Update();
     }
 
-    public override BHFlowNode AddNode(BHNode Node)
+    public override BHFlowNode AddNode(BHActionNode Node)
     {
         if (m_Children.Count > 1)
         {

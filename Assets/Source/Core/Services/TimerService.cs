@@ -75,7 +75,7 @@ public class TimerService : Service<TimerService>
                     Timer.TimeLeftToFire = Timer.TimeRate - NextFireTimeRemainder;
 
                     int FireCount = 1 + (int)(AbsTimeLeftToFire / Timer.TimeRate);
-                    for (int FireIndex = 0; FireIndex < FireCount; ++FireIndex)
+                    for (int FireIdx = 0; FireIdx < FireCount; ++FireIdx)
                     {
                         Timer.Callback?.Invoke();
                     }

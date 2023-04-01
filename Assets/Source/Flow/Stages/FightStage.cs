@@ -70,7 +70,7 @@ public class FightStage : CustomBehavior
         },
     };
 
-    private int m_CurrentSpawnerIndex = -1;
+    private int m_CurrentSpawnerIdx = -1;
     private SpawnerInfo m_CurrentSpawnerInfo;
 
     private GameObject[] m_CurrentShips;
@@ -122,13 +122,13 @@ public class FightStage : CustomBehavior
 
     private void NextSpawner()
     {
-        if (++m_CurrentSpawnerIndex >= s_SpawnersInfo.Length)
+        if (++m_CurrentSpawnerIdx >= s_SpawnersInfo.Length)
         {
             GameStateMachine.Instance.GetCurrentState<FightGameState>().NextStage();
             return;
         }
 
-        m_CurrentSpawnerInfo = s_SpawnersInfo[m_CurrentSpawnerIndex];
+        m_CurrentSpawnerInfo = s_SpawnersInfo[m_CurrentSpawnerIdx];
         m_CurrentSpawner = SpawnInState<Spawner>(m_CurrentSpawnerInfo.Type);
 
         NextIteration();

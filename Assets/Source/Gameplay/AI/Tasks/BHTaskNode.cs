@@ -1,4 +1,4 @@
-public class BHTaskNode : BHNode
+public class BHTaskNode : BHActionNode
 {
 }
 

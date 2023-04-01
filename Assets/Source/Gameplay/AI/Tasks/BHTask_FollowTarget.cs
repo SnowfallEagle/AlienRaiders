@@ -12,6 +12,7 @@ public class BHTask_FollowTarget : BHTask
     {
         m_Target = Target;
         m_Speed = Speed;
+        m_DiffModifier = DiffModifier;
     }
 
     public override void Update()

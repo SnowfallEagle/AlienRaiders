@@ -20,7 +20,7 @@ namespace Temp
 
         /** Node must be BHTaskNode or BHFlowNode
         */
-        public void StartBehavior(BHNode Node = null)
+        public void StartBehavior(BHActionNode Node = null)
         {
             StopBehavior();
 

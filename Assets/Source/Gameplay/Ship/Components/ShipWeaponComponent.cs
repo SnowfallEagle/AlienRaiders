@@ -22,11 +22,11 @@ public class ShipWeaponComponent : CustomBehavior
         CurrentWeapon?.StopFire();
     }
 
-    public void SwitchWeapon(int Index)
+    public void SwitchWeapon(int Idx)
     {
-        if (Index >= 0 && Index < m_Weapons.Length)
+        if (Idx >= 0 && Idx < m_Weapons.Length)
         {
-            CurrentWeapon = m_Weapons[Index];
+            CurrentWeapon = m_Weapons[Idx];
         }
     }
 
