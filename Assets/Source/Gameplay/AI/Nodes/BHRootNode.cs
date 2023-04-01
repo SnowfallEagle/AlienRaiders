@@ -1,69 +1,56 @@
+using UnityEngine;
 using UnityEngine.Assertions;
 
 public class BHRootNode : BHFlowNode
 {
-    private BHNode m_Child;
+    private NodeStatus m_LastStartStatus;
 
-    public override void Start(Temp.BehaviorComponent Owner, BHNode Parent)
+    public BHRootNode()
     {
-        base.Start(Owner, Parent);
-
-        m_Child?.Start(Owner, this);
+        m_bUseDecorators = false;
     }
 
-    public override void Stop()
+    protected override ChildResult GetNextChild(out BHNode Child, ChildResult PrevResult)
     {
-        base.Stop();
+        Child = m_Children[0];
+        Assert.IsNotNull(Child);
 
-        if (m_Child != null && m_Child.bActive)
+        switch (PrevResult)
         {
-            m_Child.Stop();
+            case ChildResult.Initialization: return ChildResult.InProgress;
+            case ChildResult.InProgress:     return ChildResult.ReturnToParent;
+            case ChildResult.Done:           return ChildResult.Done;
+
+            default:
+                Assert.IsTrue(false, $"PrevResult can't be { PrevResult }!");
+                return ChildResult.Done;
         }
+    }
+
+    public override NodeStatus Start()
+    {
+        m_LastStartStatus = base.Start();
+        return m_LastStartStatus;
     }
 
     public override void Update()
     {
-        base.Update();
-
-        if (m_Child == null)
+        if (m_LastStartStatus != NodeStatus.InProgress && Start() != NodeStatus.InProgress)
         {
             return;
         }
 
-        if (m_Child.bActive)
-        {
-            m_Child.Update();
-        }
-        else
-        {
-            Restart();
-        }
+        base.Update();
     }
 
     public override BHFlowNode AddNode(BHNode Node)
     {
-        Assert.IsNull(m_Child, "Only one Node can be child of RootNode!");
-
-        /* NOTE:
-            Since RootNode starts and runs until BehaviorComponent is not destroyed,
-            we need to call Start() on our node manually
-        */
-        Node.Start(m_Owner, this);
-        m_Child = Node;
+        if (m_Children.Count > 1)
+        {
+            Assert.IsTrue(false, "Root node can have only 1 child!");
+            return this;
+        }
 
         return base.AddNode(Node);
-    }
-
-    public override BHNode AddTask(BHNode Task)
-    {
-        base.AddTask(Task);
-
-        /* NOTE:
-            Since RootNode starts and runs until BehaviorComponent is not destroyed,
-            we need to call Start() every new task manually
-        */
-        Task.Start(m_Owner, this);
-
-        return this;
     }
 }

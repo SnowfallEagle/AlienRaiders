@@ -4,7 +4,7 @@ using UnityEngine;
 public class BehaviorComponent : CustomBehavior
 {
     private List<BHTask> m_TaskList = new List<BHTask>();
-    private BHNode m_RootNode = new BHNode();
+    private BHNode m_RootNode = new BHRootNode();
 
     private void Start()
     {

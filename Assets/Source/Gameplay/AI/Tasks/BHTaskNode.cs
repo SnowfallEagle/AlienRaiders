@@ -1,26 +1,5 @@
 public class BHTaskNode : BHNode
 {
-    // TODO: Maybe make NodeState?
-    public enum TaskState
-    {
-        InProgress,
-        Done,
-        Failed
-    }
-
-    private TaskState m_State = TaskState.InProgress;
-    public TaskState State
-    {
-        get => m_State;
-        set
-        {
-            m_State = value;
-            if (m_State == TaskState.Done || m_State == TaskState.Failed)
-            {
-                Stop();
-            }
-        }
-    }
 }
 
 // TODO: Delete

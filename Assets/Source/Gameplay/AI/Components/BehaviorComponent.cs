@@ -1,24 +1,48 @@
 namespace Temp
 {
 
-public class BehaviorComponent : CustomBehavior
-{
-    public BHRootNode RootNode = new BHRootNode();
-
-    /** Must be called by owner
-    */
-    public void Initialize()
+    public class BehaviorComponent : CustomBehavior
     {
-        RootNode.Start(this, null);
-    }
+        BHRootNode Root = new BHRootNode();
 
-    private void LateUpdate()
-    {
-        if (RootNode.bActive)
+        private void LateUpdate()
         {
-            RootNode.Update();
+            if (Root.bActive)
+            {
+                Root.Update();
+            }
+        }
+
+        private void OnDestroy()
+        {
+            StopBehavior();
+        }
+
+        /** Node must be BHTaskNode or BHFlowNode
+        */
+        public void StartBehavior(BHNode Node = null)
+        {
+            StopBehavior();
+
+            if (Node != null)
+            {
+                Root.AddNode(Node);
+            }
+
+            Root.Initialize(this, null);
+            Root.Start();
+            Root.bActive = true;
+        }
+
+        public void StopBehavior()
+        {
+            // TODO: We need to find way to finish without restarting, maybe make bool bRestart in RootNode
+            if (Root.bActive)
+            {
+                Root.Finish(BHNode.NodeStatus.Done);
+                Root.bActive = false;
+            }
         }
     }
-}
 
 }

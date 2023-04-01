@@ -1,78 +1,69 @@
 using System.Collections.Generic;
 using UnityEngine.Assertions;
 
-public class BHNode
+public abstract class BHNode
 {
-    private bool m_bActive = false;
-    public bool bActive => m_bActive;
+    public enum NodeStatus
+    {
+        InProgress,
+        Done,
+        Failed
+    }
 
-    public delegate void OnNodeEndedSignature(BHNode Task);
+    // Only for parent FlowNode to mark started nodes!
+    public bool bActive = false;
+
+    public delegate void OnNodeEndedSignature(BHNode Task, NodeStatus Status);
     private OnNodeEndedSignature m_OnNodeEnded;
 
     protected Temp.BehaviorComponent m_Owner;
-    protected BHNode m_Parent;
+    protected BHFlowNode m_Parent;
 
-    protected List<BHTaskNode> m_Tasks = new List<BHTaskNode>();
+    protected bool m_bUseDecorators = true;
+    /* TODO
+    private List<BHDecorator> m_Decorators = new List<BHDecorator>();
 
-    public virtual void Start(Temp.BehaviorComponent Owner, BHNode Parent)
+    public void AddDecorator(BHDecorator Decorator)
+    {
+        Assert.IsTrue(m_bUseDecorators, "This node does not use decorators!");
+        Assert.IsNotNull(Decorator);
+
+        m_Decorators.Add(Decorator);
+    }
+    */
+
+    public virtual void Initialize(Temp.BehaviorComponent Owner, BHFlowNode Parent)
     {
         Assert.IsNotNull(Owner);
         // Parent is null for RootNode
 
         m_Owner = Owner;
         m_Parent = Parent;
-
-        m_bActive = true;
-
-        foreach (var Task in m_Tasks)
-        {
-            Task.Start(Owner, this);
-        }
     }
 
-    // TODO: Maybe make enum StopReason: Ended, Restarted?
-    public virtual void Stop()
+    public virtual NodeStatus Start()
     {
-        m_bActive = false;
-        m_OnNodeEnded?.Invoke(this);
-
-        foreach (var Task in m_Tasks)
-        {
-            if (Task.bActive)
-            {
-                Task.Stop();
-            }
-        }
-    }
-
-    public virtual void Restart()
-    {
-        Stop();
-        Start(m_Owner, m_Parent);
+        return NodeStatus.InProgress;
     }
 
     public virtual void Update()
-    {
-        foreach (var Task in m_Tasks)
-        {
-            if (Task.bActive)
-            {
-                Task.Update();
-            }
-        }
-    }
+    { }
 
-    /** Task must be BHTaskNode
-        BHNode here because otherwise we may have to cast argument explicitly to
-        BHTaskNode (e.g. after calling .AddOnNodeEnded())
+    /** Can be called only in Update()!
+        Finish status must be Done or Failed.
     */
-    public virtual BHNode AddTask(BHNode Task)
+    public virtual void Finish(NodeStatus FinishStatus)
     {
-        Assert.IsNotNull(Task as BHTaskNode);
+        if (!bActive && FinishStatus == NodeStatus.InProgress)
+        {
+            Assert.IsTrue(false, "Child wanted to finish with being not activated or InProgress status!");
+            return;
+        }
 
-        m_Tasks.Add((BHTaskNode)Task);
-
-        return this;
+        if (m_Parent != null)
+        {
+            m_Parent.OnChildFinished(this, FinishStatus);
+        }
     }
 
     public BHNode AddOnNodeEnded(OnNodeEndedSignature Callback)

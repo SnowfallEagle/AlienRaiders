@@ -1,6 +1,7 @@
 using System.Collections.Generic;
-using System.Linq;
+using UnityEngine.Assertions;
 
+#if null
 public class BHSequenceNode : BHFlowNode
 {
     private List<BHNode> m_Children = new List<BHNode>();
@@ -9,54 +10,78 @@ public class BHSequenceNode : BHFlowNode
     private BHNode m_CurrentChild;
     private int m_CurrentChildIndex;
 
-    public override void Start(Temp.BehaviorComponent Owner, BHNode Parent)
+    public override NodeStatus Start()
     {
-        base.Start(Owner, Parent);
-
         m_CurrentChildIndex = 0;
         m_NumChildren = m_Children.Count;
 
-        if (m_NumChildren > 0)
+        if (m_NumChildren <= 0)
         {
-            m_CurrentChild = m_Children[m_CurrentChildIndex];
-            m_CurrentChild.Start(Owner, this);
+            return NodeStatus.Done;
         }
+
+        m_CurrentChild = m_Children[m_CurrentChildIndex];
+        NodeStatus StartStatus = m_CurrentChild.Start();
+
+        switch (StartStatus)
+        {
+            case NodeStatus.InProgress:
+                m_CurrentChild.bActive = true;
+                break;
+
+            case NodeStatus.Done:
+                m_CurrentChild.Stop(StartStatus);
+                // TODO: Try start next while we have remaining children
+                break;
+
+            case NodeStatus.Failed:
+                m_CurrentChild.Stop(StartStatus);
+                break;
+        }
+
+        return StartStatus;
     }
 
-    public override void Stop()
+    public override void Stop(NodeStatus StopStatus)
     {
-        base.Stop();
+        base.Stop(StopStatus);
 
         if (m_CurrentChild != null && m_CurrentChild.bActive)
         {
-            m_CurrentChild.Stop();
+            m_CurrentChild.Stop(StopStatus);
         }
     }
 
-    public override void Update()
+    public override NodeStatus Update()
     {
-        base.Update();
+        Assert.IsNotNull(m_CurrentChild);
 
-        if (m_CurrentChild == null)
+        NodeStatus UpdateStatus = m_CurrentChild.Update();
+        if (UpdateStatus == NodeStatus.Failed)
         {
-            return;
-        }
-
-        if (m_CurrentChild.bActive)
-        {
-            m_CurrentChild.Update();
-            return;
+            m_CurrentChild.Stop(UpdateStatus);
+            return NodeStatus.Failed;
         }
 
-        if (++m_CurrentChildIndex < m_NumChildren)
+        if (UpdateStatus == NodeStatus.Done)
         {
-            m_CurrentChild = m_Children[m_CurrentChildIndex];
-            m_CurrentChild.Start(m_Owner, this);
+            m_CurrentChild.Stop(UpdateStatus);
+
+            if (++m_CurrentChildIndex < m_NumChildren)
+            {
+                m_CurrentChild = m_Children[m_CurrentChildIndex];
+                m_CurrentChild.Start();
+                // TODO: Try to start while we have children
+            }
+            else
+            {
+                return NodeStatus.Done;
+            }
+
+            // TODO
         }
-        else
-        {
-            Restart();
-        }
+
+        return NodeStatus.InProgress;
     }
 
     public override BHFlowNode AddNode(BHNode Node)
@@ -66,3 +91,4 @@ public class BHSequenceNode : BHFlowNode
         return base.AddNode(Node);
     }
 }
+#endif

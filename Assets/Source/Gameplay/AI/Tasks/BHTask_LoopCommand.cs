@@ -9,8 +9,6 @@ public class BHTask_LoopCommand : BHTaskNode
 
     public override void Update()
     {
-        base.Update();
-
         m_Command.Process(m_Owner);
     }
 }
