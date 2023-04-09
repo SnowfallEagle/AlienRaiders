@@ -15,6 +15,7 @@ public class AutoRocketProjectile : Projectile
             .AddNode(new BHTask_LoopCommand(new BHCommand_MoveForward(m_Speed))
                 .AddOnNodeFinished((Task, Status) => { Debug.Log($"{ Task.GetType().Name } ended with status { Status }"); })
             )
+            .AddDecorator(new BHDecorator_TimeLimit(1f, false))
         );
     }
 }

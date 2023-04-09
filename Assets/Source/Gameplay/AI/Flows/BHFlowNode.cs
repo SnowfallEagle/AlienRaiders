@@ -23,15 +23,16 @@ public abstract class BHFlowNode : BHActionNode
 
     protected abstract ChildHandle GetNextChildHandle(ChildHandle CurrentChild, NodeStatus LastChildStatus);
 
-    public void AddDecorator(BHDecorator Decorator)
+    public BHFlowNode AddDecorator(BHDecorator Decorator)
     {
         if (!m_bUseDecorators || Decorator == null)
         {
             Assert.IsTrue(false, "Node doesn't use Decorators or given Decorator is null!");
-            return;
+            return this;
         }
 
         m_Decorators.Add(Decorator);
+        return this;
     }
 
     public override void Initialize(Temp.BehaviorComponent Owner, BHFlowNode Parent)
@@ -73,7 +74,17 @@ public abstract class BHFlowNode : BHActionNode
     {
         Assert.IsNotNull(m_CurrentChild);
 
-        // @INCOMPLETE: Check CheckDecoratorsToUpdate if it's Flow Node
+        // @OPTIMIZE: Check type
+        BHFlowNode ChildAsFlowNode = m_CurrentChild as BHFlowNode;
+        if (m_CurrentChild.bActive && ChildAsFlowNode != null)
+        {
+            bool bFailOnFalseCondition;
+            if (!ChildAsFlowNode.CheckDecoratorsToUpdate(out bFailOnFalseCondition))
+            {
+                m_CurrentChild.Finish(bFailOnFalseCondition ? NodeStatus.Failed : NodeStatus.Done);
+            }
+        }
+
         if (!m_CurrentChild.bActive)
         {
             FindNextChild();
@@ -138,13 +149,14 @@ public abstract class BHFlowNode : BHActionNode
         return bResult;
     }
 
-    protected bool CheckDecoratorsToUpdate()
+    protected bool CheckDecoratorsToUpdate(out bool bFailOnFalseCondition)
     {
         bool bResult = true;
+        bFailOnFalseCondition = true;
 
         foreach (var Decorator in m_Decorators)
         {
-            Decorator.ComputeUpdateCondition(ref bResult);
+            Decorator.ComputeUpdateCondition(ref bResult, ref bFailOnFalseCondition);
         }
 
         return bResult;

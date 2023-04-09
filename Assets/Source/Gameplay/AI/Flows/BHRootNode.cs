@@ -28,7 +28,9 @@ public class BHRootNode : BHFlowNode
 
     public override void Update()
     {
-        if (m_LastStartStatus != NodeStatus.InProgress && Start() != NodeStatus.InProgress)
+        if ((m_LastStartStatus != NodeStatus.InProgress ||
+            (m_NumChildren > 0 && !m_Children[0].bActive)) &&
+            Start() != NodeStatus.InProgress)
         {
             return;
         }
