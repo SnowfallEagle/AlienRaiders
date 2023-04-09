@@ -11,6 +11,20 @@ public class AutoRocketProjectile : Projectile
 
         m_TempBehaviorComponent = InitializeComponent<BehaviorComponent>();
 
+        m_TempBehaviorComponent.StartBehavior(new BHFlow_Selector()
+            .AddNode(new BHFlow_Sequence()
+                .AddNode(new BHTask_LoopCommand(new BHCommand_MoveForward(m_Speed))
+                    .AddOnNodeFinished((Task, Status) => { Debug.Log($"{ Task.GetType().Name } ended with status { Status }"); })
+                )
+                .AddDecorator(new BHDecorator_TimeLimit(1f, true))
+            )
+
+            .AddNode(new BHFlow_Sequence()
+                .AddNode(new BHTask_FollowTarget(PlayerState.Instance.PlayerShip))
+            )
+        );
+
+        /* @DEBUG
         m_TempBehaviorComponent.StartBehavior(new BHFlow_Sequence()
             .AddNode(new BHFlow_Sequence()
                 .AddNode(new BHTask_LoopCommand(new BHCommand_MoveForward(m_Speed))
@@ -23,5 +37,6 @@ public class AutoRocketProjectile : Projectile
                 .AddNode(new BHTask_FollowTarget(PlayerState.Instance.PlayerShip))
             )
         );
+        */
     }
 }
