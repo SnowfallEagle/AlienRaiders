@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class BHTask_FollowTarget : BHTask
+public class BHTask_FollowTarget : BHTaskNode
 {
     private MonoBehaviour m_Target;
 
@@ -17,12 +17,16 @@ public class BHTask_FollowTarget : BHTask
 
     public override void Update()
     {
+        if (!m_Target)
+        {
+            Finish(NodeStatus.Failed);
+            return;
+        }
+
         Vector3 CurrentDirection = m_Owner.transform.up;
-        Vector3 TargetDirection = m_Target ?
-            (m_Target.transform.position - m_Owner.transform.position).normalized :
-            CurrentDirection;
+        Vector3 TargetDirection = (m_Target.transform.position - m_Owner.transform.position).normalized;
 
         m_Owner.transform.up = CurrentDirection + (TargetDirection - CurrentDirection) * m_DiffModifier;
-        m_Owner.AddTask(new BHTask_RelativeMove(m_Owner.transform.up * (m_Speed * Time.deltaTime)));
+        new BHCommand_MoveForward(m_Speed).Process(m_Owner);
     }
 }

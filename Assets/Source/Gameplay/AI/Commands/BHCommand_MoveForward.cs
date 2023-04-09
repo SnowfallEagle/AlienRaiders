@@ -11,8 +11,6 @@ public class BHCommand_MoveForward : BHCommand
 
     public override void Process(Temp.BehaviorComponent Owner)
     {
-        base.Process(Owner);
-
         Owner.transform.position += Owner.transform.up * (m_Speed * Time.deltaTime);
     }
 }
