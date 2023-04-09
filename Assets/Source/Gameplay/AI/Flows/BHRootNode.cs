@@ -10,21 +10,14 @@ public class BHRootNode : BHFlowNode
         m_bUseDecorators = false;
     }
 
-    protected override ChildResult GetNextChild(out BHActionNode Child, ChildResult PrevResult)
+    protected override ChildHandle GetNextChildHandle(ChildHandle CurrentChild, NodeStatus LastChildStatus)
     {
-        Child = m_Children[0];
-        Assert.IsNotNull(Child);
-
-        switch (PrevResult)
+        if (CurrentChild == ChildHandle.NotInitialized)
         {
-            case ChildResult.Initialization: return ChildResult.InProgress;
-            case ChildResult.InProgress:     return ChildResult.ReturnToParent;
-            case ChildResult.Done:           return ChildResult.Done;
-
-            default:
-                Assert.IsTrue(false, $"PrevResult can't be { PrevResult }!");
-                return ChildResult.Done;
+            return (ChildHandle)0;
         }
+
+        return ChildHandle.Done;
     }
 
     public override NodeStatus Start()

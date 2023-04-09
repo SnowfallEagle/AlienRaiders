@@ -57,9 +57,9 @@ public class FightGameState : GameState
     public void NextStage()
     {
         Debug.Log("Next Stage");
-        // TODO: Start next stage
+        // @TODO: Start next stage
 
-        /* TODO:
+        /* @TODO:
             Set new lvl to PlayerState
             Call GameStateMachine to switch state, show ad
         */

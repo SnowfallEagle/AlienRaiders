@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-// TODO: We need to make base alien class from it
+// @TODO: We need to make base alien class from it
 public class AlienShip : Ship
 {
     private enum Weapons
@@ -39,7 +39,7 @@ public class AlienShip : Ship
     {
         base.OnDamageTaken(NewHealth, DeltaHealth);
 
-        // TODO: Later we can make config for this animation
+        // @TODO: Later we can make config for this animation
         m_BehaviorComponent.AddTask(new BHShipTask_AnimateSpriteColor(Color.red, Duration: 0.15f, bPulse: true));
     }
 

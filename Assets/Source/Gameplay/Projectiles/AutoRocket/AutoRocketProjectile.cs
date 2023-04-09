@@ -1,6 +1,6 @@
 using UnityEngine;
 
-// NOTE: No player support yet
+// @NOTE: No player support yet
 public class AutoRocketProjectile : Projectile
 {
     private Temp.BehaviorComponent m_TempBehaviorComponent;

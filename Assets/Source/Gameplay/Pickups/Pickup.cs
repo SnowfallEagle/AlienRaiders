@@ -17,10 +17,10 @@ public class Pickup : CustomBehavior
         InitializeComponent<BoxCollider2D>();
         m_BehaviorComponent = InitializeComponent<BehaviorComponent>();
 
-        // TODO: Move this logic from base class
+        // @TODO: Move this logic from base class
         m_BehaviorComponent.AddTask(new BHTask_MoveVertical(-m_Speed));
 
-        // TODO: We should check for level boundaries
+        // @TODO: We should check for level boundaries
         Destroy(gameObject, 10f);
     }
 

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-// TODO: Make base HealthComponent
+// @TODO: Make base HealthComponent
 public class ShipHealthComponent : CustomBehavior
 {
     public delegate void OnDamageTakenSignature(float NewHealth, float DeltaHealth);
@@ -48,7 +48,7 @@ public class ShipHealthComponent : CustomBehavior
 
     public void TakeDamage(float Damage)
     {
-        // TODO: Move this logic in PlayerShipHealthComponent.CanBeDamaged()
+        // @TODO: Move this logic in PlayerShipHealthComponent.CanBeDamaged()
         if (GameEnvironment.Instance.GetDebugOption<bool>("DebugPlayer.bGodMode") && GetComponent<PlayerShip>())
         {
             return;

@@ -1,3 +1,5 @@
+using UnityEngine.Assertions;
+
 namespace Temp
 {
 
@@ -18,16 +20,18 @@ namespace Temp
             StopBehavior();
         }
 
-        /** Node must be BHTaskNode or BHFlowNode
-        */
+        /** Node must be BHTaskNode or BHFlowNode */
         public void StartBehavior(BHActionNode Node = null)
         {
             StopBehavior();
 
-            if (Node != null)
+            if (Node == null)
             {
-                Root.AddNode(Node);
+                Assert.IsTrue(false, "Behavior started with null Node!");
+                return;
             }
+
+            Root.AddNode(Node);
 
             Root.Initialize(this, null);
             Root.Start();
@@ -36,7 +40,6 @@ namespace Temp
 
         public void StopBehavior()
         {
-            // TODO: We need to find way to finish without restarting, maybe make bool bRestart in RootNode
             if (Root.bActive)
             {
                 Root.Finish(BHNode.NodeStatus.Done);

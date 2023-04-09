@@ -17,7 +17,7 @@ public class PlayerShip : Ship
 
     private void Start()
     {
-        // TODO: In future we'll see how spawn and initialize player better
+        // @TODO: In future we'll see how spawn and initialize player better
         Initialize(new BuffMultipliers());
     }
 
