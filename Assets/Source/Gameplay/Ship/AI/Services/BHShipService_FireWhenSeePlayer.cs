@@ -2,12 +2,11 @@ using System;
 using UnityEngine;
 
 // @TODO: Move FOV -> AlienShip?
-// @INCOMPLETE: Port to service
-public class BHShipTask_FireWhenSeePlayer : BHTaskNode
+public class BHShipService_FireWhenSeePlayer : BHService
 {
     private float m_FOV;
 
-    public BHShipTask_FireWhenSeePlayer(float FOV = 180f)
+    public BHShipService_FireWhenSeePlayer(float FOV = 180f)
     {
         m_FOV = FOV;
     }

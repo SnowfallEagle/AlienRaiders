@@ -6,7 +6,7 @@ public abstract class BHActionNode : BHNode
     public bool bActive = false;
 
     public delegate void OnNodeFinishedSignature(BHNode Node, NodeStatus Status);
-    private OnNodeFinishedSignature m_OnNodeFinished;
+    protected OnNodeFinishedSignature m_OnNodeFinished;
 
     public virtual NodeStatus Start()
     {

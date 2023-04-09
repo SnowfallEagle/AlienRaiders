@@ -16,7 +16,7 @@ public abstract class BHNode
     public virtual void Initialize(BehaviorComponent Owner, BHFlowNode Parent)
     {
         Assert.IsNotNull(Owner);
-        // Parent is null for RootNode
+        // Parent is null for Root Node
 
         m_Owner = Owner;
         m_Parent = Parent;

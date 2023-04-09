@@ -21,6 +21,9 @@ public abstract class BHFlowNode : BHActionNode
     private List<BHDecorator> m_Decorators = new List<BHDecorator>();
     protected bool m_bUseDecorators = true;
 
+    private List<BHService> m_Services = new List<BHService>();
+    protected bool m_bUseServices = true;
+
     protected abstract ChildHandle GetNextChildHandle(ChildHandle CurrentChild, NodeStatus LastChildStatus);
 
     public BHFlowNode AddDecorator(BHDecorator Decorator)
@@ -35,6 +38,18 @@ public abstract class BHFlowNode : BHActionNode
         return this;
     }
 
+    public BHFlowNode AddService(BHService Service)
+    {
+        if (!m_bUseServices || Service == null)
+        {
+            Assert.IsTrue(false, "Node doesn't use Services or given Service is null!");
+            return this;
+        }
+
+        m_Services.Add(Service);
+        return this;
+    }
+
     public override void Initialize(BehaviorComponent Owner, BHFlowNode Parent)
     {
         base.Initialize(Owner, Parent);
@@ -42,6 +57,11 @@ public abstract class BHFlowNode : BHActionNode
         foreach (var Decorator in m_Decorators)
         {
             Decorator.Initialize(Owner, this);
+        }
+
+        foreach (var Service in m_Services)
+        {
+            Service.Initialize(Owner, this);
         }
 
         foreach (var Child in m_Children)
@@ -65,6 +85,12 @@ public abstract class BHFlowNode : BHActionNode
         if (m_CurrentChildHandle == ChildHandle.Done)
         {
             return NodeStatus.Done;
+        }
+
+        foreach (var Service in m_Services)
+        {
+            // @NOTE: We don't care about status of service
+            Service.Start();
         }
 
         return NodeStatus.InProgress;
@@ -95,12 +121,22 @@ public abstract class BHFlowNode : BHActionNode
             }
         }
 
+        foreach (var Service in m_Services)
+        {
+            Service.Update();
+        }
+
         m_CurrentChild.Update();
     }
 
     public override void Finish(NodeStatus FinishStatus)
     {
         base.Finish(FinishStatus);
+
+        foreach (var Service in m_Services)
+        {
+            Service.Finish(FinishStatus);
+        }
 
         foreach (var Child in m_Children)
         {

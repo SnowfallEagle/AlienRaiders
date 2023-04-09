@@ -23,11 +23,12 @@ public class AlienShip : Ship
 
         m_BoxCollider.isTrigger = true;
 
-        m_BehaviorComponent.StartBehavior(new BHTask_LoopCommand(new BHCommand_MoveForward(Speed)));
-        /* @INCOMPLETE: Need services...
-        BehaviorComponent.AddTask(new BHShipTask_DestroyWhenOutOfBottomBound());
-        BehaviorComponent.AddTask(new BHShipTask_FireWhenSeePlayer(90f));
-        */
+        m_BehaviorComponent.StartBehavior(new BHFlow_Sequence()
+            .AddNode(new BHTask_LoopCommand(new BHCommand_MoveForward(Speed)))
+
+            .AddService(new BHShipService_DestroyWhenOutOfBottomBound())
+            .AddService(new BHShipService_FireWhenSeePlayer(90f))
+        );
     }
 
     protected override Type[] OnPreInitializeWeapons()
