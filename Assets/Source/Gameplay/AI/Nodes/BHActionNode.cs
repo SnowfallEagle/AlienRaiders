@@ -5,8 +5,8 @@ public abstract class BHActionNode : BHNode
     // Only for parent FlowNode to mark started nodes!
     public bool bActive = false;
 
-    public delegate void OnNodeEndedSignature(BHNode Node, NodeStatus Status);
-    private OnNodeEndedSignature m_OnNodeEnded;
+    public delegate void OnNodeFinishedSignature(BHNode Node, NodeStatus Status);
+    private OnNodeFinishedSignature m_OnNodeFinished;
 
     public virtual NodeStatus Start()
     {
@@ -32,14 +32,14 @@ public abstract class BHActionNode : BHNode
             m_Parent.OnChildFinished(this, FinishStatus);
         }
 
-        m_OnNodeEnded?.Invoke(this, FinishStatus);
+        m_OnNodeFinished?.Invoke(this, FinishStatus);
     }
 
-    public BHActionNode AddOnNodeEnded(OnNodeEndedSignature Callback)
+    public BHActionNode AddOnNodeFinished(OnNodeFinishedSignature Callback)
     {
         if (Callback != null)
         {
-            m_OnNodeEnded += Callback;
+            m_OnNodeFinished+= Callback;
         }
         return this;
     }

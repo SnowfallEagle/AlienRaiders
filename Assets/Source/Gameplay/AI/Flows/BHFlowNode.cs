@@ -12,6 +12,8 @@ public abstract class BHFlowNode : BHActionNode
     }
 
     protected List<BHActionNode> m_Children = new List<BHActionNode>();
+    protected int m_NumChildren;
+
     private BHActionNode m_CurrentChild;
     private ChildHandle m_CurrentChildHandle;
     private NodeStatus m_LastChildStatus;
@@ -49,7 +51,8 @@ public abstract class BHFlowNode : BHActionNode
 
     public override NodeStatus Start()
     {
-        if (!m_Children.Any())
+        m_NumChildren = m_Children.Count;
+        if (m_NumChildren <= 0)
         {
             return NodeStatus.Done;
         }
