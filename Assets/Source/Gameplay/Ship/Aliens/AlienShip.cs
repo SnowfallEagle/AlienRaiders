@@ -43,9 +43,7 @@ public class AlienShip : Ship
         base.OnDamageTaken(NewHealth, DeltaHealth);
 
         // @TODO: Later we can make config for this animation
-        /* @INCOMPLETE: Need actions...
-        m_BehaviorComponent.AddTask(new BHShipTask_AnimateSpriteColor(Color.red, Duration: 0.15f, bPulse: true));
-        */
+        m_BehaviorComponent.AddAction(new BHShipAction_AnimateSpriteColor(Color.red, Duration: 0.15f, bPulse: true));
     }
 
     private void OnTriggerEnter2D(Collider2D Other)

@@ -1,14 +1,26 @@
+using System.Collections.Generic;
 using UnityEngine.Assertions;
 
 public class BehaviorComponent : CustomBehavior
 {
-    BHFlow_Root Root = new BHFlow_Root();
+    private BHFlow_Root m_Root = new BHFlow_Root();
+    private List<BHAction> m_Actions = new List<BHAction>();
 
     private void LateUpdate()
     {
-        if (Root.bActive)
+        // Behavior tree
+        if (m_Root.bActive)
         {
-            Root.Update();
+            m_Root.Update();
+        }
+
+        // Actions
+        for (int i = m_Actions.Count - 1; i >= 0; --i)
+        {
+            if (!m_Actions[i].Update())
+            {
+                m_Actions.RemoveAt(i);
+            }
         }
     }
 
@@ -28,19 +40,28 @@ public class BehaviorComponent : CustomBehavior
             return;
         }
 
-        Root.AddNode(Node);
+        m_Root.AddNode(Node);
 
-        Root.Initialize(this, null);
-        Root.Start();
-        Root.bActive = true;
+        m_Root.Initialize(this, null);
+        m_Root.Start();
+        m_Root.bActive = true;
     }
 
     public void StopBehavior()
     {
-        if (Root.bActive)
+        if (m_Root.bActive)
         {
-            Root.Finish(BHNode.NodeStatus.Done);
-            Root.bActive = false;
+            m_Root.Finish(BHNode.NodeStatus.Done);
+            m_Root.bActive = false;
+        }
+    }
+
+    public void AddAction(BHAction Action)
+    {
+        Action.Initialize(this);
+        if (Action.Start())
+        {
+            m_Actions.Add(Action);
         }
     }
 }
