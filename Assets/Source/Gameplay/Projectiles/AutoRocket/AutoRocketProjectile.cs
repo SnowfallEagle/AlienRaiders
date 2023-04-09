@@ -11,7 +11,7 @@ public class AutoRocketProjectile : Projectile
 
         m_TempBehaviorComponent = InitializeComponent<Temp.BehaviorComponent>();
 
-        m_TempBehaviorComponent.StartBehavior(new BHSequenceNode()
+        m_TempBehaviorComponent.StartBehavior(new BHFlow_Sequence()
             .AddNode(new BHTask_LoopCommand(new BHCommand_MoveForward(m_Speed))
                 .AddOnNodeFinished((Task, Status) => { Debug.Log($"{ Task.GetType().Name } ended with status { Status }"); })
             )

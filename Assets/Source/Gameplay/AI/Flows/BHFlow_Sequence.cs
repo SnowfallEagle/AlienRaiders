@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine.Assertions;
 
-public class BHSequenceNode : BHFlowNode
+public class BHFlow_Sequence : BHFlowNode
 {
     protected override ChildHandle GetNextChildHandle(ChildHandle CurrentChild, NodeStatus LastChildStatus)
     {

@@ -1,11 +1,11 @@
 using UnityEngine;
 using UnityEngine.Assertions;
 
-public class BHRootNode : BHFlowNode
+public class BHFlow_Root : BHFlowNode
 {
     private NodeStatus m_LastStartStatus;
 
-    public BHRootNode()
+    public BHFlow_Root()
     {
         m_bUseDecorators = false;
     }

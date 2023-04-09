@@ -5,7 +5,7 @@ namespace Temp
 
     public class BehaviorComponent : CustomBehavior
     {
-        BHRootNode Root = new BHRootNode();
+        BHFlow_Root Root = new BHFlow_Root();
 
         private void LateUpdate()
         {
