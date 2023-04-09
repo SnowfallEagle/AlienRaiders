@@ -4,22 +4,22 @@ public class GameManager : CustomBehavior
 {
     private void Start()
     {
-        InitializePlatformSDK();
+        InitializePlatformSdk();
         InitializeGameStateMachine();
     }
 
-    private void InitializePlatformSDK()
+    private void InitializePlatformSdk()
     {
-        if (GameEnvironment.Instance.SDKType == GameEnvironment.PlatformSDK.Yandex)
+        if (GameEnvironment.Instance.SdkType == GameEnvironment.PlatformSdk.Yandex)
         {
-            ServiceLocator.Instance.Add<PlatformSDK, YandexSDK>();
+            ServiceLocator.Instance.Add<PlatformSdk, YandexSdk>();
         }
 
-        var SDK = PlatformSDK.Instance;
-        SDK.OnPostInitialization = () =>
+        var Sdk = PlatformSdk.Instance;
+        Sdk.OnPostInitialization = () =>
         {
-            SDK.ToggleStickyAd(true);
-            SDK.ShowFullscreenAd();
+            Sdk.ToggleStickyAd(true);
+            Sdk.ShowFullscreenAd();
         };
     }
 

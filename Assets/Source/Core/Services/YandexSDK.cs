@@ -4,7 +4,7 @@ using UnityEngine;
 using Agava.WebUtility;
 using Agava.YandexGames;
 
-public class YandexSDK : PlatformSDK
+public class YandexSdk : PlatformSdk
 {
     private IEnumerator Start()
     {

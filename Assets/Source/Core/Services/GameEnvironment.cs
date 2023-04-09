@@ -11,7 +11,7 @@ using UnityEngine;
 
 public class GameEnvironment : Service<GameEnvironment>
 {
-    public enum PlatformSDK
+    public enum PlatformSdk
     {
         Fake,
         Yandex
@@ -45,11 +45,11 @@ public class GameEnvironment : Service<GameEnvironment>
         [SerializeField] public bool bDrawEyesight = false;
     }
 
-    [SerializeField] public PlatformSDK SDKType =
+    [SerializeField] public PlatformSdk SdkType =
 #if NDEBUG
-        PlatformSDK.Yandex;
+        PlatformSdk.Yandex;
 #else
-        PlatformSDK.Fake;
+        PlatformSdk.Fake;
 #endif
 
     [SerializeField] public bool bDebugMode = false;
@@ -113,7 +113,7 @@ public class GameEnvironment : Service<GameEnvironment>
     private void EnforceEnvironment()
     {
 #if _DEBUG
-        SDKType = PlatformSDK.Fake;
+        SdkType = PlatformSdk.Fake;
 #else
         bDebugMode = false;
 #endif

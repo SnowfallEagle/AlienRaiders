@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class PlatformSDK : Service<PlatformSDK>
+public class PlatformSdk : Service<PlatformSdk>
 {
     private Action m_OnPostInitialization = null;
     public Action OnPostInitialization { set => m_OnPostInitialization = value; }
