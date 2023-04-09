@@ -1,6 +1,7 @@
 using UnityEngine;
 
-public class BHShipTask_AnimateSpriteColor : BHTask
+// @INCOMPLETE: Port to action
+public class BHShipTask_AnimateSpriteColor : BHTaskNode
 {
     private Color m_DesiredColor;
     private Color m_SavedColor;
@@ -13,8 +14,7 @@ public class BHShipTask_AnimateSpriteColor : BHTask
 
     private SpriteRenderer m_SpriteRenderer;
 
-    /** bLoop worls only with bPulse = true
-    */
+    /** bLoop worls only with bPulse = true */
     public BHShipTask_AnimateSpriteColor(Color Desired, float Duration = 1f, float StartTime = 0f, bool bPulse = false, bool bLoop = false)
     {
         m_DesiredColor = Desired;
@@ -26,10 +26,11 @@ public class BHShipTask_AnimateSpriteColor : BHTask
         m_bLoop = bLoop;
     }
 
-    public override void Start()
+    public override NodeStatus Start()
     {
         m_SpriteRenderer = m_Owner.GetComponent<SpriteRenderer>();
         m_SavedColor = m_SpriteRenderer.color;
+        return NodeStatus.Done;
     }
 
     public override void Update()
@@ -38,11 +39,12 @@ public class BHShipTask_AnimateSpriteColor : BHTask
         if (m_Elapsed > m_Duration)
         {
             m_SpriteRenderer.color = m_DesiredColor;
-            State = TaskState.Done;
+            Finish(NodeStatus.Done);
 
             if (m_bPulse)
             {
-                m_Owner.AddTask(new BHShipTask_AnimateSpriteColor(m_SavedColor, m_Duration, bPulse: m_bLoop, bLoop: m_bLoop));
+                // @INCOMPLETE: AddAction
+                // m_Owner.AddTask(new BHShipTask_AnimateSpriteColor(m_SavedColor, m_Duration, bPulse: m_bLoop, bLoop: m_bLoop));
             }
             return;
         }

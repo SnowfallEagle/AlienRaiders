@@ -9,7 +9,7 @@ public class BHCommand_MoveForward : BHCommand
         m_Speed = Speed;
     }
 
-    public override void Process(Temp.BehaviorComponent Owner)
+    public override void Process(BehaviorComponent Owner)
     {
         Owner.transform.position += Owner.transform.up * (m_Speed * Time.deltaTime);
     }

@@ -23,9 +23,11 @@ public class AlienShip : Ship
 
         m_BoxCollider.isTrigger = true;
 
-        BehaviorComponent.AddTask(new BHShipTask_MoveBottom());
+        m_BehaviorComponent.StartBehavior(new BHTask_LoopCommand(new BHCommand_MoveForward(Speed)));
+        /* @INCOMPLETE: Need services...
         BehaviorComponent.AddTask(new BHShipTask_DestroyWhenOutOfBottomBound());
         BehaviorComponent.AddTask(new BHShipTask_FireWhenSeePlayer(90f));
+        */
     }
 
     protected override Type[] OnPreInitializeWeapons()
@@ -40,7 +42,9 @@ public class AlienShip : Ship
         base.OnDamageTaken(NewHealth, DeltaHealth);
 
         // @TODO: Later we can make config for this animation
+        /* @INCOMPLETE: Need actions...
         m_BehaviorComponent.AddTask(new BHShipTask_AnimateSpriteColor(Color.red, Duration: 0.15f, bPulse: true));
+        */
     }
 
     private void OnTriggerEnter2D(Collider2D Other)

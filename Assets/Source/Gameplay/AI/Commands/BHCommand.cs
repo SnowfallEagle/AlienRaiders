@@ -1,5 +1,5 @@
 public class BHCommand
 {
-    public virtual void Process(Temp.BehaviorComponent Owner)
+    public virtual void Process(BehaviorComponent Owner)
     { }
 }

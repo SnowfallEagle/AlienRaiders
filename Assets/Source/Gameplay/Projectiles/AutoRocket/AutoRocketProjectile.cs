@@ -3,13 +3,13 @@ using UnityEngine;
 // @NOTE: No player support yet
 public class AutoRocketProjectile : Projectile
 {
-    private Temp.BehaviorComponent m_TempBehaviorComponent;
+    private BehaviorComponent m_TempBehaviorComponent;
 
     protected override void Start()
     {
         base.Start();
 
-        m_TempBehaviorComponent = InitializeComponent<Temp.BehaviorComponent>();
+        m_TempBehaviorComponent = InitializeComponent<BehaviorComponent>();
 
         m_TempBehaviorComponent.StartBehavior(new BHFlow_Sequence()
             .AddNode(new BHFlow_Sequence()

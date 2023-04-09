@@ -10,10 +10,10 @@ public abstract class BHNode
         Failed
     }
 
-    protected Temp.BehaviorComponent m_Owner;
+    protected BehaviorComponent m_Owner;
     protected BHFlowNode m_Parent;
 
-    public virtual void Initialize(Temp.BehaviorComponent Owner, BHFlowNode Parent)
+    public virtual void Initialize(BehaviorComponent Owner, BHFlowNode Parent)
     {
         Assert.IsNotNull(Owner);
         // Parent is null for RootNode

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Pickup : CustomBehavior
 {
-    [SerializeField] protected float m_Speed = 2.5f;
+    [SerializeField] protected float m_Speed = 5f;
 
     protected BehaviorComponent m_BehaviorComponent;
     public BehaviorComponent BehaviorComponent => m_BehaviorComponent;
@@ -15,18 +15,14 @@ public class Pickup : CustomBehavior
         Rigidbody.gravityScale = 0f;
 
         InitializeComponent<BoxCollider2D>();
+
         m_BehaviorComponent = InitializeComponent<BehaviorComponent>();
 
         // @TODO: Move this logic from base class
-        m_BehaviorComponent.AddTask(new BHTask_MoveVertical(-m_Speed));
+        m_BehaviorComponent.StartBehavior(new BHTask_LoopCommand(new BHCommand_MoveForward(-m_Speed)));
 
         // @TODO: We should check for level boundaries
         Destroy(gameObject, 10f);
-    }
-
-    private void Update()
-    {
-        transform.Translate(0f, -m_Speed * Time.deltaTime, 0f);
     }
 
     private void OnTriggerStay2D(Collider2D Other)

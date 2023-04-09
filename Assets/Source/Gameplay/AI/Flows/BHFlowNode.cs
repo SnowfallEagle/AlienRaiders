@@ -35,7 +35,7 @@ public abstract class BHFlowNode : BHActionNode
         return this;
     }
 
-    public override void Initialize(Temp.BehaviorComponent Owner, BHFlowNode Parent)
+    public override void Initialize(BehaviorComponent Owner, BHFlowNode Parent)
     {
         base.Initialize(Owner, Parent);
 

@@ -2,19 +2,14 @@ using System;
 using UnityEngine;
 
 // @TODO: Move FOV -> AlienShip?
-public class BHShipTask_FireWhenSeePlayer : BHTask
+// @INCOMPLETE: Port to service
+public class BHShipTask_FireWhenSeePlayer : BHTaskNode
 {
     private float m_FOV;
-    private BehaviorComponent m_BehaviorComponent;
 
     public BHShipTask_FireWhenSeePlayer(float FOV = 180f)
     {
         m_FOV = FOV;
-    }
-
-    public override void Start()
-    {
-        m_BehaviorComponent = m_Owner.GetComponent<BehaviorComponent>();
     }
 
     public override void Update()
@@ -22,7 +17,7 @@ public class BHShipTask_FireWhenSeePlayer : BHTask
         PlayerShip PlayerShip = PlayerState.Instance.PlayerShip;
         if (!PlayerShip)
         {
-            m_BehaviorComponent.AddTask(new BHShipTask_StopFire());
+            new BHShipCommand_StopFire().Process(m_Owner);
             return;
         }
 
@@ -31,14 +26,14 @@ public class BHShipTask_FireWhenSeePlayer : BHTask
 
         if (MathF.Abs(Angle) < m_FOV * 0.5f)
         {
-            m_BehaviorComponent.AddTask(new BHShipTask_StartFire());
+            new BHShipCommand_StartFire().Process(m_Owner);
         }
         else
         {
-            m_BehaviorComponent.AddTask(new BHShipTask_StopFire());
+            new BHShipCommand_StopFire().Process(m_Owner);
         }
 
-        // DEBUG
+        // @DEBUG
         if (GameEnvironment.Instance.GetDebugOption<bool>("DebugAI.bDrawEyesight"))
         {
             // Direction to player
