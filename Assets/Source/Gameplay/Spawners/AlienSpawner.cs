@@ -1,6 +1,28 @@
 using UnityEngine;
 using UnityEngine.Assertions;
 
+
+/** Int values:
+    ** Have more priority than From->To **
+    SpecificSpawnPattern
+    SpecificSpawnSubpattern
+    SpecificShipPattern
+
+    FromSpawnPattern
+    ToSpawnPattern
+
+    ** Only when SpawnPattern specified **
+    FromSpawnSubpattern
+    ToSpawnSubpattern
+
+    FromShipPattern
+    ToShipPattern
+*/
+
+/** String values:
+    ResourcePath
+*/
+
 public class AlienSpawner : Spawner
 {
     public static class Pattern
@@ -25,7 +47,11 @@ public class AlienSpawner : Spawner
 
     protected override GameObject[] OnSpawn()
     {
-        string ResourcePath = m_Config.ResourcePath != null ? m_Config.ResourcePath : "Ships/Alien";
+        string ResourcePath;
+        if (!m_Config.StringValues.TryGetValue("ResourcePath", out ResourcePath))
+        {
+            ResourcePath = "Ships/Alien";
+        }
 
         m_AlienPrefab = Resources.Load<GameObject>(ResourcePath);
         Assert.IsNotNull(m_AlienPrefab);

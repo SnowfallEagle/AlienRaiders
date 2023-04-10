@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -5,28 +6,12 @@ public class Spawner : CustomBehavior
 {
     public class Config
     {
-        public const int AnyParam = -1;
-
-        /** Have more priority than From->To */
-        public int SpecificSpawnPattern = AnyParam;
-        public int SpecificSpawnSubpattern = AnyParam;
-        public int SpecificShipPattern = AnyParam;
-
-        public int FromSpawnPattern = AnyParam;
-        public int ToSpawnPattern = AnyParam;
-
-        /** Only when SpawnPattern specified */
-        public int FromSpawnSubpattern = AnyParam;
-        public int ToSpawnSubpattern = AnyParam;
-
-        public int FromShipPattern = AnyParam;
-        public int ToShipPattern = AnyParam;
+        public Dictionary<string, int> IntValues = new Dictionary<string, int>();
+        public Dictionary<string, string> StringValues = new Dictionary<string, string>();
 
         /** Black = default */
         public Color ShipColor = Color.black;
         public BuffMultipliers Buffs = new BuffMultipliers();
-
-        public string ResourcePath = null;
     }
 
     protected struct PrecomputedStuff
@@ -81,38 +66,64 @@ public class Spawner : CustomBehavior
 
     protected int GetPattern(int MaxPatterns)
     {
-        if (m_Config.SpecificSpawnPattern != Config.AnyParam)
+        int SpecificSpawnPattern;
+        if (m_Config.IntValues.TryGetValue("SpecificSpawnPattern", out SpecificSpawnPattern))
         {
-            return m_Config.SpecificSpawnPattern;
+            return SpecificSpawnPattern;
         }
 
-        int From = m_Config.FromSpawnPattern == Config.AnyParam ? 0           : m_Config.FromSpawnPattern;
-        int To   = m_Config.ToSpawnPattern   == Config.AnyParam ? MaxPatterns : m_Config.ToSpawnPattern + 1;
+        int From;
+        if (!m_Config.IntValues.TryGetValue("FromSpawnPattern", out From))
+        {
+            From = 0;
+        }
+
+        int To;
+        if (!m_Config.IntValues.TryGetValue("ToSpawnPattern", out To))
+        {
+            To = MaxPatterns;
+        }
+        else
+        {
+            ++To; // Exclusive range
+        }
+
         return Random.Range(From, To);
     }
 
     protected int GetSubpattern(int MaxPatterns)
     {
-        if (m_Config.SpecificSpawnSubpattern != Config.AnyParam && m_Config.SpecificSpawnPattern != Config.AnyParam)
+        int SpecificSpawnSubpattern;
+        if (m_Config.IntValues.TryGetValue("SpecificSpawnSubpattern", out SpecificSpawnSubpattern) &&
+            m_Config.IntValues.ContainsKey("SpecificSpawnPattern"))
         {
-            return m_Config.SpecificSpawnSubpattern;
+            return SpecificSpawnSubpattern;
         }
 
-        int From = m_Config.FromSpawnSubpattern == Config.AnyParam ? 0           : m_Config.FromSpawnSubpattern;
-        int To   = m_Config.ToSpawnSubpattern   == Config.AnyParam ? MaxPatterns : m_Config.ToSpawnSubpattern + 1;
+        int From;
+        if (!m_Config.IntValues.TryGetValue("FromSpawnSubpattern", out From))
+        {
+            From = 0;
+        }
+
+        int To;
+        if (!m_Config.IntValues.TryGetValue("ToSpawnSubpattern", out To))
+        {
+            To = MaxPatterns;
+        }
+        else
+        {
+            ++To; // Exclusive range
+        }
+
         return Random.Range(From, To);
     }
 
     protected int GetShipPattern(int MaxPatterns)
     {
-        if (m_Config.SpecificShipPattern == Config.AnyParam)
-        {
-            int From = m_Config.FromShipPattern == Config.AnyParam ? 0           : m_Config.FromShipPattern;
-            int To   = m_Config.ToShipPattern   == Config.AnyParam ? MaxPatterns : m_Config.ToShipPattern + 1;
-            return Random.Range(From, To);
-        }
-
-        return m_Config.SpecificShipPattern;
+        // @INCOMPLETE
+        Assert.IsTrue(false, "Not implemented");
+        return 0;
     }
 
     private void InitializeShips(GameObject[] Ships)

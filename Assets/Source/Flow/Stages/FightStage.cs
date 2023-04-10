@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -20,6 +21,14 @@ public class FightStage : CustomBehavior
         new SpawnerInfo
         {
             Type = typeof(OneBigTwoNearSpawner),
+            Config = new Spawner.Config()
+            {
+                StringValues = new Dictionary<string, string>()
+                {
+                    { "NearResourcePath", "Ships/FlashRocketer" },
+                    { "BigResourcePath", "Ships/BigAlien" },
+                }
+            },
             bWaitToEnd = true,
         },
 
@@ -28,8 +37,12 @@ public class FightStage : CustomBehavior
             Type = typeof(AlienSpawner),
             Config = new Spawner.Config
             {
-                SpecificSpawnPattern = (int)AlienSpawner.Pattern.Triple,
-                SpecificSpawnSubpattern = (int)AlienSpawner.TripleSubpattern.Column,
+                IntValues = new Dictionary<string, int>()
+                {
+                    { "SpecificSpawnPattern", AlienSpawner.Pattern.Triple },
+                    { "SpecificSpawnSubpattern", AlienSpawner.TripleSubpattern.Row },
+                },
+
                 ShipColor = Color.magenta,
             },
 
@@ -41,8 +54,12 @@ public class FightStage : CustomBehavior
             Type = typeof(AlienSpawner),
             Config = new Spawner.Config
             {
-                FromSpawnPattern = (int)AlienSpawner.Pattern.Single,
-                ToSpawnPattern = (int)AlienSpawner.Pattern.Triple,
+                IntValues = new Dictionary<string, int>()
+                {
+                    { "FromSpawnPattern", AlienSpawner.Pattern.Single },
+                    { "ToSpawnPattern", AlienSpawner.Pattern.Triple },
+                },
+
                 ShipColor = Color.red,
             },
 
@@ -56,7 +73,11 @@ public class FightStage : CustomBehavior
             Type = typeof(AlienSpawner),
             Config = new Spawner.Config
             {
-                SpecificSpawnPattern = (int)AlienSpawner.Pattern.Triple,
+                IntValues = new Dictionary<string, int>()
+                {
+                    { "SpecificSpawnPattern", AlienSpawner.Pattern.Triple },
+                },
+
                 ShipColor = Color.blue
             },
 
