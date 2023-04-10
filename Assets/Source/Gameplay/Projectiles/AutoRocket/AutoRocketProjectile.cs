@@ -12,12 +12,7 @@ public class AutoRocketProjectile : Projectile
 
         m_BehaviorComponent.StartBehavior(new BHFlow_Sequence()
             .AddNode(new BHFlow_Sequence()
-                .AddNode(new BHTask_LoopCommand(new BHCommand_MoveForward(Speed))
-#if UNITY_EDITOR
-                    // @DEBUG
-                    .AddOnNodeFinished((Task, Status) => { Debug.Log($"{ Task.GetType().Name } ended with status { Status }"); })
-#endif
-                )
+                .AddNode(new BHTask_LoopCommand(new BHCommand_MoveForward(Speed)))
                 .AddDecorator(new BHDecorator_TimeLimit(m_UntargetedFlyTime, false))
             )
 

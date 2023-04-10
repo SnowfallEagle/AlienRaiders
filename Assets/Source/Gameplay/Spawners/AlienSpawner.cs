@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class AlienSpawner : Spawner
 {
@@ -30,7 +31,8 @@ public class AlienSpawner : Spawner
         {
             // @DEBUG
             // s_AlienPrefab = Resources.Load<GameObject>("Ships/Alien");
-            s_AlienPrefab = Resources.Load<GameObject>("Ships/Rocketer");
+            s_AlienPrefab = Resources.Load<GameObject>("Ships/FlashRocketer");
+            Assert.IsNotNull(s_AlienPrefab);
             s_AlienPrefab.transform.rotation = Quaternion.Euler(0f, 0f, 180f);
         }
 

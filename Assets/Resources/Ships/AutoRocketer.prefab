@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2322615566326916061}
   - component: {fileID: 3400602365398443725}
   m_Layer: 0
-  m_Name: Rocketer
+  m_Name: AutoRocketer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
