@@ -23,18 +23,16 @@ public class AlienSpawner : Spawner
         MaxPatterns
     }
 
-    private static GameObject s_AlienPrefab;
+    private GameObject m_AlienPrefab;
 
     protected override GameObject[] OnSpawn()
     {
-        if (!s_AlienPrefab)
-        {
-            // @DEBUG
-            // s_AlienPrefab = Resources.Load<GameObject>("Ships/Alien");
-            s_AlienPrefab = Resources.Load<GameObject>("Ships/FlashRocketer");
-            Assert.IsNotNull(s_AlienPrefab);
-            s_AlienPrefab.transform.rotation = Quaternion.Euler(0f, 0f, 180f);
-        }
+        string ResourcePath = m_Config.ResourcePath != null ? m_Config.ResourcePath : "Ships/Alien";
+
+        m_AlienPrefab = Resources.Load<GameObject>(ResourcePath);
+        Assert.IsNotNull(m_AlienPrefab);
+
+        m_AlienPrefab.transform.rotation = Quaternion.Euler(0f, 0f, 180f);
 
         switch (GetPattern((int)Pattern.MaxPatterns))
         {
@@ -46,7 +44,7 @@ public class AlienSpawner : Spawner
 
     private GameObject[] SpawnSingle()
     {
-        GameObject Alien = SpawnInState(s_AlienPrefab);
+        GameObject Alien = SpawnInState(m_AlienPrefab);
 
         float XRange = s_Precomputed.TargetSize.x * 0.5f;
         Alien.transform.position = new Vector3(
@@ -67,7 +65,7 @@ public class AlienSpawner : Spawner
         GameObject[] Aliens = new GameObject[NumAliens];
         for (int i = 0; i < NumAliens; ++i)
         {
-            Aliens[i] = SpawnInState(s_AlienPrefab);
+            Aliens[i] = SpawnInState(m_AlienPrefab);
         }
 
         // Set up config

@@ -26,8 +26,12 @@ public class PlayerShip : Ship
         base.Initialize(Buffs);
 
         gameObject.layer = LayerMask.NameToLayer("Player");
-
         m_Team = ShipTeam.Player;
+
+        HealthComponent.OnDamageTaken += (NewHealth, DeltaHealth) =>
+        {
+            BehaviorComponent.AddAction(new BHShipAction_AnimateSpriteColor(Color.red, 0.1f, bPulse: true));
+        };
     }
 
     private void LateUpdate()

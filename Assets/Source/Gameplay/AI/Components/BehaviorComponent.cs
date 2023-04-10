@@ -64,4 +64,12 @@ public class BehaviorComponent : CustomBehavior
             m_Actions.Add(Action);
         }
     }
+
+    public void AddExclusiveAction(BHAction ExclusiveAction)
+    {
+        System.Type ExclusiveType = ExclusiveAction.GetType();
+        m_Actions.RemoveAll((Action) => Action.GetType().IsSubclassOf(ExclusiveType));
+
+        AddAction(ExclusiveAction);
+    }
 }

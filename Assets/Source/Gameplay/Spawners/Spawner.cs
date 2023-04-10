@@ -10,7 +10,7 @@ public class Spawner : CustomBehavior
     {
         public const int AnyParam = -1;
 
-        // Have more priority than From->To
+        /** Have more priority than From->To */
         public int SpecificSpawnPattern = AnyParam;
         public int SpecificSpawnSubpattern = AnyParam;
         public int SpecificShipPattern = AnyParam;
@@ -18,15 +18,16 @@ public class Spawner : CustomBehavior
         public int FromSpawnPattern = AnyParam;
         public int ToSpawnPattern = AnyParam;
 
-        // Only when SpawnPattern specified
+        /** Only when SpawnPattern specified */
         public int FromSpawnSubpattern = AnyParam;
         public int ToSpawnSubpattern = AnyParam;
 
         public int FromShipPattern = AnyParam;
         public int ToShipPattern = AnyParam;
-        
-        public Color ShipColor = Color.white;
 
+        /** Black = default */
+        public Color ShipColor = Color.black;
+        public string ResourcePath = null;
         public BuffMultipliers Buffs = new BuffMultipliers();
     }
 

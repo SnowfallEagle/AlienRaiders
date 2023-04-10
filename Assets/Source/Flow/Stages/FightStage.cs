@@ -24,6 +24,7 @@ public class FightStage : CustomBehavior
             {
                 SpecificSpawnPattern = (int)AlienSpawner.Pattern.Single,
                 ShipColor = Color.magenta,
+                ResourcePath = "Ships/AutoRocketer"
             },
 
             bWaitToEnd = true,
