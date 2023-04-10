@@ -152,7 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9e4e40faddfba342a5793379e3af198, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ShipTeam: 0
+  m_Team: 0
   m_DefaultSpeed: 2.5
   m_DamageOnCollide: 10
 --- !u!1001 &1718488102545593935

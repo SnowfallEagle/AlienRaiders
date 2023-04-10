@@ -22,7 +22,7 @@ public class Weapon : CustomBehavior
 
     public void StartFire()
     {
-        // FIXME: We should set timers that'll fire when we can shoot again, because we can spam taps
+        // @FIXME: We should set timers that'll fire when we can shoot again, because we can spam taps
         if (!m_hFireTimer.bValid)
         {
             TimerService.Instance.AddTimer(m_hFireTimer, this, Fire, m_FireRate, true);
@@ -34,8 +34,7 @@ public class Weapon : CustomBehavior
         m_hFireTimer.Invalidate();
     }
 
-    /** Overridable method for derived weapons
-    */
+    /** Overridable method for derived weapons */
     protected virtual void Fire()
     { }
 }

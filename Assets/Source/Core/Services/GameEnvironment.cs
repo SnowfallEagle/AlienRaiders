@@ -75,8 +75,7 @@ public class GameEnvironment : Service<GameEnvironment>
         ProcessInput();
     }
 
-    /** Get debug option if game is in debug mode
-    */
+    /** Get debug option if game is in debug mode */
     public T GetDebugOption<T>(string OptionName)
     {
         if (!bDebugMode)

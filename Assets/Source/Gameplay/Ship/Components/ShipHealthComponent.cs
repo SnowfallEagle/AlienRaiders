@@ -15,8 +15,7 @@ public class ShipHealthComponent : CustomBehavior
 
     private bool m_bNeedToDestroy = false;
 
-    /** Must be called from Ship
-    */
+    /** Must be called from Ship */
     public void Initialize(BuffMultipliers Buffs)
     {
         SetHealth(m_DefaultHealth * Buffs.ShipHealth);

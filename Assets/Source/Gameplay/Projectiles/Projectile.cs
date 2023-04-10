@@ -9,10 +9,10 @@ public class Projectile : CustomBehavior
     protected BehaviorComponent m_BehaviorComponent;
     public BehaviorComponent BehaviorComponent => m_BehaviorComponent;
 
-    protected float m_Damage = 5f;
+    private float m_Damage = 5f;
     public float Damage => m_Damage;
 
-    protected float m_Speed = 5f;
+    private float m_Speed = 5f;
     public float Speed => m_Speed;
 
     protected Ship m_Owner;

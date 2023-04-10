@@ -78,8 +78,6 @@ public class Ship : CustomBehavior
         return new Type[] { };
     }
 
-    /** Overridable method
-    */
     protected virtual void OnDamageTaken(float NewHealth, float DeltaHealth)
     { }
 

@@ -18,7 +18,7 @@ public class YandexSdk : PlatformSdk
 
     private void Update()
     {
-        // DEBUG
+        // @DEBUG
         if (Input.GetKey(KeyCode.S)) StickyAd.Show();
         if (Input.GetKey(KeyCode.D)) StickyAd.Hide();
 

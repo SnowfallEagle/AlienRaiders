@@ -17,7 +17,7 @@ public class BHTask_FollowTarget : BHTaskNode
 
     public override void Update()
     {
-        // Make it first, because target could been destroyed and we can stop for 1 frame
+        // Move first, because target could been destroyed and we'll stop for 1 frame
         new BHCommand_MoveForward(m_Speed).Process(m_Owner);
 
         if (!m_Target)

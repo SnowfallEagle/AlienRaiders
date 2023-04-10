@@ -10,7 +10,7 @@ public class BasicProjectile : Projectile
         float Modifier = Dot < 0f ? -1f : 1f;
 
         m_BehaviorComponent.StartBehavior(new BHTask_LoopCommand(
-            new BHCommand_RelativeMove(m_Owner.transform.up * (m_Speed * Modifier * Time.deltaTime))
+            new BHCommand_MoveForward(Speed * Modifier)
         ));
     }
 }
