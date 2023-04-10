@@ -6,7 +6,7 @@ public class AlienShip : Ship
 {
     private enum Weapons
     {
-        Launcher,
+        AnyWeapon,
 
         MaxWeapons
     }
@@ -38,7 +38,7 @@ public class AlienShip : Ship
     protected override Type[] OnPreInitializeWeapons()
     {
         Type[] WeaponTypes = new Type[(int)Weapons.MaxWeapons];
-        WeaponTypes[(int)Weapons.Launcher] = typeof(LauncherWeapon);
+        WeaponTypes[(int)Weapons.AnyWeapon] = typeof(Weapon);
         return WeaponTypes;
     }
 
@@ -46,7 +46,6 @@ public class AlienShip : Ship
     {
         base.OnDamageTaken(NewHealth, DeltaHealth);
 
-        // @TODO: Later we can make config for this animation
         m_BehaviorComponent.AddExclusiveAction(new BHShipAction_AnimateSpriteColor(Color.red, Duration: 0.15f, bPulse: true));
     }
 

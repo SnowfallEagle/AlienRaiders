@@ -39,7 +39,8 @@ public class ShipWeaponComponent : CustomBehavior
         {
             for (int i = 0; i < WeaponTypes.Length; ++i)
             {
-                if (ChildWeapon.GetType() == WeaponTypes[i])
+                System.Type ChildType = ChildWeapon.GetType();
+                if (ChildType == WeaponTypes[i] || ChildType.IsSubclassOf(WeaponTypes[i]))
                 {
                     m_Weapons[i] = ChildWeapon;
                     break;

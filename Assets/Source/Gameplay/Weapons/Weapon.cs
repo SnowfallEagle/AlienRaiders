@@ -1,24 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class Weapon : CustomBehavior
 {
+    protected Ship m_Owner;
+    protected BuffMultipliers m_Buffs;
+
     [SerializeField] protected float m_FireRate = 0.5f;
     private TimerService.Handle m_hFireTimer = new TimerService.Handle();
 
-    protected BuffMultipliers m_Buffs;
-
-    public void Initialize(BuffMultipliers Buffs)
+    public virtual void Initialize(BuffMultipliers Buffs)
     {
         m_Buffs = Buffs;
+
+        m_Owner = transform.parent.GetComponent<Ship>();
+        Assert.IsNotNull(m_Owner);
     }
-
-    protected virtual void Start()
-    { }
-
-    private void Update()
-    { }
 
     public void StartFire()
     {
