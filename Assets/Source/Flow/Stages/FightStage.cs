@@ -20,6 +20,14 @@ public class FightStage : CustomBehavior
     {
         new SpawnerInfo
         {
+            Type = typeof(AlienSpawner),
+            TimeToNext = 0.25f,
+            Iterations = 999
+        },
+
+#if null
+        new SpawnerInfo
+        {
             Type = typeof(OneBigTwoNearSpawner),
             Config = new Spawner.Config()
             {
@@ -83,6 +91,7 @@ public class FightStage : CustomBehavior
 
             TimeToNext = 1f,
         },
+#endif
     };
 
     private int m_CurrentSpawnerIdx = -1;

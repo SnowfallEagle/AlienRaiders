@@ -95,7 +95,7 @@ public class AlienSpawner : Spawner
         // Set up config
         Vector3 AlienSize = Aliens[0].GetComponent<BoxCollider2D>().bounds.size;
         Vector3 FirstPosition = new Vector3(
-            s_Precomputed.TargetCenter.x - s_Precomputed.TargetSize.x * 0.5f,
+            s_Precomputed.TargetCenter.x - s_Precomputed.TargetSize.x * 0.5f + AlienSize.x * 0.5f,
             s_Precomputed.TargetCenter.y + s_Precomputed.TargetSize.y * 0.6f,
             0f
         );
@@ -103,26 +103,27 @@ public class AlienSpawner : Spawner
         float XDiff = 0f;
         float YDiff = 0f;
 
+        // @FIXME: FirstPosition can be broken...
         switch (GetSubpattern(TripleSubpattern.MaxPatterns))
         {
             case TripleSubpattern.Right:
                 XDiff = AlienSize.x + SpaceBetweenAliens;
                 YDiff = AlienSize.y + SpaceBetweenAliens;
 
-                FirstPosition.x += Random.Range(0f, s_Precomputed.TargetSize.x - XDiff * NumAliens);
+                FirstPosition.x += Random.Range(0f, s_Precomputed.TargetSize.x - XDiff * NumAliens - AlienSize.x * 0.5f);
                 break;
 
             case TripleSubpattern.Left:
                 XDiff = -(AlienSize.x + SpaceBetweenAliens);
                 YDiff = AlienSize.y + SpaceBetweenAliens;
 
-                FirstPosition.x += Random.Range(-XDiff * (NumAliens - 1), s_Precomputed.TargetSize.x + XDiff * NumAliens);
+                FirstPosition.x += Random.Range(-XDiff * (NumAliens - 1), s_Precomputed.TargetSize.x + XDiff * NumAliens - AlienSize.x * 0.5f);
                 break;
 
             case TripleSubpattern.Column:
                 XDiff = AlienSize.x + SpaceBetweenAliens;
 
-                FirstPosition.x += Random.Range(0f, s_Precomputed.TargetSize.x - AlienSize.x * (NumAliens - 1));
+                FirstPosition.x += Random.Range(0f, s_Precomputed.TargetSize.x - AlienSize.x * NumAliens);
                 break;
 
             case TripleSubpattern.Row:

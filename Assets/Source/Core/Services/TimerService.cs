@@ -83,8 +83,13 @@ public class TimerService : Service<TimerService>
                     continue;
                 }
 
-                Timer.Callback?.Invoke();
+                /* @NOTE:
+                    Timer callback could use its handle again to create new timer, so
+                    call callback after removing old timer
+                */
+                var Callback = Timer.Callback;
                 RemoveTimer(Timer.Handle);
+                Callback?.Invoke();
             }
         }
     }
