@@ -3,22 +3,22 @@ using UnityEngine.Assertions;
 
 public class AlienSpawner : Spawner
 {
-    public enum Pattern
+    public static class Pattern
     {
-        Single,
-        Triple,
+        public const int Single = 0;
+        public const int Triple = 1;
 
-        MaxPatterns
+        public const int MaxPatterns = 2;
     }
 
-    public enum TripleSubpattern
+    public static class TripleSubpattern
     {
-        Left,
-        Right,
-        Row,
-        Column,
+        public const int Left   = 0;
+        public const int Right  = 1;
+        public const int Row    = 2;
+        public const int Column = 3;
 
-        MaxPatterns
+        public const int MaxPatterns = 4;
     }
 
     private GameObject m_AlienPrefab;
@@ -32,10 +32,10 @@ public class AlienSpawner : Spawner
 
         m_AlienPrefab.transform.rotation = Quaternion.Euler(0f, 0f, 180f);
 
-        switch (GetPattern((int)Pattern.MaxPatterns))
+        switch (GetPattern(Pattern.MaxPatterns))
         {
-            case (int)Pattern.Single: return SpawnSingle();
-            case (int)Pattern.Triple: return SpawnTriple();
+            case Pattern.Single: return SpawnSingle();
+            case Pattern.Triple: return SpawnTriple();
             default: return new GameObject[] { };
         }
     }
@@ -77,29 +77,29 @@ public class AlienSpawner : Spawner
         float XDiff = 0f;
         float YDiff = 0f;
 
-        switch (GetSubpattern((int)TripleSubpattern.MaxPatterns))
+        switch (GetSubpattern(TripleSubpattern.MaxPatterns))
         {
-            case (int)TripleSubpattern.Right:
+            case TripleSubpattern.Right:
                 XDiff = AlienSize.x + SpaceBetweenAliens;
                 YDiff = AlienSize.y + SpaceBetweenAliens;
 
                 FirstPosition.x += Random.Range(0f, s_Precomputed.TargetSize.x - XDiff * NumAliens);
                 break;
 
-            case (int)TripleSubpattern.Left:
+            case TripleSubpattern.Left:
                 XDiff = -(AlienSize.x + SpaceBetweenAliens);
                 YDiff = AlienSize.y + SpaceBetweenAliens;
 
                 FirstPosition.x += Random.Range(-XDiff * (NumAliens - 1), s_Precomputed.TargetSize.x + XDiff * NumAliens);
                 break;
 
-            case (int)TripleSubpattern.Column:
+            case TripleSubpattern.Column:
                 XDiff = AlienSize.x + SpaceBetweenAliens;
 
                 FirstPosition.x += Random.Range(0f, s_Precomputed.TargetSize.x - AlienSize.x * (NumAliens - 1));
                 break;
 
-            case (int)TripleSubpattern.Row:
+            case TripleSubpattern.Row:
                 YDiff = AlienSize.y + SpaceBetweenAliens;
 
                 FirstPosition.x += Random.Range(0f, s_Precomputed.TargetSize.x - AlienSize.x);

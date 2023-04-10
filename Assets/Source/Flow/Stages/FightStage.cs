@@ -23,7 +23,6 @@ public class FightStage : CustomBehavior
             bWaitToEnd = true,
         },
 
-        /*
         new SpawnerInfo
         {
             Type = typeof(AlienSpawner),
@@ -63,7 +62,6 @@ public class FightStage : CustomBehavior
 
             TimeToNext = 1f,
         },
-        */
     };
 
     private int m_CurrentSpawnerIdx = -1;
