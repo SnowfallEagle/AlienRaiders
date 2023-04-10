@@ -9,9 +9,9 @@ public class FightStage : CustomBehavior
         public Type Type = typeof(AlienSpawner);
         public Spawner.Config Config = new Spawner.Config();
 
-        public float TimeToNext = 0f; // If bWaitToEnd = true then this shows delay after destroying ships
+        /** If bWaitToEnd = true then this shows delay after destroying ships */
+        public float TimeToNext = 0f;
         public bool bWaitToEnd = false;
-
         public int Iterations = 1;
     }
 
@@ -19,17 +19,11 @@ public class FightStage : CustomBehavior
     {
         new SpawnerInfo
         {
-            Type = typeof(AlienSpawner),
-            Config = new Spawner.Config
-            {
-                SpecificSpawnPattern = (int)AlienSpawner.Pattern.Single,
-                ShipColor = Color.magenta,
-                ResourcePath = "Ships/AutoRocketer"
-            },
-
+            Type = typeof(OneBigTwoNearSpawner),
             bWaitToEnd = true,
         },
 
+        /*
         new SpawnerInfo
         {
             Type = typeof(AlienSpawner),
@@ -69,6 +63,7 @@ public class FightStage : CustomBehavior
 
             TimeToNext = 1f,
         },
+        */
     };
 
     private int m_CurrentSpawnerIdx = -1;

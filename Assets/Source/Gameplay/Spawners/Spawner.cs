@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -27,8 +24,9 @@ public class Spawner : CustomBehavior
 
         /** Black = default */
         public Color ShipColor = Color.black;
-        public string ResourcePath = null;
         public BuffMultipliers Buffs = new BuffMultipliers();
+
+        public string ResourcePath = null;
     }
 
     protected struct PrecomputedStuff
@@ -36,12 +34,19 @@ public class Spawner : CustomBehavior
         public Vector3 TargetSize;
         public Vector3 TargetCenter;
         public Vector3 LeftTop;
+        public Vector3 CenterTop;
 
         public void Precompute()
         {
             TargetSize = RenderingService.Instance.TargetSize;
             TargetCenter = RenderingService.Instance.TargetCenter;
-            LeftTop = TargetCenter - TargetSize * 0.5f;
+
+            LeftTop = TargetCenter;
+            LeftTop.x -= TargetSize.x * 0.5f;
+            LeftTop.y += TargetSize.y * 0.5f;
+
+            CenterTop = TargetCenter;
+            CenterTop.y += TargetSize.y * 0.5f;
         }
     }
 
@@ -59,7 +64,6 @@ public class Spawner : CustomBehavior
         }
 
         Assert.IsNotNull(Config);
-
         m_Config = Config;
 
         GameObject[] Ships = OnSpawn();
@@ -120,7 +124,10 @@ public class Spawner : CustomBehavior
         foreach (var Ship in Ships)
         {
             Ship.GetComponent<Ship>().Initialize(Buffs);
-            Ship.GetComponent<SpriteRenderer>().color = m_Config.ShipColor;
+            if (m_Config.ShipColor != Color.black)
+            {
+                Ship.GetComponent<SpriteRenderer>().color = m_Config.ShipColor;
+            }
         }
     }
 }

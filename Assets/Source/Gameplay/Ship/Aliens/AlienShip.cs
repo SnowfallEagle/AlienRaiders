@@ -18,6 +18,10 @@ public class AlienShip : Ship
     {
         base.Initialize(Buffs);
 
+        Vector3 Position = transform.position;
+        Position.z = WorldZLayers.Alien;
+        transform.position = Position;
+
         gameObject.layer = LayerMask.NameToLayer("Alien");
         m_Team = ShipTeam.Enemy;
 
@@ -43,7 +47,7 @@ public class AlienShip : Ship
         base.OnDamageTaken(NewHealth, DeltaHealth);
 
         // @TODO: Later we can make config for this animation
-        m_BehaviorComponent.AddAction(new BHShipAction_AnimateSpriteColor(Color.red, Duration: 0.15f, bPulse: true));
+        m_BehaviorComponent.AddExclusiveAction(new BHShipAction_AnimateSpriteColor(Color.red, Duration: 0.15f, bPulse: true));
     }
 
     private void OnTriggerEnter2D(Collider2D Other)

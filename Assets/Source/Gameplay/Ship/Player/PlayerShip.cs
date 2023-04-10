@@ -25,6 +25,10 @@ public class PlayerShip : Ship
     {
         base.Initialize(Buffs);
 
+        Vector3 Position = transform.position;
+        Position.z = WorldZLayers.Player;
+        transform.position = Position;
+
         gameObject.layer = LayerMask.NameToLayer("Player");
         m_Team = ShipTeam.Player;
 

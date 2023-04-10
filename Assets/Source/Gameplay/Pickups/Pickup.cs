@@ -11,6 +11,10 @@ public class Pickup : CustomBehavior
 
     private void Start()
     {
+        Vector3 Position = transform.position;
+        Position.z = WorldZLayers.Pickup;
+        transform.position = Position;
+
         var Rigidbody = InitializeComponent<Rigidbody2D>();
         Rigidbody.gravityScale = 0f;
 
