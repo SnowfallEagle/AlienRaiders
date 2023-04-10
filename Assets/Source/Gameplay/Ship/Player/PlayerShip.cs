@@ -34,7 +34,7 @@ public class PlayerShip : Ship
 
         HealthComponent.OnDamageTaken += (NewHealth, DeltaHealth) =>
         {
-            BehaviorComponent.AddAction(new BHShipAction_AnimateSpriteColor(Color.red, 0.1f, bPulse: true));
+            BehaviorComponent.AddExclusiveAction(new BHShipAction_AnimateSpriteColor(Color.red, 0.1f, bPulse: true));
         };
     }
 

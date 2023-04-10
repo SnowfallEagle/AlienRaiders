@@ -2,8 +2,9 @@ using UnityEngine;
 
 public class BHShipAction_AnimateSpriteColor : BHAction
 {
-    private Color m_DesiredColor;
     private Color m_SavedColor;
+    private Color m_DesiredColor;
+    private Color m_CurrentColor;
 
     private float m_Duration;
     private float m_Elapsed;
@@ -14,12 +15,10 @@ public class BHShipAction_AnimateSpriteColor : BHAction
     private SpriteRenderer m_SpriteRenderer;
 
     /** bLoop worls only with bPulse = true */
-    public BHShipAction_AnimateSpriteColor(Color Desired, float Duration = 1f, float StartTime = 0f, bool bPulse = false, bool bLoop = false)
+    public BHShipAction_AnimateSpriteColor(Color Desired, float Duration = 1f, bool bPulse = false, bool bLoop = false)
     {
         m_DesiredColor = Desired;
-
         m_Duration = Duration;
-        m_Elapsed = StartTime;
 
         m_bPulse = bPulse;
         m_bLoop = bLoop;
@@ -29,7 +28,18 @@ public class BHShipAction_AnimateSpriteColor : BHAction
     {
         m_SpriteRenderer = m_Owner.GetComponent<SpriteRenderer>();
         m_SavedColor = m_SpriteRenderer.color;
+
+        StartAnimation(m_SavedColor, m_DesiredColor);
         return true;
+    }
+
+    private void StartAnimation(Color From, Color To)
+    {
+        m_Elapsed = 0.0f;
+        m_CurrentColor = From;
+        m_DesiredColor = To;
+
+        m_SpriteRenderer.color = From;
     }
 
     public override bool Update()
@@ -37,16 +47,22 @@ public class BHShipAction_AnimateSpriteColor : BHAction
         m_Elapsed += Time.deltaTime;
         if (m_Elapsed > m_Duration)
         {
-            m_SpriteRenderer.color = m_DesiredColor;
-
-            if (m_bPulse)
+            if (!m_bPulse)
             {
-                m_Owner.AddAction(new BHShipAction_AnimateSpriteColor(m_SavedColor, m_Duration, bPulse: m_bLoop, bLoop: m_bLoop));
+                m_SpriteRenderer.color = m_DesiredColor;
+                return false;
             }
-            return false;
+
+            StartAnimation(m_DesiredColor, m_SavedColor);
+            m_bPulse = m_bLoop; // Play animation last time if m_bLoop = false
         }
 
-        m_SpriteRenderer.color = Color.Lerp(m_SavedColor, m_DesiredColor, m_Elapsed / m_Duration);
+        m_SpriteRenderer.color = Color.Lerp(m_CurrentColor, m_DesiredColor, m_Elapsed / m_Duration);
         return true;
+    }
+
+    public override void Abort()
+    {
+        m_SpriteRenderer.color = m_SavedColor;
     }
 }

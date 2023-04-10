@@ -68,7 +68,15 @@ public class BehaviorComponent : CustomBehavior
     public void AddExclusiveAction(BHAction ExclusiveAction)
     {
         System.Type ExclusiveType = ExclusiveAction.GetType();
-        m_Actions.RemoveAll((Action) => Action.GetType().IsSubclassOf(ExclusiveType));
+        m_Actions.RemoveAll((Action) =>
+        {
+            if (Action.GetType() == ExclusiveType)
+            {
+                Action.Abort();
+                return true;
+            }
+            return false;
+        });
 
         AddAction(ExclusiveAction);
     }

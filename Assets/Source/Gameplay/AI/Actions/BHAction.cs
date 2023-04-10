@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public abstract class BHAction
 {
     protected BehaviorComponent m_Owner;
@@ -22,4 +18,7 @@ public abstract class BHAction
     {
         return true;
     }
+
+    public virtual void Abort()
+    { }
 }
