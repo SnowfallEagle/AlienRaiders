@@ -8,7 +8,7 @@ public class IntroStage : FightStage
         {
             new SpawnerInfo
             {
-                Type = typeof(OneBigTwoNearSpawner),
+                Spawner = typeof(OneBigTwoNearSpawner),
                 Config = new Spawner.Config()
                 {
                     StringValues = new Dictionary<string, string>()
@@ -17,6 +17,9 @@ public class IntroStage : FightStage
                         { "BigResourcePath", "Ships/BigAlien" },
                     }
                 },
+
+                Pickup = "Pickups/Pickup",
+
                 bWaitToEnd = true,
             }
         };

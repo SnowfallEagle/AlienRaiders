@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-public class Spawner : CustomBehavior
+public abstract class Spawner : CustomBehavior
 {
     public class Config
     {

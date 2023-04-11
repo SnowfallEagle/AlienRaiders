@@ -1,7 +1,7 @@
 public static class WorldZLayers
 {
-    public static float Player     = 0f;
-    public static float Alien      = 1f;
-    public static float Projectile = 2f;
-    public static float Pickup     = 3f;
+    public const float Player     = 0f;
+    public const float Alien      = 1f;
+    public const float Projectile = 2f;
+    public const float Pickup     = 3f;
 }

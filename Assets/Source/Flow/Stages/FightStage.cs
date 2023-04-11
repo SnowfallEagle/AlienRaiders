@@ -7,8 +7,13 @@ public abstract class FightStage : CustomBehavior
 {
     protected class SpawnerInfo
     {
-        public Type Type = typeof(AlienSpawner);
+        public Type Spawner = typeof(AlienSpawner);
         public Spawner.Config Config = new Spawner.Config();
+
+        /** Resource path of pickup
+            Only for first iteration
+        */
+        public string Pickup;
 
         /** If bWaitToEnd = true then this shows delay after destroying ships */
         public float TimeToNext = 0f;
@@ -77,8 +82,23 @@ public abstract class FightStage : CustomBehavior
         }
 
         m_CurrentSpawnerInfo = m_Spawners[m_CurrentSpawnerIdx];
-        m_CurrentSpawner = SpawnInState<Spawner>(m_CurrentSpawnerInfo.Type);
+        m_CurrentSpawner = SpawnInState<Spawner>(m_CurrentSpawnerInfo.Spawner);
         m_CurrentSpawner.name = m_CurrentSpawner.GetType().Name;
+
+        if (m_CurrentSpawnerInfo.Pickup != null)
+        {
+            var Pickup = SpawnInState(Resources.Load<GameObject>(m_CurrentSpawnerInfo.Pickup));
+
+            var SpriteRenderer = Pickup.GetComponent<SpriteRenderer>();
+            float PickupHalfSizeX = SpriteRenderer.bounds.size.x * 0.5f;
+            Vector3 TargetSize = RenderingService.Instance.TargetSize;
+
+            Vector3 PickupSpawnPosition = RenderingService.Instance.TargetCenter;
+            PickupSpawnPosition.y += TargetSize.y;
+            PickupSpawnPosition.x += UnityEngine.Random.Range(PickupHalfSizeX, TargetSize.x - PickupHalfSizeX) - (TargetSize.x * 0.5f);
+
+            Pickup.transform.position = PickupSpawnPosition;
+        }
 
         NextIteration();
     }

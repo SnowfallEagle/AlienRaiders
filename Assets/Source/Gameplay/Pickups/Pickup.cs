@@ -6,7 +6,7 @@ public class Pickup : CustomBehavior
 {
     [SerializeField] protected float m_Speed = 5f;
 
-    protected BehaviorComponent m_BehaviorComponent;
+    private BehaviorComponent m_BehaviorComponent;
     public BehaviorComponent BehaviorComponent => m_BehaviorComponent;
 
     private void Start()
@@ -19,10 +19,9 @@ public class Pickup : CustomBehavior
         Rigidbody.gravityScale = 0f;
 
         InitializeComponent<BoxCollider2D>();
+        InitializeComponent<SpriteRenderer>();
 
         m_BehaviorComponent = InitializeComponent<BehaviorComponent>();
-
-        // @TODO: Move this logic from base class
         m_BehaviorComponent.StartBehavior(new BHTask_LoopCommand(new BHCommand_MoveForward(-m_Speed)));
 
         // @TODO: We should check for level boundaries
