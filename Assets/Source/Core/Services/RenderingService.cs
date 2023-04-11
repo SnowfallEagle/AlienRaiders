@@ -17,6 +17,19 @@ public class RenderingService : Service<RenderingService>
     [SerializeField] protected Vector3 m_TargetCenter = Vector3.zero;
     public Vector3 TargetCenter => m_TargetSizeSprite ? m_TargetSizeSprite.bounds.center : m_TargetCenter;
 
+    public Vector3 LeftTop;
+    public Vector3 CenterTop;
+
+    public RenderingService()
+    {
+        LeftTop = TargetCenter;
+        LeftTop.x -= TargetSize.x * 0.5f;
+        LeftTop.y += TargetSize.y * 0.5f;
+
+        CenterTop = TargetCenter;
+        CenterTop.y += TargetSize.y * 0.5f;
+    }
+
     private void Start()
     {
         Camera.main.nearClipPlane = ZNearClip;

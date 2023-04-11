@@ -1,36 +1,23 @@
 using UnityEngine;
 using UnityEngine.Assertions;
 
-/** String values:
-    BigResourcePath
-    NearResourcePath
-
-    Float values:
-    NumGridCells
-    GridPosition
-*/
-
 public class OneBigTwoNearSpawner : Spawner
 {
-    protected override GameObject[] OnSpawn()
+    public class Config : SpawnerConfig
+    {
+        public string BigResourcePath = "Ships/BigAlien";
+        public string NearResourcePath = "Ships/Alien";
+    }
+
+    protected override GameObject[] OnSpawn(SpawnerConfig BaseConfig)
     {
         const int NumAliens = 3;
         const float SpaceBetweenAliens = 1f;
 
-        string BigResourcePath;
-        string NearResourcePath;
+        Config Config = (Config)BaseConfig;
 
-        if (!m_Config.StringValues.TryGetValue("BigResourcePath", out BigResourcePath))
-        {
-            BigResourcePath = "Ships/BigAlien";
-        }
-        if (!m_Config.StringValues.TryGetValue("NearResourcePath", out NearResourcePath))
-        {
-            NearResourcePath = "Ships/Alien";
-        }
-
-        var BigPrefab = Resources.Load<GameObject>(BigResourcePath);
-        var NearPrefab = Resources.Load<GameObject>(NearResourcePath);
+        var BigPrefab = Resources.Load<GameObject>(Config.BigResourcePath);
+        var NearPrefab = Resources.Load<GameObject>(Config.NearResourcePath);
 
         BigPrefab.transform.rotation = Quaternion.Euler(0f, 0f, 180f);
         NearPrefab.transform.rotation = Quaternion.Euler(0f, 0f, 180f);
@@ -45,10 +32,10 @@ public class OneBigTwoNearSpawner : Spawner
         };
 
         Vector3 Position;
-        if (!GetSpawnPosition(out Position))
+        if (!Config.GetSpawnPosition(out Position))
         {
-            Position = s_Precomputed.CenterTop;
-            Position.y += s_Precomputed.TargetSize.y * 0.1f;
+            Position = RenderingService.Instance.CenterTop;
+            Position.y += RenderingService.Instance.TargetSize.y * 0.1f;
         }
 
         Vector3 NearPositionDiff = Vector3.zero;

@@ -8,7 +8,7 @@ public abstract class FightStage : CustomBehavior
     protected class SpawnerInfo
     {
         public Type Spawner = typeof(AlienSpawner);
-        public Spawner.Config Config = new Spawner.Config();
+        public SpawnerConfig Config = new SpawnerConfig();
 
         /** Resource path of pickup
             Only for first iteration

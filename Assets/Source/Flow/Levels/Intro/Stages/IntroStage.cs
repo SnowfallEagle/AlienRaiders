@@ -9,24 +9,31 @@ public class IntroStage : FightStage
             new SpawnerInfo
             {
                 Spawner = typeof(OneBigTwoNearSpawner),
-                Config = new Spawner.Config
+                Config = new OneBigTwoNearSpawner.Config
                 {
-                    StringValues = new Dictionary<string, string>()
-                    {
-                        { "NearResourcePath", "Ships/FlashRocketer" },
-                        { "BigResourcePath", "Ships/BigAlien" },
-                    },
+                    NearResourcePath = "Ships/FlashRocketer",
+                    BigResourcePath = "Ships/BigAlien",
 
-                    FloatValues = new Dictionary<string, float>
-                    {
-                        { "NumGridCells", 10 },
-                        { "GridPosition", 3 },
-                    }
+                    NumGridCells = 10,
+                    GridPosition = 3,
                 },
 
                 Pickup = "Pickups/Pickup",
 
                 bWaitToEnd = true,
+            },
+
+            new SpawnerInfo
+            {
+                Spawner = typeof(AlienSpawner),
+                Config = new AlienSpawner.Config
+                {
+                    Pattern = new MPatternSpawnerConfig
+                    {
+                        SpecificSpawnPattern = AlienSpawner.Pattern.Triple,
+                        SpecificSpawnSubpattern = AlienSpawner.TripleSubpattern.Row
+                    }
+                }
             }
         };
     }
