@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7383781527495817322}
   - component: {fileID: 7383781527495817325}
   - component: {fileID: 7383781527495817302}
+  - component: {fileID: 6980590516994496505}
   - component: {fileID: 7383781527495817320}
   m_Layer: 7
   m_Name: Player
@@ -101,6 +102,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Team: 0
   m_DefaultSpeed: 2.5
+--- !u!114 &6980590516994496505
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7383781527495817324}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd4ceebab6b75254199a8ba8e9eae58f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_DefaultHealth: 10
 --- !u!61 &7383781527495817320
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -4,6 +4,10 @@ using UnityEngine.Assertions;
 /** String values:
     BigResourcePath
     NearResourcePath
+
+    Float values:
+    NumGridCells
+    GridPosition
 */
 
 public class OneBigTwoNearSpawner : Spawner
@@ -40,8 +44,12 @@ public class OneBigTwoNearSpawner : Spawner
             SpawnInState(NearPrefab)
         };
 
-        Vector3 Position = s_Precomputed.CenterTop;
-        Position.y += s_Precomputed.TargetSize.y * 0.1f;
+        Vector3 Position;
+        if (!GetSpawnPosition(out Position))
+        {
+            Position = s_Precomputed.CenterTop;
+            Position.y += s_Precomputed.TargetSize.y * 0.1f;
+        }
 
         Vector3 NearPositionDiff = Vector3.zero;
         NearPositionDiff.x = NearSize.x + SpaceBetweenAliens;

@@ -4,16 +4,7 @@ public class IntroLevel : Level
     {
         Stages = new StageInfo[]
         {
-            new StageInfo
-            {
-                Stage = typeof(IntroStage),
-                EnemyBuffs = new BuffMultipliers
-                {
-                    ShipHealth = 0.1f,
-
-                    ProjectileDamage = 10f
-                }
-            }
+            new StageInfo { Stage = typeof(IntroStage) }
         };
     }
 }

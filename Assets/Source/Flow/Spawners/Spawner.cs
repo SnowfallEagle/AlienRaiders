@@ -7,6 +7,7 @@ public abstract class Spawner : CustomBehavior
     public class Config
     {
         public Dictionary<string, int> IntValues = new Dictionary<string, int>();
+        public Dictionary<string, float> FloatValues = new Dictionary<string, float>();
         public Dictionary<string, string> StringValues = new Dictionary<string, string>();
 
         /** Black = default */
@@ -124,6 +125,29 @@ public abstract class Spawner : CustomBehavior
         // @INCOMPLETE
         Assert.IsTrue(false, "Not implemented");
         return 0;
+    }
+
+    protected bool GetSpawnPosition(out Vector3 Position)
+    {
+        float GridPosition;
+        if (m_Config.FloatValues.TryGetValue("GridPosition", out GridPosition))
+        {
+            float NumGridCells;
+            if (!m_Config.FloatValues.TryGetValue("NumGridCells", out NumGridCells))
+            {
+                NumGridCells = 1;
+            }
+            Assert.IsTrue(NumGridCells > 0);
+
+            float CellWidth = RenderingService.Instance.TargetSize.x / NumGridCells;
+            Position = s_Precomputed.LeftTop;
+            Position.x += CellWidth * (GridPosition - 1) + (CellWidth * 0.5f);
+
+            return true;
+        }
+
+        Position = Vector3.zero;
+        return false;
     }
 
     private void InitializeShips(GameObject[] Ships)

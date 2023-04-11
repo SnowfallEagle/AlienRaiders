@@ -147,7 +147,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_DefaultSpeed: 4
-  m_DefaultDamage: 5
+  m_DefaultDamage: 1
   m_LifeTime: 5
   m_SlowFlyTime: 2.5
   m_FastSpeedModifier: 8

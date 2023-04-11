@@ -101,7 +101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9e4e40faddfba342a5793379e3af198, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ShipTeam: 0
+  m_Team: 0
   m_DefaultSpeed: 2.5
   m_DamageOnCollide: 10
 --- !u!61 &2322615566326916059
@@ -142,7 +142,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd4ceebab6b75254199a8ba8e9eae58f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_DefaultHealth: 100
+  m_DefaultHealth: 3
 --- !u!114 &2322615566326916061
 MonoBehaviour:
   m_ObjectHideFlags: 0

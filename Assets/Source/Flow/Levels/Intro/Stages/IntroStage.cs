@@ -9,12 +9,18 @@ public class IntroStage : FightStage
             new SpawnerInfo
             {
                 Spawner = typeof(OneBigTwoNearSpawner),
-                Config = new Spawner.Config()
+                Config = new Spawner.Config
                 {
                     StringValues = new Dictionary<string, string>()
                     {
                         { "NearResourcePath", "Ships/FlashRocketer" },
                         { "BigResourcePath", "Ships/BigAlien" },
+                    },
+
+                    FloatValues = new Dictionary<string, float>
+                    {
+                        { "NumGridCells", 10 },
+                        { "GridPosition", 3 },
                     }
                 },
 
