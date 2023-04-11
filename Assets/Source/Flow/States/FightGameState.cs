@@ -1,42 +1,16 @@
 using System;
+using UnityEngine.Assertions;
 
 public class FightGameState : GameState
 {
-    private class StageInfo
+    private static Type[] s_Levels = new Type[]
     {
-        public Type StageType = typeof(FightStage);
-        public BuffMultipliers EnemyBuffs = new BuffMultipliers();
-    }
-
-    private class LevelInfo
-    {
-        public StageInfo[] Stages = new StageInfo[] { };
-        public BuffMultipliers EnemyBuffs = new BuffMultipliers();
-    }
-
-    private static LevelInfo[] s_Levels = new LevelInfo[]
-    {
-        new LevelInfo
-        {
-            Stages = new StageInfo[]
-            {
-                new StageInfo
-                {
-                    StageType = typeof(FightStage),
-                    EnemyBuffs = new BuffMultipliers
-                    {
-                        ShipHealth = 0.1f,
-
-                        ProjectileDamage = 10f
-                    }
-                }
-            }
-        }
+        typeof(IntroLevel)
     };
-    private int m_CurrentLevelIdx;
+    private Level m_CurrentLevel;
 
-    private int m_CurrentStageIdx;
     private FightStage m_CurrentStage;
+    private int m_CurrentStageIdx;
 
     private BuffMultipliers m_EnemyBuffs;
     public BuffMultipliers EnemyBuffs => m_EnemyBuffs;
@@ -51,8 +25,9 @@ public class FightGameState : GameState
     private void NextLevel()
     {
         // @TODO: Implement DebugLevel
-        m_CurrentLevelIdx = PlayerState.Instance.Level;
-        if (m_CurrentLevelIdx >= s_Levels.Length)
+
+        int Level = PlayerState.Instance.Level;
+        if (Level >= s_Levels.Length)
         {
             // @INCOMPLETE: What we'll do when player completes game?
 
@@ -61,6 +36,9 @@ public class FightGameState : GameState
             NextLevel();
             return;
         }
+
+        m_CurrentLevel = (Level)Activator.CreateInstance(s_Levels[Level]);
+        Assert.IsNotNull(m_CurrentLevel.Stages);
 
         m_CurrentStageIdx = -1;
         NextStage();
@@ -73,7 +51,7 @@ public class FightGameState : GameState
             Destroy(m_CurrentStage.gameObject);
         }
 
-        if (++m_CurrentStageIdx >= s_Levels[m_CurrentLevelIdx].Stages.Length)
+        if (++m_CurrentStageIdx >= m_CurrentLevel.Stages.Length)
         {
             ++PlayerState.Instance.Level;
             // @INCOMPLETE: Call GameStateMachine to switch state; Show ad;
@@ -83,11 +61,9 @@ public class FightGameState : GameState
             return;
         }
 
-        m_EnemyBuffs =
-            s_Levels[m_CurrentLevelIdx].EnemyBuffs *
-            s_Levels[m_CurrentLevelIdx].Stages[m_CurrentStageIdx].EnemyBuffs;
+        m_EnemyBuffs = m_CurrentLevel.EnemyBuffs * m_CurrentLevel.Stages[m_CurrentStageIdx].EnemyBuffs;
 
-        m_CurrentStage = SpawnInState<FightStage>(s_Levels[m_CurrentLevelIdx].Stages[m_CurrentStageIdx].StageType);
+        m_CurrentStage = SpawnInState<FightStage>(m_CurrentLevel.Stages[m_CurrentStageIdx].Stage);
         m_CurrentStage.name = m_CurrentStage.GetType().Name;
     }
 }

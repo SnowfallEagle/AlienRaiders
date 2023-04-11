@@ -1,11 +1,11 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-public class FightStage : CustomBehavior
+/** Fight stages should set m_Spawners in their constructor */
+public abstract class FightStage : CustomBehavior
 {
-    private class SpawnerInfo
+    protected class SpawnerInfo
     {
         public Type Type = typeof(AlienSpawner);
         public Spawner.Config Config = new Spawner.Config();
@@ -16,89 +16,12 @@ public class FightStage : CustomBehavior
         public int Iterations = 1;
     }
 
-    private SpawnerInfo[] s_SpawnersInfo = new SpawnerInfo[]
-    {
-        new SpawnerInfo
-        {
-            Type = typeof(OneBigTwoNearSpawner),
-            Config = new Spawner.Config()
-            {
-                StringValues = new Dictionary<string, string>()
-                {
-                    { "NearResourcePath", "Ships/FlashRocketer" },
-                    { "BigResourcePath", "Ships/BigAlien" },
-                }
-            },
-            bWaitToEnd = true,
-        },
-
-#if null
-        new SpawnerInfo
-        {
-            Type = typeof(AlienSpawner),
-            bWaitToEnd = true,
-            Iterations = 999
-        },
-
-        new SpawnerInfo
-        {
-            Type = typeof(AlienSpawner),
-            Config = new Spawner.Config
-            {
-                IntValues = new Dictionary<string, int>()
-                {
-                    { "SpecificSpawnPattern", AlienSpawner.Pattern.Triple },
-                    { "SpecificSpawnSubpattern", AlienSpawner.TripleSubpattern.Row },
-                },
-
-                ShipColor = Color.magenta,
-            },
-
-            bWaitToEnd = true,
-        },
-
-        new SpawnerInfo
-        {
-            Type = typeof(AlienSpawner),
-            Config = new Spawner.Config
-            {
-                IntValues = new Dictionary<string, int>()
-                {
-                    { "FromSpawnPattern", AlienSpawner.Pattern.Single },
-                    { "ToSpawnPattern", AlienSpawner.Pattern.Triple },
-                },
-
-                ShipColor = Color.red,
-            },
-
-            bWaitToEnd = true,
-
-            Iterations = 2
-        },
-
-        new SpawnerInfo
-        {
-            Type = typeof(AlienSpawner),
-            Config = new Spawner.Config
-            {
-                IntValues = new Dictionary<string, int>()
-                {
-                    { "SpecificSpawnPattern", AlienSpawner.Pattern.Triple },
-                },
-
-                ShipColor = Color.blue
-            },
-
-            TimeToNext = 1f,
-        },
-#endif
-    };
-
-    private int m_CurrentSpawnerIdx = -1;
+    protected SpawnerInfo[] m_Spawners;
     private SpawnerInfo m_CurrentSpawnerInfo;
+    private int m_CurrentSpawnerIdx = -1;
 
-    private GameObject[] m_CurrentShips;
     private Spawner m_CurrentSpawner;
+    private GameObject[] m_CurrentShips;
 
     private TimerService.Handle m_hIterationTimer = new TimerService.Handle();
 
@@ -106,6 +29,7 @@ public class FightStage : CustomBehavior
     {
         // @TODO: Implement DebugLevel
 
+        Assert.IsNotNull(m_Spawners);
         NextSpawner();
     }
 
@@ -146,13 +70,13 @@ public class FightStage : CustomBehavior
 
     private void NextSpawner()
     {
-        if (++m_CurrentSpawnerIdx >= s_SpawnersInfo.Length)
+        if (++m_CurrentSpawnerIdx >= m_Spawners.Length)
         {
             GameStateMachine.Instance.GetCurrentState<FightGameState>().NextStage();
             return;
         }
 
-        m_CurrentSpawnerInfo = s_SpawnersInfo[m_CurrentSpawnerIdx];
+        m_CurrentSpawnerInfo = m_Spawners[m_CurrentSpawnerIdx];
         m_CurrentSpawner = SpawnInState<Spawner>(m_CurrentSpawnerInfo.Type);
         m_CurrentSpawner.name = m_CurrentSpawner.GetType().Name;
 
