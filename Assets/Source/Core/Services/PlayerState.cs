@@ -17,4 +17,7 @@ public class PlayerState : Service<PlayerState>
             return m_PlayerShip;
         }
     }
+
+    // @TODO: We need to load and save data somewhere using sdk...
+    public int Level = 0;
 }

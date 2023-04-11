@@ -1,5 +1,4 @@
 using System;
-using UnityEngine;
 
 public class ShipWeaponComponent : CustomBehavior
 {
@@ -59,3 +58,4 @@ public class ShipWeaponComponent : CustomBehavior
         }
     }
 }
+

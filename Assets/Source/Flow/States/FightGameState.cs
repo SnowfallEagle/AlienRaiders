@@ -1,5 +1,4 @@
 using System;
-using UnityEngine;
 
 public class FightGameState : GameState
 {
@@ -15,7 +14,7 @@ public class FightGameState : GameState
         public BuffMultipliers EnemyBuffs = new BuffMultipliers();
     }
 
-    private static LevelInfo[] s_LevelsInfo = new LevelInfo[]
+    private static LevelInfo[] s_Levels = new LevelInfo[]
     {
         new LevelInfo
         {
@@ -34,11 +33,11 @@ public class FightGameState : GameState
             }
         }
     };
+    private int m_CurrentLevelIdx;
 
-    private int m_CurrentLevel = 0;
-    private int m_CurrentStage = 0;
+    private int m_CurrentStageIdx;
+    private FightStage m_CurrentStage;
 
-    // I don't think that PlayerBuffs is good idea, because it's better to make a new ship
     private BuffMultipliers m_EnemyBuffs;
     public BuffMultipliers EnemyBuffs => m_EnemyBuffs;
 
@@ -46,22 +45,49 @@ public class FightGameState : GameState
     {
         base.Start();
 
-        m_EnemyBuffs =
-            s_LevelsInfo[m_CurrentLevel].EnemyBuffs *
-            s_LevelsInfo[m_CurrentLevel].Stages[m_CurrentStage].EnemyBuffs;
+        NextLevel();
+    }
 
-        var State = SpawnInState(s_LevelsInfo[m_CurrentLevel].Stages[m_CurrentStage].StageType);
-        State.name = State.GetType().Name;
+    private void NextLevel()
+    {
+        // @TODO: Implement DebugLevel
+        m_CurrentLevelIdx = PlayerState.Instance.Level;
+        if (m_CurrentLevelIdx >= s_Levels.Length)
+        {
+            // @INCOMPLETE: What we'll do when player completes game?
+
+            // @DEBUG
+            PlayerState.Instance.Level = 0;
+            NextLevel();
+            return;
+        }
+
+        m_CurrentStageIdx = -1;
+        NextStage();
     }
 
     public void NextStage()
     {
-        Debug.Log("Next Stage");
-        // @TODO: Start next stage
+        if (m_CurrentStage)
+        {
+            Destroy(m_CurrentStage.gameObject);
+        }
 
-        /* @TODO:
-            Set new lvl to PlayerState
-            Call GameStateMachine to switch state, show ad
-        */
+        if (++m_CurrentStageIdx >= s_Levels[m_CurrentLevelIdx].Stages.Length)
+        {
+            ++PlayerState.Instance.Level;
+            // @INCOMPLETE: Call GameStateMachine to switch state; Show ad;
+
+            // @DEBUG
+            NextLevel();
+            return;
+        }
+
+        m_EnemyBuffs =
+            s_Levels[m_CurrentLevelIdx].EnemyBuffs *
+            s_Levels[m_CurrentLevelIdx].Stages[m_CurrentStageIdx].EnemyBuffs;
+
+        m_CurrentStage = SpawnInState<FightStage>(s_Levels[m_CurrentLevelIdx].Stages[m_CurrentStageIdx].StageType);
+        m_CurrentStage.name = m_CurrentStage.GetType().Name;
     }
 }

@@ -154,6 +154,7 @@ public class FightStage : CustomBehavior
 
         m_CurrentSpawnerInfo = s_SpawnersInfo[m_CurrentSpawnerIdx];
         m_CurrentSpawner = SpawnInState<Spawner>(m_CurrentSpawnerInfo.Type);
+        m_CurrentSpawner.name = m_CurrentSpawner.GetType().Name;
 
         NextIteration();
     }
