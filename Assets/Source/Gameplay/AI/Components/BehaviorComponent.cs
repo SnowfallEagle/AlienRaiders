@@ -36,7 +36,7 @@ public class BehaviorComponent : CustomBehavior
 
         if (Node == null)
         {
-            Assert.IsTrue(false, "Behavior started with null Node!");
+            NoEntry.Assert("Behavior started with null Node!");
             return;
         }
 

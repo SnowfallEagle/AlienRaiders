@@ -76,7 +76,6 @@ public class AlienSpawner : Spawner
 
         // Set up config
         Vector3 AlienSize = Aliens[0].GetComponent<BoxCollider2D>().bounds.size;
-        Vector3 FirstPosition;
 
         float XDiff = 0f;
         float YDiff = 0f;
@@ -102,10 +101,13 @@ public class AlienSpawner : Spawner
                 break;
         }
 
-        if (!m_Config.GetSpawnPosition(out FirstPosition, XDiff * NumAliens))
+        float GroupWidth = XDiff * NumAliens;
+        float GroupHeight = YDiff > 0f ? YDiff * NumAliens : AlienSize.y;
+
+        Vector3 FirstPosition;
+        if (!m_Config.GetSpawnPosition(out FirstPosition, GroupWidth, GroupHeight))
         {
-            FirstPosition = RenderingService.Instance.CenterTop;
-            FirstPosition.y += RenderingService.Instance.TargetSize.y * 0.1f;
+            m_Config.GetSpawnPosition(out FirstPosition, SpawnerConfig.AlignType.Center, GroupWidth, GroupHeight);
         }
 
         // Set positions

@@ -30,7 +30,7 @@ public abstract class BHFlowNode : BHActionNode
     {
         if (!m_bUseDecorators || Decorator == null)
         {
-            Assert.IsTrue(false, "Node doesn't use Decorators or given Decorator is null!");
+            NoEntry.Assert("Node doesn't use Decorators or given Decorator is null!");
             return this;
         }
 
@@ -42,7 +42,7 @@ public abstract class BHFlowNode : BHActionNode
     {
         if (!m_bUseServices || Service == null)
         {
-            Assert.IsTrue(false, "Node doesn't use Services or given Service is null!");
+            NoEntry.Assert("Node doesn't use Services or given Service is null!");
             return this;
         }
 
@@ -151,7 +151,7 @@ public abstract class BHFlowNode : BHActionNode
     {
         if (Node == null)
         {
-            Assert.IsTrue(false);
+            NoEntry.Assert();
             return;
         }
 
@@ -165,7 +165,7 @@ public abstract class BHFlowNode : BHActionNode
             (!Node.GetType().IsSubclassOf(typeof(BHTaskNode)) &&
              !Node.GetType().IsSubclassOf(typeof(BHFlowNode))))
         {
-            Assert.IsTrue(false, "Given node is null or not derived from Task or Flow!");
+            NoEntry.Assert("Given node is null or not derived from Task or Flow!");
             return this;
         }
 

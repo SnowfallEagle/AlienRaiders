@@ -40,7 +40,7 @@ public class PatternSpawnerConfig
     public int GetShipPattern(int MaxPatterns)
     {
         // @INCOMPLETE
-        Assert.IsTrue(false, "Not implemented");
+        NotImplemented.Assert();
         return 0;
     }
 }

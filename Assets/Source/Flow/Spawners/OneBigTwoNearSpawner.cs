@@ -32,11 +32,13 @@ public class OneBigTwoNearSpawner : Spawner
             SpawnInState(NearPrefab)
         };
 
+        float GroupWidth = (NearSize.x + SpaceBetweenAliens) * 2 + BigSize.x;
+        float GroupHeight = BigSize.y;
+
         Vector3 Position;
-        if (!Config.GetSpawnPosition(out Position, (NearSize.x + SpaceBetweenAliens) * 2 + BigSize.x))
+        if (!Config.GetSpawnPosition(out Position, GroupWidth, GroupHeight))
         {
-            Position = RenderingService.Instance.CenterTop;
-            Position.y += RenderingService.Instance.TargetSize.y * 0.1f;
+            Config.GetSpawnPosition(out Position, SpawnerConfig.AlignType.Center, GroupWidth, GroupHeight);
         }
 
         Vector3 NearPositionDiff = Vector3.zero;

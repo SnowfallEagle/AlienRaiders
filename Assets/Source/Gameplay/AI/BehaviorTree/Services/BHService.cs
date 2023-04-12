@@ -12,7 +12,7 @@ public class BHService : BHActionNode
     {
         if (!bActive && FinishStatus == NodeStatus.InProgress)
         {
-            Assert.IsTrue(false, "Child wanted to finish with being not activated or InProgress status!");
+            NoEntry.Assert("Child wanted to finish with being not activated or InProgress status!");
             return;
         }
 

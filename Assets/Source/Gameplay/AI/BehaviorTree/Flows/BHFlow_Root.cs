@@ -42,7 +42,7 @@ public class BHFlow_Root : BHFlowNode
     {
         if (m_Children.Count > 1)
         {
-            Assert.IsTrue(false, "Root node can have only 1 child!");
+            NoEntry.Assert("Root node can have only 1 child!");
             return this;
         }
 

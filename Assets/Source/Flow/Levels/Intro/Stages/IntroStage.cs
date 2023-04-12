@@ -4,6 +4,7 @@ public class IntroStage : FightStage
     {
         m_Spawners = new SpawnerInfo[]
         {
+        #if null
             new SpawnerInfo
             {
                 Spawner = typeof(OneBigTwoNearSpawner),
@@ -17,6 +18,7 @@ public class IntroStage : FightStage
 
                 bWaitToEnd = true,
             },
+        #endif
 
             new SpawnerInfo
             {

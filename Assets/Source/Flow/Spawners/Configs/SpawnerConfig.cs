@@ -22,32 +22,37 @@ public class SpawnerConfig
     public float NumGridCells = 1;
     public float GridPosition = AnyValue;
 
-    public bool GetSpawnPosition(out Vector3 Position, float GroupWidth)
+    public void GetSpawnPosition(out Vector3 Position, AlignType Align, float GroupWidth, float GroupHeight = 0f)
+    {
+        switch (Align)
+        {
+            case AlignType.Left:
+                Position = RenderingService.Instance.LeftTop;
+                Position.x += GroupWidth * 0.5f;
+                break;
+
+            case AlignType.Right:
+                Position = RenderingService.Instance.RightTop;
+                Position.x -= GroupWidth * 0.5f;
+                break;
+
+            case AlignType.Center:
+                Position = RenderingService.Instance.CenterTop;
+                break;
+
+            default:
+                Position = Vector3.zero;
+                break;
+        }
+
+        Position.y += GroupHeight;
+    }
+
+    public bool GetSpawnPosition(out Vector3 Position, float GroupWidth, float GroupHeight = 0f)
     {
         if (Align != AlignType.None)
         {
-            switch (Align)
-            {
-                case AlignType.Left:
-                    Position = RenderingService.Instance.LeftTop;
-                    Position.x += GroupWidth * 0.5f;
-                    break;
-
-                case AlignType.Right:
-                    Position = RenderingService.Instance.RightTop;
-                    Position.x -= GroupWidth * 0.5f;
-                    break;
-
-                case AlignType.Center:
-                    Position = RenderingService.Instance.CenterTop;
-                    break;
-
-                default:
-                    Assert.IsTrue(false);
-                    Position = Vector3.zero;
-                    break;
-            }
-
+            GetSpawnPosition(out Position, Align, GroupWidth, GroupHeight);
             return true;
         }
 
@@ -57,6 +62,7 @@ public class SpawnerConfig
 
             Position = RenderingService.Instance.LeftTop;
             Position.x += CellWidth * (GridPosition - 1) + (CellWidth * 0.5f);
+            Position.y += GroupHeight;
             return true;
         }
 
