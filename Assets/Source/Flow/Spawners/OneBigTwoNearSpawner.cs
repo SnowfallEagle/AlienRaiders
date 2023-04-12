@@ -23,6 +23,7 @@ public class OneBigTwoNearSpawner : Spawner
         NearPrefab.transform.rotation = Quaternion.Euler(0f, 0f, 180f);
 
         Vector3 NearSize = NearPrefab.GetComponent<SpriteRenderer>().bounds.size;
+        Vector3 BigSize = BigPrefab.GetComponent<SpriteRenderer>().bounds.size;
 
         GameObject[] Aliens = new GameObject[NumAliens]
         {
@@ -32,7 +33,7 @@ public class OneBigTwoNearSpawner : Spawner
         };
 
         Vector3 Position;
-        if (!Config.GetSpawnPosition(out Position))
+        if (!Config.GetSpawnPosition(out Position, (NearSize.x + SpaceBetweenAliens) * 2 + BigSize.x))
         {
             Position = RenderingService.Instance.CenterTop;
             Position.y += RenderingService.Instance.TargetSize.y * 0.1f;

@@ -60,7 +60,7 @@ public class GameEnvironment : Service<GameEnvironment>
 
     private Dictionary<KeyCode, ValueRef<bool>> InputBindings;
 
-    protected override void Initialize()
+    public GameEnvironment()
     {
         EnforceEnvironment();
         SetBindings();

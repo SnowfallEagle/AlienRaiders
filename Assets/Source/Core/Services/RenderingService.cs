@@ -18,6 +18,7 @@ public class RenderingService : Service<RenderingService>
     public Vector3 TargetCenter => m_TargetSizeSprite ? m_TargetSizeSprite.bounds.center : m_TargetCenter;
 
     public Vector3 LeftTop;
+    public Vector3 RightTop;
     public Vector3 CenterTop;
 
     public RenderingService()
@@ -25,6 +26,8 @@ public class RenderingService : Service<RenderingService>
         LeftTop = TargetCenter;
         LeftTop.x -= TargetSize.x * 0.5f;
         LeftTop.y += TargetSize.y * 0.5f;
+
+        RightTop = TargetCenter + TargetSize * 0.5f;
 
         CenterTop = TargetCenter;
         CenterTop.y += TargetSize.y * 0.5f;

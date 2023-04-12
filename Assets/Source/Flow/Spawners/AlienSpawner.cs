@@ -5,7 +5,7 @@ public class AlienSpawner : Spawner
 {
     public class Config : SpawnerConfig
     {
-        public MPatternSpawnerConfig Pattern;
+        public PatternSpawnerConfig Pattern;
 
         public string ResourcePath = "Ships/Alien";
     }
@@ -76,11 +76,7 @@ public class AlienSpawner : Spawner
 
         // Set up config
         Vector3 AlienSize = Aliens[0].GetComponent<BoxCollider2D>().bounds.size;
-        Vector3 FirstPosition = new Vector3(
-            RenderingService.Instance.TargetCenter.x - RenderingService.Instance.TargetSize.x * 0.5f + AlienSize.x * 0.5f,
-            RenderingService.Instance.TargetCenter.y + RenderingService.Instance.TargetSize.y * 0.6f,
-            0f
-        );
+        Vector3 FirstPosition;
 
         float XDiff = 0f;
         float YDiff = 0f;
@@ -90,39 +86,32 @@ public class AlienSpawner : Spawner
             case TripleSubpattern.Right:
                 XDiff = AlienSize.x + SpaceBetweenAliens;
                 YDiff = AlienSize.y + SpaceBetweenAliens;
-
-                FirstPosition.x += Random.Range(0f, RenderingService.Instance.TargetSize.x - XDiff * NumAliens - AlienSize.x * 0.5f);
                 break;
 
             case TripleSubpattern.Left:
                 XDiff = -(AlienSize.x + SpaceBetweenAliens);
                 YDiff = AlienSize.y + SpaceBetweenAliens;
-
-                FirstPosition.x += Random.Range(-XDiff * (NumAliens - 1), RenderingService.Instance.TargetSize.x + XDiff * NumAliens - AlienSize.x * 0.5f);
                 break;
 
             case TripleSubpattern.Column:
                 XDiff = AlienSize.x + SpaceBetweenAliens;
-
-                FirstPosition.x += Random.Range(0f, RenderingService.Instance.TargetSize.x - AlienSize.x * NumAliens);
                 break;
 
             case TripleSubpattern.Row:
                 YDiff = AlienSize.y + SpaceBetweenAliens;
-
-                FirstPosition.x += Random.Range(0f, RenderingService.Instance.TargetSize.x - AlienSize.x);
                 break;
         }
 
-        // Set position
-        for (int i = 0; i < NumAliens; ++i)
+        if (!m_Config.GetSpawnPosition(out FirstPosition, XDiff * NumAliens))
         {
-            Aliens[i].transform.position = new Vector3(
-                FirstPosition.x + XDiff * i,
-                FirstPosition.y + YDiff * i,
-                0f
-            );
+            FirstPosition = RenderingService.Instance.CenterTop;
+            FirstPosition.y += RenderingService.Instance.TargetSize.y * 0.1f;
         }
+
+        // Set positions
+        Aliens[0].transform.position = FirstPosition;
+        Aliens[1].transform.position = new Vector3(FirstPosition.x + XDiff, FirstPosition.y + YDiff);
+        Aliens[2].transform.position = new Vector3(FirstPosition.x - XDiff, FirstPosition.y - YDiff);
 
         return Aliens;
     }

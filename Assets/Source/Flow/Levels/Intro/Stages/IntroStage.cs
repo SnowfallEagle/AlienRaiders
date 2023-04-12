@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 public class IntroStage : FightStage
 {
     public IntroStage()
@@ -13,9 +11,6 @@ public class IntroStage : FightStage
                 {
                     NearResourcePath = "Ships/FlashRocketer",
                     BigResourcePath = "Ships/BigAlien",
-
-                    NumGridCells = 10,
-                    GridPosition = 3,
                 },
 
                 Pickup = "Pickups/Pickup",
@@ -28,12 +23,31 @@ public class IntroStage : FightStage
                 Spawner = typeof(AlienSpawner),
                 Config = new AlienSpawner.Config
                 {
-                    Pattern = new MPatternSpawnerConfig
+                    Pattern = new PatternSpawnerConfig
                     {
                         SpecificSpawnPattern = AlienSpawner.Pattern.Triple,
                         SpecificSpawnSubpattern = AlienSpawner.TripleSubpattern.Row
-                    }
-                }
+                    },
+
+                    Align = SpawnerConfig.AlignType.Left
+                },
+            },
+
+            new SpawnerInfo
+            {
+                Spawner = typeof(AlienSpawner),
+                Config = new AlienSpawner.Config
+                {
+                    Pattern = new PatternSpawnerConfig
+                    {
+                        SpecificSpawnPattern = AlienSpawner.Pattern.Triple,
+                        SpecificSpawnSubpattern = AlienSpawner.TripleSubpattern.Row
+                    },
+
+                    Align = SpawnerConfig.AlignType.Right
+                },
+
+                bWaitToEnd = true
             }
         };
     }

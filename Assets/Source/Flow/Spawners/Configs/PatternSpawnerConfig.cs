@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Assertions;
 
-public class MPatternSpawnerConfig
+public class PatternSpawnerConfig
 {
     public int SpecificSpawnPattern = SpawnerConfig.AnyValue;
     public int FromSpawnPattern     = SpawnerConfig.AnyValue;
@@ -43,5 +43,4 @@ public class MPatternSpawnerConfig
         Assert.IsTrue(false, "Not implemented");
         return 0;
     }
-
 }
