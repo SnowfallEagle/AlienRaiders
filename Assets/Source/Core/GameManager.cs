@@ -5,7 +5,9 @@ public class GameManager : CustomBehavior
     private void Start()
     {
         InitializePlatformSdk();
-        InitializeGameStateMachine();
+
+        var StateMachine = GameStateMachine.Instance;
+        var Console = ConsoleService.Instance;
     }
 
     private void InitializePlatformSdk()
@@ -21,10 +23,5 @@ public class GameManager : CustomBehavior
             Sdk.ToggleStickyAd(true);
             Sdk.ShowFullscreenAd();
         };
-    }
-
-    private void InitializeGameStateMachine()
-    {
-        var StateMachine = GameStateMachine.Instance;
     }
 }
