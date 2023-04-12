@@ -4,7 +4,7 @@ public class Projectile : CustomBehavior
 {
     [SerializeField] protected float m_DefaultSpeed = 5f;
     [SerializeField] protected float m_DefaultDamage = 5f;
-    [SerializeField] protected float m_LifeTime = 5f;
+    [SerializeField] protected float m_LifeTime = 15f;
 
     protected BehaviorComponent m_BehaviorComponent;
     public BehaviorComponent BehaviorComponent => m_BehaviorComponent;

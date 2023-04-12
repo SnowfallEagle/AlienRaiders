@@ -31,6 +31,9 @@ public class GameEnvironment : Service<GameEnvironment>
 
         [SerializeField] public bool bSpecificStage = false;
         [SerializeField] public int Stage = 0;
+
+        [SerializeField] public bool bSpecificSpawner = false;
+        [SerializeField] public int Spawner = 0;
     }
 
     [Serializable]

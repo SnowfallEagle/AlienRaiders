@@ -18,6 +18,7 @@ public class SpawnerConfig
     public BuffMultipliers Buffs = new BuffMultipliers();
 
     public AlignType Align = AlignType.None;
+    public float SpaceBetweenAliens = AnyValue;
 
     public float NumGridCells = 1;
     public float GridPosition = AnyValue;

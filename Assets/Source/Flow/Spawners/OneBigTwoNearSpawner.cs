@@ -5,14 +5,14 @@ public class OneBigTwoNearSpawner : Spawner
 {
     public class Config : SpawnerConfig
     {
-        public string BigResourcePath = "Ships/BigAlien";
-        public string NearResourcePath = "Ships/Alien";
+        public string BigResourcePath = "Aliens/BigAlien";
+        public string NearResourcePath = "Aliens/Alien";
     }
 
     protected override GameObject[] OnSpawn(SpawnerConfig BaseConfig)
     {
         const int NumAliens = 3;
-        const float SpaceBetweenAliens = 1f;
+        float SpaceBetweenAliens = BaseConfig.SpaceBetweenAliens > 0f ? BaseConfig.SpaceBetweenAliens : 1f;
 
         Config Config = (Config)BaseConfig;
 

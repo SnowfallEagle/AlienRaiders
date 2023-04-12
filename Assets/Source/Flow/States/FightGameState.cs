@@ -19,13 +19,16 @@ public class FightGameState : GameState
     {
         base.Start();
 
+        if (GameEnvironment.Instance.GetDebugOption<bool>("DebugLevel.bSpecificLevel"))
+        {
+            PlayerState.Instance.Level = GameEnvironment.Instance.GetDebugOption<int>("DebugLevel.Level");
+        }
+
         NextLevel();
     }
 
     private void NextLevel()
     {
-        // @TODO: Implement DebugLevel
-
         int Level = PlayerState.Instance.Level;
         if (Level >= s_Levels.Length)
         {
@@ -40,7 +43,9 @@ public class FightGameState : GameState
         m_CurrentLevel = (Level)Activator.CreateInstance(s_Levels[Level]);
         Assert.IsNotNull(m_CurrentLevel.Stages);
 
-        m_CurrentStageIdx = -1;
+        m_CurrentStageIdx = GameEnvironment.Instance.GetDebugOption<bool>("DebugLevel.bSpecificStage") ?
+            GameEnvironment.Instance.GetDebugOption<int>("DebugLevel.Stage") - 1 :
+            -1;
         NextStage();
     }
 

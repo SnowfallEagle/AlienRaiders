@@ -49,7 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_DefaultSpeed: 5
   m_DefaultDamage: 1
-  m_LifeTime: 5
+  m_LifeTime: 7.5
   m_UntargetedFlyTime: 1
   m_TargetDirectionModifier: 0.0075
 --- !u!212 &7162803005779952051

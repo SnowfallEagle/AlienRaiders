@@ -7,7 +7,8 @@ public abstract class FightStage : CustomBehavior
 {
     protected class SpawnerInfo
     {
-        public Type Spawner = typeof(AlienSpawner);
+        /** Just wait timer if null */
+        public Type Spawner;
         public SpawnerConfig Config = new SpawnerConfig();
 
         /** Resource path of pickup
@@ -23,24 +24,35 @@ public abstract class FightStage : CustomBehavior
 
     protected SpawnerInfo[] m_Spawners;
     private SpawnerInfo m_CurrentSpawnerInfo;
-    private int m_CurrentSpawnerIdx = -1;
+    private int m_CurrentSpawnerIdx;
 
     private Spawner m_CurrentSpawner;
     private GameObject[] m_CurrentShips;
+    private bool m_bWaitingEnded;
 
     private TimerService.Handle m_hIterationTimer = new TimerService.Handle();
 
     private void Start()
     {
-        // @TODO: Implement DebugLevel
-
         Assert.IsNotNull(m_Spawners);
+
+        // Force wait to end last spawner
+        int SpawnersLength = m_Spawners.Length;
+        if (SpawnersLength > 0)
+        {
+            m_Spawners[SpawnersLength - 1].bWaitToEnd = true;
+        }
+
+        m_CurrentSpawnerIdx = GameEnvironment.Instance.GetDebugOption<bool>("DebugLevel.bSpecificSpawner") ?
+            GameEnvironment.Instance.GetDebugOption<int>("DebugLevel.Spawner") - 1 :
+            -1;
+
         NextSpawner();
     }
 
     private void Update()
     {
-        if (m_CurrentSpawnerInfo == null || !m_CurrentSpawnerInfo.bWaitToEnd)
+        if (m_CurrentSpawnerInfo == null || !m_CurrentSpawnerInfo.bWaitToEnd || m_bWaitingEnded)
         {
             return;
         }
@@ -54,18 +66,23 @@ public abstract class FightStage : CustomBehavior
         }
 
         TimerService.Instance.AddTimer(m_hIterationTimer, this, NextIteration, m_CurrentSpawnerInfo.TimeToNext);
+        m_bWaitingEnded = true;
     }
 
     private void NextIteration()
     {
         if (--m_CurrentSpawnerInfo.Iterations < 0)
         {
-            Destroy(m_CurrentSpawner.gameObject);
+            if (m_CurrentSpawner)
+            {
+                Destroy(m_CurrentSpawner.gameObject);
+            }
             NextSpawner();
             return;
         }
 
-        m_CurrentShips = m_CurrentSpawner.Spawn(m_CurrentSpawnerInfo.Config);
+        m_CurrentShips = m_CurrentSpawner ? m_CurrentSpawner.Spawn(m_CurrentSpawnerInfo.Config) : null;
+        m_bWaitingEnded = false;
 
         if (!m_CurrentSpawnerInfo.bWaitToEnd)
         {
@@ -82,8 +99,15 @@ public abstract class FightStage : CustomBehavior
         }
 
         m_CurrentSpawnerInfo = m_Spawners[m_CurrentSpawnerIdx];
-        m_CurrentSpawner = SpawnInState<Spawner>(m_CurrentSpawnerInfo.Spawner);
-        m_CurrentSpawner.name = m_CurrentSpawner.GetType().Name;
+        if (m_CurrentSpawnerInfo.Spawner != null)
+        {
+            m_CurrentSpawner = SpawnInState<Spawner>(m_CurrentSpawnerInfo.Spawner);
+            m_CurrentSpawner.name = m_CurrentSpawner.GetType().Name;
+        }
+        else
+        {
+            m_CurrentSpawner = null;
+        }
 
         if (m_CurrentSpawnerInfo.Pickup != null)
         {

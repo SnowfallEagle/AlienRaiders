@@ -429,6 +429,9 @@ MonoBehaviour:
   m_TargetSizeSprite: {fileID: 348050980}
   m_TargetSize: {x: 11.5, y: 20, z: 0}
   m_TargetCenter: {x: 0, y: 0, z: 0}
+  LeftTop: {x: -5.75, y: 10, z: 0}
+  RightTop: {x: 5.75, y: 10, z: 0}
+  CenterTop: {x: 0, y: 10, z: 0}
 --- !u!1 &819168920
 GameObject:
   m_ObjectHideFlags: 0
@@ -575,17 +578,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 545b45855693738438a91b3e65579d7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SDKType: 1
+  SdkType: 0
   bDebugMode: 1
   DebugLevel:
-    bEnabled: 0
+    bEnabled: 1
     bSpecificLevel: 0
     Level: 0
-    bSpecificStage: 0
+    bSpecificStage: 1
     Stage: 0
+    bSpecificSpawner: 0
+    Spawner: 2
   DebugPlayer:
-    bEnabled: 1
+    bEnabled: 0
     bGodMode: 1
   DebugAI:
-    bEnabled: 1
+    bEnabled: 0
     bDrawEyesight: 1

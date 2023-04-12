@@ -78,7 +78,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: f7eb00cb3ec9bab45b85d561558c4250, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a39f5d360eb38284fb54a62672b5ec9f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -102,18 +102,18 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.0020412952, y: 0.007144451}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.4, y: 0.7}
+    oldSize: {x: 1.14, y: 1.88}
     newSize: {x: 0.4, y: 0.7}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.34284368, y: 0.555068}
+  m_Size: {x: 0.8, y: 1.55}
   m_EdgeRadius: 0
 --- !u!114 &2322615566326916062
 MonoBehaviour:
@@ -164,7 +164,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -6110140553614665388, guid: c0ff77313b4b230419d4b8b29633346f, type: 3}
       propertyPath: m_FireRate
-      value: 2
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: -6110140553614665388, guid: c0ff77313b4b230419d4b8b29633346f, type: 3}
       propertyPath: m_Projectile

@@ -7,7 +7,7 @@ public class AlienSpawner : Spawner
     {
         public PatternSpawnerConfig Pattern;
 
-        public string ResourcePath = "Ships/Alien";
+        public string ResourcePath = "Aliens/Alien";
     }
 
     public static class Pattern
@@ -51,21 +51,23 @@ public class AlienSpawner : Spawner
     private GameObject[] SpawnSingle()
     {
         GameObject Alien = SpawnInState(m_AlienPrefab);
+        Vector3 Size = Alien.GetComponent<SpriteRenderer>().bounds.size;
 
-        float XRange = RenderingService.Instance.TargetSize.x * 0.5f;
-        Alien.transform.position = new Vector3(
-            Random.Range(-XRange, XRange),
-            RenderingService.Instance.TargetCenter.y + RenderingService.Instance.TargetSize.y * 0.6f,
-            0f
-        );
+        Vector3 Position;
+        if (!m_Config.GetSpawnPosition(out Position, Size.x, Size.y))
+        {
+            float XRange = RenderingService.Instance.TargetSize.x * 0.5f;
+            Position = new Vector3(Random.Range(-XRange, XRange), RenderingService.Instance.TargetCenter.y + RenderingService.Instance.TargetSize.y * 0.6f);
+        }
 
+        Alien.transform.position = Position;
         return new GameObject[] { Alien };
     }
 
     private GameObject[] SpawnTriple()
     {
         const int NumAliens = 3;
-        const float SpaceBetweenAliens = 0.5f;
+        float SpaceBetweenAliens = m_Config.SpaceBetweenAliens > 0f ? m_Config.SpaceBetweenAliens : 0.5f;
 
         // Spawn aliens
         GameObject[] Aliens = new GameObject[NumAliens];
