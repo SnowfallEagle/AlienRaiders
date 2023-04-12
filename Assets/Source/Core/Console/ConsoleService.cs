@@ -58,10 +58,16 @@ public class LevelConsoleCommand : ConsoleCommand
 public class ConsoleService : Service<ConsoleService>
 {
     private bool m_bShown = false;
+
     private string m_Input = "";
+    private string m_SavedInputWhileBrowsing = "";
     private string m_InputControlName = "ConsoleInput";
 
-    // @TODO: History
+    private const int MaxHistory = 24;
+    private string[] m_History = new string[MaxHistory];
+
+    private int m_HistoryAddCursor = 0;
+    private int m_HistoryBrowseCursor = 0;
 
     private Dictionary<string, ConsoleCommand> m_Commands = new Dictionary<string, ConsoleCommand>
     {
@@ -83,18 +89,60 @@ public class ConsoleService : Service<ConsoleService>
             return;
         }
 
+        bool bMoveCursorToEnd = false;
+
         Event Event = Event.current;
         if (Event.type == EventType.KeyDown)
         {
-            if (Event.keyCode == KeyCode.BackQuote)
+            switch (Event.keyCode)
             {
-                m_bShown ^= true;
-                return;
-            }
-            else if (Event.keyCode == KeyCode.Return)
-            {
-                ProcessInput();
-                m_Input = "";
+                case KeyCode.BackQuote:
+                    m_bShown ^= true;
+                    return;
+
+                case KeyCode.Return:
+                    ProcessInput();
+                    if (m_Input != "")
+                    {
+                        PushHistory(m_Input);
+                        m_Input = "";
+                    }
+                    break;
+
+                case KeyCode.UpArrow:
+                    int PrevCursor = m_HistoryBrowseCursor - 1;
+                    if (PrevCursor < 0)
+                    {
+                        PrevCursor = MaxHistory - 1;
+                    }
+
+                    if (m_History[PrevCursor] != null)
+                    {
+                        if (m_HistoryBrowseCursor == m_HistoryAddCursor)
+                        {
+                            m_SavedInputWhileBrowsing = m_Input;
+                        }
+
+                        m_Input = m_History[PrevCursor];
+                        m_HistoryBrowseCursor = PrevCursor;
+                    }
+
+                    bMoveCursorToEnd = true;
+                    break;
+
+                case KeyCode.DownArrow:
+                    if (m_HistoryBrowseCursor != m_HistoryAddCursor)
+                    {
+                        if (++m_HistoryBrowseCursor >= MaxHistory)
+                        {
+                            m_HistoryBrowseCursor = 0;
+                        }
+
+                        m_Input = m_HistoryBrowseCursor == m_HistoryAddCursor ?
+                            m_SavedInputWhileBrowsing :
+                            m_History[m_HistoryBrowseCursor];
+                    }
+                    break;
             }
         }
 
@@ -105,6 +153,23 @@ public class ConsoleService : Service<ConsoleService>
 
         m_Input = GUI.TextField(new Rect(10f, 5f, Screen.width - 20f, 20f), m_Input);
         GUI.FocusControl(m_InputControlName);
+
+        if (bMoveCursorToEnd)
+        {
+            TextEditor Editor = (TextEditor)GUIUtility.GetStateObject(typeof(TextEditor), GUIUtility.keyboardControl);
+            Editor.MoveTextEnd();
+        }
+    }
+
+    private void PushHistory(string Input)
+    {
+        m_History[m_HistoryAddCursor] = Input;
+        if (++m_HistoryAddCursor >= MaxHistory)
+        {
+            m_HistoryAddCursor = 0;
+        }
+
+        m_HistoryBrowseCursor = m_HistoryAddCursor;
     }
 
     private void ProcessInput()
