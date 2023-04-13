@@ -1,7 +1,6 @@
 using UnityEngine;
 
-// @TODO: Levels should choose cloud colors and sprites for this stuff
-// @TODO: Moving effects
+// @TODO: Levels should choose cloud color and sprites for this stuff
 
 public class MovingBackground : CustomBehavior
 {
@@ -18,7 +17,7 @@ public class MovingBackground : CustomBehavior
 
     [SerializeField] protected GameObject m_Clouds;
 
-    public void Start()
+    private void Start()
     {
         m_BackgroundOver = new GameObject();
         m_BackgroundUnder = new GameObject();
@@ -45,27 +44,44 @@ public class MovingBackground : CustomBehavior
         m_Clouds.transform.position = Position;
     }
 
-    public void Update()
+    private void Update()
     {
-        Vector3 Diff = new Vector3(0f, YVelocity * Time.deltaTime, 0f);
+        { // Swap backgrounds and move clouds
+            Vector3 Diff = new Vector3(0f, -YVelocity * Time.deltaTime, 0f);
 
-        Vector3 OverPosition = m_BackgroundOver.transform.position += Diff;
-        m_BackgroundUnder.transform.position += Diff;
-        m_Clouds.transform.position += Diff;
+            Vector3 OverPosition = m_BackgroundOver.transform.position += Diff;
+            m_BackgroundUnder.transform.position += Diff;
+            m_Clouds.transform.position += Diff;
 
-        if (OverPosition.y < 0f)
-        {
-            Vector3 NewUnderPosition = m_BackgroundUnder.transform.position;
-            NewUnderPosition.y = OverPosition.y + m_BackgroundSize.y;
-            m_BackgroundUnder.transform.position = NewUnderPosition;
+            if (OverPosition.y < 0f)
+            {
+                Vector3 NewUnderPosition = m_BackgroundUnder.transform.position;
+                NewUnderPosition.y = OverPosition.y + m_BackgroundSize.y;
+                m_BackgroundUnder.transform.position = NewUnderPosition;
 
-            GameObject Temp = m_BackgroundUnder;
-            m_BackgroundUnder = m_BackgroundOver;
-            m_BackgroundOver = Temp;
+                GameObject Temp = m_BackgroundUnder;
+                m_BackgroundUnder = m_BackgroundOver;
+                m_BackgroundOver = Temp;
 
-            Vector3 CloudsPosition = m_Clouds.transform.position;
-            CloudsPosition.y = NewUnderPosition.y - (m_BackgroundSize.y * 0.5f);
-            m_Clouds.transform.position = CloudsPosition;
+                Vector3 CloudsPosition = m_Clouds.transform.position;
+                CloudsPosition.y = NewUnderPosition.y - (m_BackgroundSize.y * 0.5f);
+                m_Clouds.transform.position = CloudsPosition;
+            }
+        }
+
+        { // Move background a bit
+            PlayerShip Ship = PlayerState.Instance.PlayerShip;
+            if (!Ship)
+            {
+                return;
+            }
+
+            Vector3 Position = new Vector3(
+                Ship.transform.position.x / (RenderingService.Instance.TargetSize.x * 0.5f) * 0.05f,
+                Ship.transform.position.y / (RenderingService.Instance.TargetSize.y * 0.5f) * 0.05f,
+                WorldZLayers.BackgroundSprite
+            );
+            transform.position = Position;
         }
     }
 }

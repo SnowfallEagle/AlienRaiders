@@ -64,7 +64,7 @@ public class IntroStage : FightStage
                     SpaceBetweenAliens = 3f,
 
                     NumGridCells = 6,
-                    GridPosition = 1.5f
+                    GridPosition = 2.5f
                 }
             },
 

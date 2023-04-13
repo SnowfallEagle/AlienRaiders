@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class RenderingService : Service<RenderingService>
@@ -37,9 +35,18 @@ public class RenderingService : Service<RenderingService>
     {
         Camera.main.nearClipPlane = ZNearClip;
         Camera.main.farClipPlane = ZFarClip;
+
+        Vector3 Position = Camera.main.transform.position;
+        Position.z = WorldZLayers.Camera;
+        Camera.main.transform.position = Position;
     }
 
     private void Update()
+    {
+        UpdateScreenRatio();
+    }
+
+    private void UpdateScreenRatio()
     {
         Vector3 CurrentTargetSize = TargetSize;
 

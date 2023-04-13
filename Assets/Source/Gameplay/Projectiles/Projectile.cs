@@ -20,7 +20,7 @@ public class Projectile : CustomBehavior
     protected virtual void Start()
     {
         Vector3 Position = transform.position;
-        Position.z = WorldZLayers.Projectile;
+        Position.z = m_Owner.Team == Ship.ShipTeam.Player ? WorldZLayers.ProjectilePlayer : WorldZLayers.ProjectileAlien;
         transform.position = Position;
 
         gameObject.layer = LayerMask.NameToLayer("Projectile");
