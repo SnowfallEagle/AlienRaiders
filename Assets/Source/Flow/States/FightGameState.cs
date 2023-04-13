@@ -34,7 +34,7 @@ public class FightGameState : GameState
         base.Start();
 
         // @TODO: Figure out how to do it better
-        SpawnInState(Resources.Load<GameObject>("Scenes/FightScene"));
+        SpawnInState(Resources.Load<GameObject>("Scenes/Fight/FightScene"));
 
         PlayerState.Instance.SpawnShip();
 

@@ -5,8 +5,11 @@ using UnityEngine;
 public class MovingBackground : CustomBehavior
 {
     private const float BackgroundScale = 3f;
+    private const int MaxMovingEffects = 8;
+    private const int MaxMovingEffectsOnSide = MaxMovingEffects / 2;
 
-    [SerializeField] protected float YVelocity = 1f;
+    [SerializeField] protected float m_BackgroundVelocityY = 1f;
+    [SerializeField] protected float m_MovingEffectVelocityY = 5f;
 
     [SerializeField] protected Sprite m_BackgroundSpriteOver;
     [SerializeField] protected Sprite m_BackgroundSpriteUnder;
@@ -15,39 +18,84 @@ public class MovingBackground : CustomBehavior
     private GameObject m_BackgroundUnder;
     private Vector3 m_BackgroundSize;
 
-    [SerializeField] protected GameObject m_Clouds;
+    [SerializeField] protected GameObject m_CloudsPrefab;
+    private GameObject m_Clouds;
+
+    [SerializeField] protected GameObject m_MovingEffectPrefab;
+    private GameObject[] m_MovingEffects = new GameObject[MaxMovingEffects];
+
+    private Vector3 m_MovingEffectSize;
+    private float m_MovingEffectThreshold;
+    private float m_MovingEffectStartY;
 
     private void Start()
     {
-        m_BackgroundOver = new GameObject();
-        m_BackgroundUnder = new GameObject();
+        Vector3 Position;
 
-        m_BackgroundOver.transform.parent = transform;
-        m_BackgroundUnder.transform.parent = transform;
+        { // Backgrounds
+            m_BackgroundOver = new GameObject();
+            m_BackgroundUnder = new GameObject();
 
-        Vector3 Scale = new Vector3(BackgroundScale, BackgroundScale, BackgroundScale);
-        m_BackgroundOver.transform.localScale = Scale;
-        m_BackgroundUnder.transform.localScale = Scale;
+            m_BackgroundOver.transform.parent = transform;
+            m_BackgroundUnder.transform.parent = transform;
 
-        var SpriteRenderer1 = m_BackgroundOver.AddComponent<SpriteRenderer>().sprite = m_BackgroundSpriteOver;
-        m_BackgroundUnder.AddComponent<SpriteRenderer>().sprite = m_BackgroundSpriteUnder;
-        m_BackgroundSize = SpriteRenderer1.bounds.size * BackgroundScale;
+            Vector3 Scale = new Vector3(BackgroundScale, BackgroundScale, BackgroundScale);
+            m_BackgroundOver.transform.localScale = Scale;
+            m_BackgroundUnder.transform.localScale = Scale;
 
-        Vector3 Position = new Vector3(0f, 0f, WorldZLayers.BackgroundSprite);
-        m_BackgroundUnder.transform.position = Position;
+            var SpriteRenderer = m_BackgroundOver.AddComponent<SpriteRenderer>().sprite = m_BackgroundSpriteOver;
+            m_BackgroundUnder.AddComponent<SpriteRenderer>().sprite = m_BackgroundSpriteUnder;
+            m_BackgroundSize = SpriteRenderer.bounds.size * BackgroundScale;
 
-        Position.y += m_BackgroundSize.y;
-        m_BackgroundOver.transform.position = Position;
+            Position = new Vector3(0f, 0f, WorldZLayers.BackgroundSprite);
+            m_BackgroundUnder.transform.position = Position;
 
-        Position.y -= m_BackgroundSize.y * 0.5f;
-        Position.z = WorldZLayers.BackgroundEffect;
-        m_Clouds.transform.position = Position;
+            Position.y += m_BackgroundSize.y;
+            m_BackgroundOver.transform.position = Position;
+        }
+
+        { // Clouds
+            m_Clouds = SpawnInState(m_CloudsPrefab);
+
+            Position.y -= m_BackgroundSize.y * 0.5f;
+            Position.z = WorldZLayers.BackgroundEffect;
+            m_Clouds.transform.position = Position;
+        }
+
+        { // Moving effects
+            m_MovingEffectSize = m_MovingEffectPrefab.GetComponent<BoxCollider2D>().size;
+            m_MovingEffectThreshold = RenderingService.Instance.TargetSize.y;
+            m_MovingEffectStartY = RenderingService.Instance.CenterTop.y + (m_MovingEffectSize.y * 0.55f);
+
+            Vector3 EffectPositionLeft = new Vector3(
+                -(RenderingService.Instance.TargetSize.x * 0.65f) - m_MovingEffectSize.x,
+                m_MovingEffectStartY,
+                WorldZLayers.BackgroundEffect
+            );
+            Vector3 EffectPositionRight = EffectPositionLeft;
+            EffectPositionRight.x = -EffectPositionRight.x;
+
+            int i;
+            for (i = 0; i < MaxMovingEffectsOnSide; ++i)
+            {
+                m_MovingEffects[i] = SpawnInState(m_MovingEffectPrefab);
+                m_MovingEffects[i].transform.position = EffectPositionLeft;
+                EffectPositionLeft.y -= m_MovingEffectSize.y;
+            }
+
+            for ( ; i < MaxMovingEffects; ++i)
+            {
+                m_MovingEffects[i] = SpawnInState(m_MovingEffectPrefab);
+                m_MovingEffects[i].transform.position = EffectPositionRight;
+                EffectPositionRight.y -= m_MovingEffectSize.y;
+            }
+        }
     }
 
     private void Update()
     {
         { // Swap backgrounds and move clouds
-            Vector3 Diff = new Vector3(0f, -YVelocity * Time.deltaTime, 0f);
+            Vector3 Diff = new Vector3(0f, -m_BackgroundVelocityY * Time.deltaTime, 0f);
 
             Vector3 OverPosition = m_BackgroundOver.transform.position += Diff;
             m_BackgroundUnder.transform.position += Diff;
@@ -70,18 +118,32 @@ public class MovingBackground : CustomBehavior
         }
 
         { // Move background a bit
-            PlayerShip Ship = PlayerState.Instance.PlayerShip;
-            if (!Ship)
+            if (PlayerState.Instance.PlayerShip is PlayerShip Ship && Ship)
             {
-                return;
+                Vector3 Position = new Vector3(
+                    Ship.transform.position.x / (RenderingService.Instance.TargetSize.x * 0.5f) * 0.05f,
+                    Ship.transform.position.y / (RenderingService.Instance.TargetSize.y * 0.5f) * 0.05f,
+                    WorldZLayers.BackgroundSprite
+                );
+                transform.position = Position;
             }
+        }
 
-            Vector3 Position = new Vector3(
-                Ship.transform.position.x / (RenderingService.Instance.TargetSize.x * 0.5f) * 0.05f,
-                Ship.transform.position.y / (RenderingService.Instance.TargetSize.y * 0.5f) * 0.05f,
-                WorldZLayers.BackgroundSprite
-            );
-            transform.position = Position;
+        { // Moving effects
+            float YDiff = -m_MovingEffectVelocityY * Time.deltaTime;
+
+            for (int i = 0; i < MaxMovingEffects; ++i)
+            {
+                Vector3 Position = m_MovingEffects[i].transform.position;
+                Position.y += YDiff; // @TODO: Maybe make it a bit random?
+
+                if (Position.y < -m_MovingEffectThreshold)
+                {
+                    Position.y = m_MovingEffectStartY + (Position.y + m_MovingEffectThreshold);
+                }
+
+                m_MovingEffects[i].transform.position = Position;
+            }
         }
     }
 }
