@@ -167,7 +167,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23af0f3dd04e2214fad11f6671755ff7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_InitialState: {fileID: 382882140903407730, guid: 284af101a104d5741963e9554e229c1e, type: 3}
 --- !u!1 &348050979
 GameObject:
   m_ObjectHideFlags: 0
@@ -582,12 +581,12 @@ MonoBehaviour:
   bDebugMode: 1
   DebugLevel:
     bEnabled: 1
-    bSpecificLevel: 0
-    Level: 0
+    bSpecificLevel: 1
+    Level: -1
     bSpecificStage: 0
-    Stage: 0
+    Stage: -1
     bSpecificSpawner: 1
-    Spawner: 0
+    Spawner: 1
   DebugPlayer:
     bEnabled: 0
     bGodMode: 1
