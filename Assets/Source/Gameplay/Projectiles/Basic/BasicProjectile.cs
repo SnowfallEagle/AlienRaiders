@@ -6,6 +6,6 @@ public class BasicProjectile : Projectile
     {
         base.Start();
 
-        m_BehaviorComponent.StartBehavior(new BHTask_LoopCommand(new BHCommand_MoveForward(Speed)));
+        BehaviorComponent.StartBehavior(new BHTask_LoopCommand(new BHCommand_MoveForward(Speed)));
     }
 }

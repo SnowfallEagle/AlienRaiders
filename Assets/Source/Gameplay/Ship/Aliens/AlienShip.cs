@@ -25,9 +25,9 @@ public class AlienShip : Ship
         gameObject.layer = LayerMask.NameToLayer("Alien");
         m_Team = ShipTeam.Enemy;
 
-        m_BoxCollider.isTrigger = true;
+        BoxCollider.isTrigger = true;
 
-        m_BehaviorComponent.StartBehavior(new BHFlow_Sequence()
+        BehaviorComponent.StartBehavior(new BHFlow_Sequence()
             .AddNode(new BHTask_LoopCommand(new BHCommand_MoveForward(Speed)))
 
             .AddService(new BHShipService_DestroyWhenOutOfBottomBound())
@@ -46,7 +46,7 @@ public class AlienShip : Ship
     {
         base.OnDamageTaken(NewHealth, DeltaHealth);
 
-        m_BehaviorComponent.AddExclusiveAction(new BHShipAction_AnimateSpriteColor(Color.red, Duration: 0.15f, bPulse: true));
+        BehaviorComponent.AddExclusiveAction(new BHShipAction_AnimateSpriteColor(Color.red, Duration: 0.15f, bPulse: true));
     }
 
     private void OnTriggerEnter2D(Collider2D Other)

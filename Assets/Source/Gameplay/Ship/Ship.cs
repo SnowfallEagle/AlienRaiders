@@ -18,22 +18,22 @@ public class Ship : CustomBehavior
     private float m_Speed;
     public float Speed => m_Speed;
 
-    protected BoxCollider2D m_BoxCollider;
+    private BoxCollider2D m_BoxCollider;
     public BoxCollider2D BoxCollider => m_BoxCollider;
 
-    protected Rigidbody2D m_RigidBody;
+    private Rigidbody2D m_RigidBody;
     public Rigidbody2D RigidBody => m_RigidBody;
 
-    protected SpriteRenderer m_SpriteRenderer;
+    private SpriteRenderer m_SpriteRenderer;
     public SpriteRenderer SpriteRenderer => m_SpriteRenderer;
 
-    protected ShipHealthComponent m_HealthComponent;
+    private ShipHealthComponent m_HealthComponent;
     public ShipHealthComponent HealthComponent => m_HealthComponent;
 
-    protected ShipWeaponComponent m_WeaponComponent;
+    private ShipWeaponComponent m_WeaponComponent;
     public ShipWeaponComponent WeaponComponent => m_WeaponComponent;
 
-    protected BehaviorComponent m_BehaviorComponent;
+    private BehaviorComponent m_BehaviorComponent;
     public BehaviorComponent BehaviorComponent => m_BehaviorComponent;
 
     public virtual void Initialize(BuffMultipliers Buffs)

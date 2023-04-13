@@ -2,9 +2,13 @@ using System;
 using UnityEngine;
 using UnityEngine.Assertions;
 
+// @TODO: Maybe move all stage logic stuff in FightGameState and use Stages as Info?
+
 /** Fight stages should set m_Spawners in their constructor */
 public abstract class FightStage : CustomBehavior
 {
+    public const int AnyIdx = -1;
+
     protected class SpawnerInfo
     {
         /** Just wait timer if null */
@@ -24,13 +28,20 @@ public abstract class FightStage : CustomBehavior
 
     protected SpawnerInfo[] m_Spawners;
     private SpawnerInfo m_CurrentSpawnerInfo;
+
     private int m_CurrentSpawnerIdx;
+    private int m_SpecificSpawnerIdx;
 
     private Spawner m_CurrentSpawner;
     private GameObject[] m_CurrentShips;
     private bool m_bWaitingEnded;
 
     private TimerService.Handle m_hIterationTimer = new TimerService.Handle();
+
+    public void Initialize(int SpawnerIdx = AnyIdx)
+    {
+        m_SpecificSpawnerIdx = SpawnerIdx;
+    }
 
     private void Start()
     {
@@ -43,10 +54,15 @@ public abstract class FightStage : CustomBehavior
             m_Spawners[SpawnersLength - 1].bWaitToEnd = true;
         }
 
-        m_CurrentSpawnerIdx = GameEnvironment.Instance.GetDebugOption<bool>("DebugLevel.bSpecificSpawner") ?
-            GameEnvironment.Instance.GetDebugOption<int>("DebugLevel.Spawner") - 1 :
-            -1;
-
+        if (m_SpecificSpawnerIdx == AnyIdx)
+        {
+            m_CurrentSpawnerIdx = -1;
+        }
+        else
+        {
+            m_CurrentSpawnerIdx = m_SpecificSpawnerIdx - 1;
+            m_SpecificSpawnerIdx = AnyIdx;
+        }
         NextSpawner();
     }
 

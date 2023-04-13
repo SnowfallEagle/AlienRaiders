@@ -6,7 +6,7 @@ public class Projectile : CustomBehavior
     [SerializeField] protected float m_DefaultDamage = 5f;
     [SerializeField] protected float m_LifeTime = 15f;
 
-    protected BehaviorComponent m_BehaviorComponent;
+    private BehaviorComponent m_BehaviorComponent;
     public BehaviorComponent BehaviorComponent => m_BehaviorComponent;
 
     private float m_Damage = 5f;
@@ -32,6 +32,7 @@ public class Projectile : CustomBehavior
         BoxCollider.isTrigger = true;
 
         m_BehaviorComponent = InitializeComponent<BehaviorComponent>();
+        // @INCOMPLETE: We need to check bounds
 
         Destroy(gameObject, m_LifeTime);
     }
@@ -50,7 +51,7 @@ public class Projectile : CustomBehavior
         if (Ship && Ship.Team != m_Owner.Team)
         {
             Ship.HealthComponent.TakeDamage(m_Damage);
-            // @TODO: Maybe spawn effect on OnDestroy()?
+            // @TODO: Maybe spawn effect
             Destroy(gameObject);
         }
     }

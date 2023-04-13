@@ -584,10 +584,10 @@ MonoBehaviour:
     bEnabled: 1
     bSpecificLevel: 0
     Level: 0
-    bSpecificStage: 1
+    bSpecificStage: 0
     Stage: 0
-    bSpecificSpawner: 0
-    Spawner: 2
+    bSpecificSpawner: 1
+    Spawner: 0
   DebugPlayer:
     bEnabled: 0
     bGodMode: 1

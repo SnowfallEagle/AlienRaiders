@@ -9,7 +9,7 @@ public class FlashRocketProjectile : Projectile
     {
         base.Start();
 
-        m_BehaviorComponent.StartBehavior(new BHFlow_Sequence()
+        BehaviorComponent.StartBehavior(new BHFlow_Sequence()
             .AddNode(new BHFlow_Sequence()
                 .AddNode(new BHTask_LoopCommand(new BHCommand_MoveForward(Speed)))
                 .AddDecorator(new BHDecorator_TimeLimit(m_SlowFlyTime, false))

@@ -16,9 +16,6 @@ public class GameState : CustomBehavior
         TimerService.Instance.AddTimer(m_hCleanupTimer, this, Cleanup, CleanupTimeRate, true, 0f);
     }
 
-    protected virtual void Update()
-    { }
-
     private void OnDestroy()
     {
         foreach (var Object in m_RefObjects)

@@ -15,12 +15,6 @@ public class PlayerShip : Ship
 
     private bool m_bCheckBounds = true;
 
-    private void Start()
-    {
-        // @TODO: In future we'll see how spawn and initialize player better
-        Initialize(new BuffMultipliers());
-    }
-
     public override void Initialize(BuffMultipliers Buffs)
     {
         base.Initialize(Buffs);

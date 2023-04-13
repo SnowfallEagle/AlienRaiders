@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerState : Service<PlayerState>
@@ -20,4 +18,15 @@ public class PlayerState : Service<PlayerState>
 
     // @TODO: We need to load and save data somewhere using sdk...
     public int Level = 0;
+
+    public void SpawnShip()
+    {
+        if (m_PlayerShip)
+        {
+            Destroy(m_PlayerShip.gameObject);
+        }
+
+        m_PlayerShip = SpawnInState(Resources.Load<GameObject>("Player/Player")).GetComponent<PlayerShip>();
+        m_PlayerShip.Initialize(new BuffMultipliers());
+    }
 }
