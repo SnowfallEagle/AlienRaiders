@@ -6,7 +6,7 @@ public class FightGameState : GameState
 {
     public const int AnyIdx = -1;
 
-    private static Type[] s_Levels = new Type[]
+    public static Type[] s_Levels = new Type[]
     {
         typeof(IntroLevel)
     };

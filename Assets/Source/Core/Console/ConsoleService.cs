@@ -2,59 +2,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class ConsoleCommand
-{
-    public struct ArgumentInfo
-    {
-        public string Name;
-        public Type Type;
-        public object Default;
-    }
-
-    public ArgumentInfo[] ArgumentsInfo = new ArgumentInfo[0];
-
-    public abstract void Execute(object[] Args);
-
-    public void LogInfo(string CommandName)
-    {
-        string Info = ArgumentsInfo.Length > 0 ?
-            $"{ CommandName }: " :
-            $"{ CommandName }: no arguments";
-
-        foreach (var Argument in ArgumentsInfo)
-        {
-            Info += Argument.Default != null ?
-                $"<{ Argument.Name }: { Argument.Type.Name } = { Argument.Default }>" :
-                $"<{ Argument.Name }: { Argument.Type.Name }> ";
-        }
-
-        Debug.Log(Info);
-    }
-}
-
-public class LevelConsoleCommand : ConsoleCommand
-{
-    public LevelConsoleCommand()
-    {
-        ArgumentsInfo = new ArgumentInfo[]
-        {
-            new ArgumentInfo { Name = "name",    Type = typeof(string), Default = "IntroLevel" },
-            new ArgumentInfo { Name = "stage",   Type = typeof(int),    Default = 0 },
-            new ArgumentInfo { Name = "spawner", Type = typeof(int),    Default = 0 },
-        };
-    }
-
-    public override void Execute(object[] Args)
-    {
-        foreach (var Arg in Args)
-        {
-            Debug.Log(Arg);
-        }
-
-        // @INCOMPLETE: Change state on new FightGameState with arguments
-    }
-}
-
 public class ConsoleService : Service<ConsoleService>
 {
     private bool m_bShown = false;
@@ -206,8 +153,9 @@ public class ConsoleService : Service<ConsoleService>
             }
         }
 
-        object[] Args = new object[InputPieces.Length - 1];
-        for (int PieceIdx = 1, ArgIdx = 0; PieceIdx < InputPieces.Length; ++PieceIdx, ++ArgIdx)
+        object[] Args = new object[Command.ArgumentsInfo.Length];
+        int ArgIdx = 0;
+        for (int PieceIdx = 1; PieceIdx < InputPieces.Length; ++PieceIdx, ++ArgIdx)
         {
             Type ArgType = Command.ArgumentsInfo[ArgIdx].Type;
 
@@ -239,6 +187,11 @@ public class ConsoleService : Service<ConsoleService>
                 Debug.LogWarning("Can't parse float!");
                 return;
             }
+        }
+
+        for ( ; ArgIdx < Command.ArgumentsInfo.Length; ++ArgIdx)
+        {
+            Args[ArgIdx] = Command.ArgumentsInfo[ArgIdx].Default;
         }
 
         Command.Execute(Args);
