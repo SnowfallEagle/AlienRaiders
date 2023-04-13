@@ -102,7 +102,14 @@ public abstract class FightStage : CustomBehavior
 
         if (!m_CurrentSpawnerInfo.bWaitToEnd)
         {
-            TimerService.Instance.AddTimer(m_hIterationTimer, this, NextIteration, m_CurrentSpawnerInfo.TimeToNext);
+            if (m_CurrentSpawnerInfo.TimeToNext > 0f)
+            {
+                TimerService.Instance.AddTimer(m_hIterationTimer, this, NextIteration, m_CurrentSpawnerInfo.TimeToNext);
+            }
+            else
+            {
+                NextIteration();
+            }
         }
     }
 
