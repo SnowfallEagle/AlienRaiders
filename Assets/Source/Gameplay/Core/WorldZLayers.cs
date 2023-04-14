@@ -6,7 +6,7 @@ public static class WorldZLayers
     public const float ProjectileAlien  = Alien + 1;
     public const float ProjectilePlayer = ProjectileAlien + 1;
     public const float Pickup           = ProjectilePlayer + 1;
-    public const float BackgroundEffect = Pickup + 1;
-    // @TODO: Separate clouds?
+    public const float BackgroundClouds = Pickup + 1;
+    public const float BackgroundEffect = BackgroundClouds + 1;
     public const float BackgroundSprite = BackgroundEffect + 1;
 }

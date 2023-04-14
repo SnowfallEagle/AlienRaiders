@@ -87,7 +87,7 @@ public class MovingBackground : CustomBehavior
             m_Clouds = SpawnInState(m_CloudsPrefab);
 
             Position.y -= m_BackgroundSize.y * 0.5f;
-            Position.z = WorldZLayers.BackgroundEffect;
+            Position.z = WorldZLayers.BackgroundClouds;
             m_Clouds.transform.position = Position;
         }
 
@@ -170,8 +170,8 @@ public class MovingBackground : CustomBehavior
             if (PlayerState.Instance.PlayerShip is PlayerShip Ship && Ship)
             {
                 Vector3 Position = new Vector3(
-                    -(Ship.transform.position.x / (RenderingService.Instance.TargetSize.x * 0.5f) * 0.05f),
-                    Ship.transform.position.y / (RenderingService.Instance.TargetSize.y * 0.5f) * 0.05f,
+                    -(Ship.transform.position.x / (RenderingService.Instance.TargetSize.x * 0.5f) * 0.1f),
+                    Ship.transform.position.y / (RenderingService.Instance.TargetSize.y * 0.5f) * 0.1f,
                     WorldZLayers.BackgroundSprite
                 );
                 transform.position = Position;
