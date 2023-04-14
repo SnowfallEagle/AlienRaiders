@@ -60,6 +60,7 @@ public class IntroStage : FightStage
                         SpecificSpawnPattern = AlienSpawner.Pattern.Triple,
                         SpecificSpawnSubpattern = AlienSpawner.TripleSubpattern.Row
                     },
+                    ResourcePath = "Aliens/SlowAlien",
 
                     SpaceBetweenAliens = 3f,
 
@@ -78,6 +79,7 @@ public class IntroStage : FightStage
                         SpecificSpawnPattern = AlienSpawner.Pattern.Triple,
                         SpecificSpawnSubpattern = AlienSpawner.TripleSubpattern.Row
                     },
+                    ResourcePath = "Aliens/SlowAlien",
 
                     SpaceBetweenAliens = 3f,
 

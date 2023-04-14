@@ -1,12 +1,12 @@
 using UnityEngine;
 
 // @TODO: Levels should choose cloud color and sprites for this stuff
+// @TODO: Stars?
 
 public class MovingBackground : CustomBehavior
 {
+    /** Backgrounds */
     private const float BackgroundScale = 3f;
-    private const int MaxMovingEffects = 8;
-    private const int MaxMovingEffectsOnSide = MaxMovingEffects / 2;
 
     [SerializeField] protected float m_BackgroundVelocityY = 1f;
     [SerializeField] protected float m_MovingEffectVelocityY = 5f;
@@ -18,8 +18,13 @@ public class MovingBackground : CustomBehavior
     private GameObject m_BackgroundUnder;
     private Vector3 m_BackgroundSize;
 
+    /** Clouds */
     [SerializeField] protected GameObject m_CloudsPrefab;
     private GameObject m_Clouds;
+
+    /** Moving Effects */
+    private const int MaxMovingEffects = 8;
+    private const int MaxMovingEffectsOnSide = MaxMovingEffects / 2;
 
     [SerializeField] protected GameObject m_MovingEffectPrefab;
     private GameObject[] m_MovingEffects = new GameObject[MaxMovingEffects];
@@ -68,7 +73,7 @@ public class MovingBackground : CustomBehavior
             m_MovingEffectStartY = RenderingService.Instance.CenterTop.y + (m_MovingEffectSize.y * 0.55f);
 
             Vector3 EffectPositionLeft = new Vector3(
-                -(RenderingService.Instance.TargetSize.x * 0.65f) - m_MovingEffectSize.x,
+                -(RenderingService.Instance.TargetSize.x * 0.05f) - m_MovingEffectSize.x,
                 m_MovingEffectStartY,
                 WorldZLayers.BackgroundEffect
             );
@@ -121,7 +126,7 @@ public class MovingBackground : CustomBehavior
             if (PlayerState.Instance.PlayerShip is PlayerShip Ship && Ship)
             {
                 Vector3 Position = new Vector3(
-                    Ship.transform.position.x / (RenderingService.Instance.TargetSize.x * 0.5f) * 0.05f,
+                    -(Ship.transform.position.x / (RenderingService.Instance.TargetSize.x * 0.5f) * 0.05f),
                     Ship.transform.position.y / (RenderingService.Instance.TargetSize.y * 0.5f) * 0.05f,
                     WorldZLayers.BackgroundSprite
                 );
