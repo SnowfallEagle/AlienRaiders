@@ -91,7 +91,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3681906966515592202}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 26, y: 2.221177, z: 0}
+  m_LocalPosition: {x: 27, y: 2.221177, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -175,7 +175,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6920719643433450783}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -26, y: -0.878823, z: 0}
+  m_LocalPosition: {x: -27, y: -0.878823, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -284,3 +284,6 @@ MonoBehaviour:
   m_BackgroundSpriteUnder: {fileID: 21300000, guid: 9470fc80c20ec0d4ebd646f84d5419c9, type: 3}
   m_CloudsPrefab: {fileID: 6482188892765912834, guid: 106b9b1bfa0557a4ea02fe8d3a1a5750, type: 3}
   m_MovingEffectPrefab: {fileID: 8145211107645638712, guid: cc88a1ee8b7d61b48be7fc26281087b1, type: 3}
+  m_StarSprite: {fileID: 21300000, guid: 5c018e4179a9d5245900ded5edc50e91, type: 3}
+  m_FarStarVelocityY: 1
+  m_NearStarVelocityY: 2

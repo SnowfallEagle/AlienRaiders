@@ -1,37 +1,50 @@
 using UnityEngine;
 
 // @TODO: Levels should choose cloud color and sprites for this stuff
-// @TODO: Stars?
 
 public class MovingBackground : CustomBehavior
 {
     /** Backgrounds */
     private const float BackgroundScale = 3f;
 
-    [SerializeField] protected float m_BackgroundVelocityY = 1f;
-    [SerializeField] protected float m_MovingEffectVelocityY = 5f;
+    [SerializeField] private float m_BackgroundVelocityY = 1f;
+    [SerializeField] private float m_MovingEffectVelocityY = 5f;
 
-    [SerializeField] protected Sprite m_BackgroundSpriteOver;
-    [SerializeField] protected Sprite m_BackgroundSpriteUnder;
+    [SerializeField] private Sprite m_BackgroundSpriteOver;
+    [SerializeField] private Sprite m_BackgroundSpriteUnder;
 
     private GameObject m_BackgroundOver;
     private GameObject m_BackgroundUnder;
     private Vector3 m_BackgroundSize;
 
     /** Clouds */
-    [SerializeField] protected GameObject m_CloudsPrefab;
+    [SerializeField] private GameObject m_CloudsPrefab;
     private GameObject m_Clouds;
 
     /** Moving Effects */
     private const int MaxMovingEffects = 8;
     private const int MaxMovingEffectsOnSide = MaxMovingEffects / 2;
 
-    [SerializeField] protected GameObject m_MovingEffectPrefab;
+    [SerializeField] private GameObject m_MovingEffectPrefab;
     private GameObject[] m_MovingEffects = new GameObject[MaxMovingEffects];
 
     private Vector3 m_MovingEffectSize;
     private float m_MovingEffectThreshold;
     private float m_MovingEffectStartY;
+
+    /** Stars */
+    private const int MaxStars = 64;
+    private const int MaxNearStars = MaxStars / 4;
+    private const int MaxFarStars = MaxStars - MaxNearStars;
+
+    private static Vector3 FarStarScale = new Vector3(0.1f, 0.1f, 1f);
+    private static Vector3 NearStarScale = new Vector3(0.25f, 0.25f, 1f);
+
+    [SerializeField] private Sprite m_StarSprite;
+    private SpriteRenderer[] m_Stars = new SpriteRenderer[MaxStars];
+
+    [SerializeField] private float m_FarStarVelocityY = 0.5f;
+    [SerializeField] private float m_NearStarVelocityY = 1f;
 
     private void Start()
     {
@@ -95,6 +108,26 @@ public class MovingBackground : CustomBehavior
                 EffectPositionRight.y -= m_MovingEffectSize.y;
             }
         }
+
+        { // Stars
+            var StarPrefab = new GameObject();
+            StarPrefab.AddComponent<SpriteRenderer>().sprite = m_StarSprite;
+
+            for (int i = 0; i < MaxStars; ++i)
+            {
+                m_Stars[i] = SpawnInState(StarPrefab).GetComponent<SpriteRenderer>();
+                RespawnStar(i);
+
+                Vector3 StarPosition = m_Stars[i].transform.position;
+                StarPosition.y -= Random.Range(0f, RenderingService.Instance.TargetSize.y);
+                StarPosition.z = WorldZLayers.BackgroundEffect;
+                m_Stars[i].transform.position = StarPosition;
+
+                m_Stars[i].transform.localScale = i < MaxNearStars ? NearStarScale : FarStarScale;
+            }
+
+            Destroy(StarPrefab);
+        }
     }
 
     private void Update()
@@ -150,5 +183,29 @@ public class MovingBackground : CustomBehavior
                 m_MovingEffects[i].transform.position = Position;
             }
         }
+
+        { // Stars
+            Vector3 NearDiff = new Vector3(0f, -m_NearStarVelocityY * Time.deltaTime);
+            Vector3 FarDiff = new Vector3(0f, -m_FarStarVelocityY * Time.deltaTime);
+
+            for (int i = 0; i < MaxStars; ++i)
+            {
+                Vector3 Position = m_Stars[i].transform.position += (i < MaxNearStars ? NearDiff : FarDiff);
+                if (Position.y < -(RenderingService.Instance.TargetSize.y * 0.6f))
+                {
+                    RespawnStar(i);
+                }
+            }
+        }
+    }
+
+    private void RespawnStar(int Idx)
+    {
+        Vector3 Position = m_Stars[Idx].transform.position;
+        Position.x = RenderingService.Instance.CenterTop.x + Random.Range(-RenderingService.Instance.TargetSize.x, RenderingService.Instance.TargetSize.x);
+        Position.y = RenderingService.Instance.CenterTop.y + RenderingService.Instance.TargetSize.y * 0.1f; // @INCOMPLETE: + (diff between threshold and actual y position)
+        m_Stars[Idx].transform.position = Position;
+
+        m_Stars[Idx].color = new Color(Random.Range(0.25f, 1f), Random.Range(0f, 0.25f), Random.Range(0.25f, 1f), Random.Range(0.1f, 0.75f));
     }
 }

@@ -48,11 +48,14 @@ public class ConsoleService : Service<ConsoleService>
                     return;
 
                 case KeyCode.Return:
-                    ProcessInput();
                     if (m_Input != "")
                     {
-                        PushHistory(m_Input);
-                        m_Input = "";
+                        ProcessInput();
+                        if (m_Input != "")
+                        {
+                            PushHistory(m_Input);
+                            m_Input = "";
+                        }
                     }
                     break;
 
