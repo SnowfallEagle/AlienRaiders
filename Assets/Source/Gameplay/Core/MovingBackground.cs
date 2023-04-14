@@ -33,18 +33,29 @@ public class MovingBackground : CustomBehavior
     private float m_MovingEffectStartY;
 
     /** Stars */
+    struct Star
+    {
+        public SpriteRenderer SpriteRenderer;
+        public bool bFadeOut;
+    }
+
     private const int MaxStars = 64;
     private const int MaxNearStars = MaxStars / 4;
     private const int MaxFarStars = MaxStars - MaxNearStars;
+
+    private const float MinStarAlpha = 0f;
+    private const float MaxStarAlpha = 0.9f;
 
     private static Vector3 FarStarScale = new Vector3(0.1f, 0.1f, 1f);
     private static Vector3 NearStarScale = new Vector3(0.25f, 0.25f, 1f);
 
     [SerializeField] private Sprite m_StarSprite;
-    private SpriteRenderer[] m_Stars = new SpriteRenderer[MaxStars];
+    private Star[] m_Stars = new Star[MaxStars];
 
     [SerializeField] private float m_FarStarVelocityY = 0.5f;
     [SerializeField] private float m_NearStarVelocityY = 1f;
+
+    [SerializeField] private float m_StarFadingSpeed = 0.1f;
 
     private void Start()
     {
@@ -115,15 +126,15 @@ public class MovingBackground : CustomBehavior
 
             for (int i = 0; i < MaxStars; ++i)
             {
-                m_Stars[i] = SpawnInState(StarPrefab).GetComponent<SpriteRenderer>();
+                m_Stars[i].SpriteRenderer = SpawnInState(StarPrefab).GetComponent<SpriteRenderer>();
                 RespawnStar(i);
 
-                Vector3 StarPosition = m_Stars[i].transform.position;
+                Vector3 StarPosition = m_Stars[i].SpriteRenderer.transform.position;
                 StarPosition.y -= Random.Range(0f, RenderingService.Instance.TargetSize.y);
                 StarPosition.z = WorldZLayers.BackgroundEffect;
-                m_Stars[i].transform.position = StarPosition;
+                m_Stars[i].SpriteRenderer.transform.position = StarPosition;
 
-                m_Stars[i].transform.localScale = i < MaxNearStars ? NearStarScale : FarStarScale;
+                m_Stars[i].SpriteRenderer.transform.localScale = i < MaxNearStars ? NearStarScale : FarStarScale;
             }
 
             Destroy(StarPrefab);
@@ -190,22 +201,42 @@ public class MovingBackground : CustomBehavior
 
             for (int i = 0; i < MaxStars; ++i)
             {
-                Vector3 Position = m_Stars[i].transform.position += (i < MaxNearStars ? NearDiff : FarDiff);
+                Vector3 Position = m_Stars[i].SpriteRenderer.transform.position += (i < MaxNearStars ? NearDiff : FarDiff);
                 if (Position.y < -(RenderingService.Instance.TargetSize.y * 0.6f))
                 {
                     RespawnStar(i);
+                    continue;
                 }
+
+                Color Color = m_Stars[i].SpriteRenderer.color;
+                if (m_Stars[i].bFadeOut)
+                {
+                    Color.a -= m_StarFadingSpeed * Time.deltaTime;
+
+                    if (Color.a <= 0f)
+                    {
+                        RespawnStar(i);
+                        continue;
+                    }
+                }
+                else
+                {
+                    Color.a += System.MathF.Min(m_StarFadingSpeed * Time.deltaTime, MaxStarAlpha);
+                }
+
+                m_Stars[i].SpriteRenderer.color = Color;
             }
         }
     }
 
     private void RespawnStar(int Idx)
     {
-        Vector3 Position = m_Stars[Idx].transform.position;
+        Vector3 Position = m_Stars[Idx].SpriteRenderer.transform.position;
         Position.x = RenderingService.Instance.CenterTop.x + Random.Range(-RenderingService.Instance.TargetSize.x, RenderingService.Instance.TargetSize.x);
-        Position.y = RenderingService.Instance.CenterTop.y + RenderingService.Instance.TargetSize.y * 0.1f; // @INCOMPLETE: + (diff between threshold and actual y position)
-        m_Stars[Idx].transform.position = Position;
+        Position.y = RenderingService.Instance.CenterTop.y + RenderingService.Instance.TargetSize.y * 0.1f;
+        m_Stars[Idx].SpriteRenderer.transform.position = Position;
 
-        m_Stars[Idx].color = new Color(Random.Range(0.25f, 1f), Random.Range(0f, 0.25f), Random.Range(0.25f, 1f), Random.Range(0.1f, 0.75f));
+        m_Stars[Idx].SpriteRenderer.color = new Color(Random.Range(0.25f, 1f), Random.Range(0f, 0.25f), Random.Range(0.25f, 1f), Random.Range(MinStarAlpha, MaxStarAlpha));
+        m_Stars[Idx].bFadeOut = Random.Range(0, 2) == 1 ? true : false;
     }
 }
