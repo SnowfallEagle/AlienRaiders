@@ -29,9 +29,6 @@ public class GameManager : CustomBehavior
     {
         var StateMachine = GameStateMachine.Instance;
 
-        var Object = new GameObject();
-        var FightState = Object.AddComponent<FightGameState>();
-
         int Level = GameEnvironment.Instance.GetDebugOption<bool>("DebugLevel.bSpecificLevel") ?
             GameEnvironment.Instance.GetDebugOption<int>("DebugLevel.Level") :
             FightGameState.AnyIdx;
@@ -44,7 +41,6 @@ public class GameManager : CustomBehavior
             GameEnvironment.Instance.GetDebugOption<int>("DebugLevel.Spawner") :
             FightGameState.AnyIdx;
 
-        FightState.Initialize(Level, Stage, Spawner);
-        StateMachine.SwitchState(FightState);
+        StateMachine.SwitchState(new FightGameState(Level, Stage, Spawner));
     }
 }

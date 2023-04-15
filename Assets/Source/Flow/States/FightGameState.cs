@@ -22,23 +22,34 @@ public class FightGameState : GameState
     private BuffMultipliers m_EnemyBuffs;
     public BuffMultipliers EnemyBuffs => m_EnemyBuffs;
 
-    public void Initialize(int LevelIdx = AnyIdx, int StageIdx = AnyIdx, int SpawnerIdx = AnyIdx)
+    public FightGameState(int LevelIdx = AnyIdx, int StageIdx = AnyIdx, int SpawnerIdx = AnyIdx)
     {
         m_SpecificLevelIdx   = LevelIdx   == AnyIdx ? AnyIdx : LevelIdx;
         m_SpecificStageIdx   = StageIdx   == AnyIdx ? AnyIdx : StageIdx;
         m_SpecificSpawnerIdx = SpawnerIdx == AnyIdx ? AnyIdx : SpawnerIdx;
     }
 
-    protected override void Start()
+    public override void Start()
     {
         base.Start();
 
-        // @TODO: Figure out how to do it better
-        SpawnInState(Resources.Load<GameObject>("Scenes/Fight/FightScene"));
-
-        PlayerState.Instance.SpawnShip();
-
+        // @TODO: Put stuff from fight scene in main scene
+        CustomBehavior.SpawnInState(Resources.Load<GameObject>("Scenes/Fight/FightScene"));
         NextLevel();
+    }
+
+    public override void Update()
+    {
+        base.Update();
+
+        m_CurrentStage?.Update();
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
+
+        m_CurrentStage?.Exit();
     }
 
     private void NextLevel()
@@ -81,10 +92,7 @@ public class FightGameState : GameState
 
     public void NextStage()
     {
-        if (m_CurrentStage)
-        {
-            Destroy(m_CurrentStage.gameObject);
-        }
+        m_CurrentStage?.Exit();
 
         if (++m_CurrentStageIdx >= m_CurrentLevel.Stages.Length)
         {
@@ -98,8 +106,8 @@ public class FightGameState : GameState
 
         m_EnemyBuffs = m_CurrentLevel.EnemyBuffs * m_CurrentLevel.Stages[m_CurrentStageIdx].EnemyBuffs;
 
-        m_CurrentStage = SpawnInState<FightStage>(m_CurrentLevel.Stages[m_CurrentStageIdx].Stage);
-        m_CurrentStage.Initialize(m_SpecificSpawnerIdx);
-        m_CurrentStage.name = m_CurrentStage.GetType().Name;
+        m_CurrentStage = (FightStage)Activator.CreateInstance(m_CurrentLevel.Stages[m_CurrentStageIdx].Stage);
+        Assert.IsNotNull(m_CurrentStage);
+        m_CurrentStage.Start(m_SpecificSpawnerIdx);
     }
 }

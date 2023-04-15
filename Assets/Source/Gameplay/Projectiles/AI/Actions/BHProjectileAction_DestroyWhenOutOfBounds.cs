@@ -14,7 +14,7 @@ public class BHProjectileAction_DestroyWhenOutOfBounds : BHAction
     {
         if (!IsInOfBounds())
         {
-            Object.Destroy(m_Owner.gameObject);
+            CustomBehavior.Destroy(m_Owner.gameObject);
         }
         return true;
     }

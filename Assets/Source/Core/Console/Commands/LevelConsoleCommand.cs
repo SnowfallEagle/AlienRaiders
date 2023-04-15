@@ -14,9 +14,6 @@ public class LevelConsoleCommand : ConsoleCommand
 
     public override void Execute(object[] Args)
     {
-        var Object = new GameObject();
-        var FightState = Object.AddComponent<FightGameState>();
-
         string LevelName = Args[0].ToString();
         int LevelIdx = FightGameState.AnyIdx;
 
@@ -29,8 +26,7 @@ public class LevelConsoleCommand : ConsoleCommand
             }
         }
 
-        FightState.Initialize(LevelIdx, (int)Args[1], (int)Args[2]);
-        GameStateMachine.Instance.SwitchState(FightState);
+        GameStateMachine.Instance.SwitchState(new FightGameState(LevelIdx, (int)Args[1], (int)Args[2]));
     }
 }
 

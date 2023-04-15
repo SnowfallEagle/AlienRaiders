@@ -7,6 +7,7 @@ public class MovingBackground : CustomBehavior
     /** Backgrounds */
     private const float BackgroundScale = 3f;
 
+    [Header("Backgrounds")]
     [SerializeField] private float m_BackgroundVelocityY = 1f;
     [SerializeField] private float m_MovingEffectVelocityY = 5f;
 
@@ -18,10 +19,12 @@ public class MovingBackground : CustomBehavior
     private Vector3 m_BackgroundSize;
 
     /** Clouds */
+    [Header("Clouds")]
     [SerializeField] private GameObject m_CloudsPrefab;
     private GameObject m_Clouds;
 
     /** Moving Effects */
+    [Header("Moving Effects")]
     private const int MaxMovingEffects = 8;
     private const int MaxMovingEffectsOnSide = MaxMovingEffects / 2;
 
@@ -49,6 +52,7 @@ public class MovingBackground : CustomBehavior
     private static Vector3 FarStarScale = new Vector3(0.1f, 0.1f, 1f);
     private static Vector3 NearStarScale = new Vector3(0.25f, 0.25f, 1f);
 
+    [Header("Stars")]
     [SerializeField] private Sprite m_StarSprite;
     private Star[] m_Stars = new Star[MaxStars];
 
@@ -122,6 +126,7 @@ public class MovingBackground : CustomBehavior
 
         { // Stars
             var StarPrefab = new GameObject();
+            StarPrefab.name = "Star";
             StarPrefab.AddComponent<SpriteRenderer>().sprite = m_StarSprite;
 
             for (int i = 0; i < MaxStars; ++i)

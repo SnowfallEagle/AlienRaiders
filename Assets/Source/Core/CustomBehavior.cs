@@ -78,7 +78,7 @@ public class CustomBehavior : MonoBehaviour
     }
 
     /** Spawn MonoBehaviour by original */
-    protected static T SpawnInState<T>(T Component) where T : MonoBehaviour 
+    public static T SpawnInState<T>(T Component) where T : MonoBehaviour 
     {
         var Instance = Instantiate(Component);
         ReferenceInState(Instance);
@@ -86,7 +86,7 @@ public class CustomBehavior : MonoBehaviour
     }
 
     /** Spawn GameObject by original */
-    protected static GameObject SpawnInState(GameObject Object) 
+    public static GameObject SpawnInState(GameObject Object) 
     {
         var Instance = Instantiate(Object);
         ReferenceInState(Instance);
@@ -94,7 +94,7 @@ public class CustomBehavior : MonoBehaviour
     }
 
     /** Spawn empty GameObject */
-    protected static GameObject SpawnInState() 
+    public static GameObject SpawnInState() 
     {
         var Object = new GameObject();
         ReferenceInState(Object);
@@ -102,7 +102,7 @@ public class CustomBehavior : MonoBehaviour
     }
 
     /** Spawn Component by Type */
-    protected static Component SpawnInState(Type ComponentType)
+    public static Component SpawnInState(Type ComponentType)
     {
         var GameObject = SpawnInState();
         var Component = GameObject.AddComponent(ComponentType);
@@ -110,25 +110,25 @@ public class CustomBehavior : MonoBehaviour
     }
 
     /** Spawn Component */
-    protected static T SpawnInState<T>() where T : MonoBehaviour
+    public static T SpawnInState<T>() where T : MonoBehaviour
     {
         return (T)SpawnInState(typeof(T));
     }
 
     /** Spawn Component by Type */
-    protected static T SpawnInState<T>(Type ComponentType) where T : MonoBehaviour
+    public static T SpawnInState<T>(Type ComponentType) where T : MonoBehaviour
     {
         return (T)SpawnInState(ComponentType);
     }
 
     /** Reference Component in GameState */
-    protected static void ReferenceInState(MonoBehaviour Object)
+    public static void ReferenceInState(MonoBehaviour Object)
     {
         GameStateMachine.Instance.CurrentState.ReferenceObject(Object);
     }
 
     /** Reference GameObject in GameState */
-    protected static void ReferenceInState(GameObject Object)
+    public static void ReferenceInState(GameObject Object)
     {
         GameStateMachine.Instance.CurrentState.ReferenceObject(Object);
     }

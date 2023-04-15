@@ -5,7 +5,7 @@ using UnityEngine.Assertions;
 // @TODO: Maybe move all stage logic stuff in FightGameState and use Stages as Info?
 
 /** Fight stages should set m_Spawners in their constructor */
-public abstract class FightStage : CustomBehavior
+public abstract class FightStage
 {
     public const int AnyIdx = -1;
 
@@ -38,12 +38,7 @@ public abstract class FightStage : CustomBehavior
 
     private TimerService.Handle m_hIterationTimer = new TimerService.Handle();
 
-    public void Initialize(int SpawnerIdx = AnyIdx)
-    {
-        m_SpecificSpawnerIdx = SpawnerIdx;
-    }
-
-    private void Start()
+    public void Start(int SpawnerIdx = AnyIdx)
     {
         Assert.IsNotNull(m_Spawners);
 
@@ -66,7 +61,7 @@ public abstract class FightStage : CustomBehavior
         NextSpawner();
     }
 
-    private void Update()
+    public void Update()
     {
         if (m_CurrentSpawnerInfo == null || !m_CurrentSpawnerInfo.bWaitToEnd || m_bWaitingEnded)
         {
@@ -81,8 +76,13 @@ public abstract class FightStage : CustomBehavior
             }
         }
 
-        TimerService.Instance.AddTimer(m_hIterationTimer, this, NextIteration, m_CurrentSpawnerInfo.TimeToNext);
+        TimerService.Instance.AddTimer(m_hIterationTimer, null, NextIteration, m_CurrentSpawnerInfo.TimeToNext);
         m_bWaitingEnded = true;
+    }
+
+    public void Exit()
+    {
+        m_hIterationTimer.Invalidate();
     }
 
     private void NextIteration()
@@ -91,7 +91,7 @@ public abstract class FightStage : CustomBehavior
         {
             if (m_CurrentSpawner)
             {
-                Destroy(m_CurrentSpawner.gameObject);
+                CustomBehavior.Destroy(m_CurrentSpawner.gameObject);
             }
             NextSpawner();
             return;
@@ -104,7 +104,7 @@ public abstract class FightStage : CustomBehavior
         {
             if (m_CurrentSpawnerInfo.TimeToNext > 0f)
             {
-                TimerService.Instance.AddTimer(m_hIterationTimer, this, NextIteration, m_CurrentSpawnerInfo.TimeToNext);
+                TimerService.Instance.AddTimer(m_hIterationTimer, null, NextIteration, m_CurrentSpawnerInfo.TimeToNext);
             }
             else
             {
@@ -124,7 +124,7 @@ public abstract class FightStage : CustomBehavior
         m_CurrentSpawnerInfo = m_Spawners[m_CurrentSpawnerIdx];
         if (m_CurrentSpawnerInfo.Spawner != null)
         {
-            m_CurrentSpawner = SpawnInState<Spawner>(m_CurrentSpawnerInfo.Spawner);
+            m_CurrentSpawner = CustomBehavior.SpawnInState<Spawner>(m_CurrentSpawnerInfo.Spawner);
             m_CurrentSpawner.name = m_CurrentSpawner.GetType().Name;
         }
         else
@@ -134,7 +134,7 @@ public abstract class FightStage : CustomBehavior
 
         if (m_CurrentSpawnerInfo.Pickup != null)
         {
-            var Pickup = SpawnInState(Resources.Load<GameObject>(m_CurrentSpawnerInfo.Pickup));
+            var Pickup = CustomBehavior.SpawnInState(Resources.Load<GameObject>(m_CurrentSpawnerInfo.Pickup));
 
             var SpriteRenderer = Pickup.GetComponent<SpriteRenderer>();
             float PickupHalfSizeX = SpriteRenderer.bounds.size.x * 0.5f;
