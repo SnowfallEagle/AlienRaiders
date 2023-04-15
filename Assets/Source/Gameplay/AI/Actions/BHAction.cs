@@ -2,6 +2,9 @@ public abstract class BHAction
 {
     protected BehaviorComponent m_Owner;
 
+    public delegate void OnActionFinishedSignature(BHAction Action, bool bSucceeded);
+    private OnActionFinishedSignature m_OnActionFinished;
+
     public void Initialize(BehaviorComponent Owner)
     {
         m_Owner = Owner;
@@ -19,6 +22,21 @@ public abstract class BHAction
         return true;
     }
 
-    public virtual void Abort()
-    { }
+    /** Called by Behavior Component */
+    public virtual void OnAbort()
+    {
+        m_OnActionFinished?.Invoke(this, false);
+    }
+
+    /** Called by Behavior Component */
+    public virtual void OnFinish()
+    {
+        m_OnActionFinished?.Invoke(this, true);
+    }
+
+    public BHAction AddOnActionFinished(OnActionFinishedSignature Callback)
+    {
+        m_OnActionFinished += Callback;
+        return this;
+    }
 }

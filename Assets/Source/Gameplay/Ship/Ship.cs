@@ -18,6 +18,8 @@ public class Ship : CustomBehavior
     private float m_Speed;
     public float Speed => m_Speed;
 
+    public bool bProcessInput = true;
+
     private BoxCollider2D m_BoxCollider;
     public BoxCollider2D BoxCollider => m_BoxCollider;
 
@@ -60,7 +62,10 @@ public class Ship : CustomBehavior
 
     private void Update()
     {
-        ProcessInput();
+        if (bProcessInput)
+        {
+            ProcessInput();
+        }
     }
 
     /** Overridable ProcessInput() method

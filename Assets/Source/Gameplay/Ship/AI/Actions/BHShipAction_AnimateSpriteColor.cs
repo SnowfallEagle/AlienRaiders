@@ -61,8 +61,10 @@ public class BHShipAction_AnimateSpriteColor : BHAction
         return true;
     }
 
-    public override void Abort()
+    public override void OnAbort()
     {
+        base.OnAbort();
+
         m_SpriteRenderer.color = m_SavedColor;
     }
 }

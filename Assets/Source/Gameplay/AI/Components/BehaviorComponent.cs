@@ -19,6 +19,7 @@ public class BehaviorComponent : CustomBehavior
         {
             if (!m_Actions[i].Update())
             {
+                m_Actions[i].OnFinish();
                 m_Actions.RemoveAt(i);
             }
         }
@@ -72,7 +73,7 @@ public class BehaviorComponent : CustomBehavior
         {
             if (Action.GetType() == ExclusiveType)
             {
-                Action.Abort();
+                Action.OnAbort();
                 return true;
             }
             return false;

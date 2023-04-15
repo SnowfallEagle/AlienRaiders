@@ -10,11 +10,6 @@ public class GameStateMachine : Service<GameStateMachine>
         m_CurrentState?.Update();
     }
 
-    private void OnDestroy()
-    {
-        m_CurrentState?.Exit();
-    }
-
     public void SwitchState(GameState State)
     {
         Assert.IsNotNull(State);

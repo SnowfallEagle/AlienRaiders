@@ -33,6 +33,7 @@ public class FightGameState : GameState
     {
         base.Start();
 
+        PlayerState.Instance.PlayerShip.bProcessInput = true;
         NextLevel();
     }
 

@@ -18,6 +18,7 @@ public class GameState
     public virtual void Update()
     { }
 
+    /** Called only when switching states */
     public virtual void Exit()
     {
         m_hCleanupTimer.Invalidate();

@@ -38,7 +38,11 @@ public class PlayerShip : Ship
 
     private void OnDisable()
     {
-        WeaponComponent.StopFire();
+        // Check to not to call TimerService in StopFire()
+        if (gameObject.scene.isLoaded)
+        {
+            WeaponComponent.StopFire();
+        }
     }
 
     protected override void ProcessInput()

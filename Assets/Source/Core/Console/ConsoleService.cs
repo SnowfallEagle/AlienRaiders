@@ -20,6 +20,7 @@ public class ConsoleService : Service<ConsoleService>
     {
         { "level", new LevelConsoleCommand() }
     };
+    public Dictionary<string, ConsoleCommand> Commands => m_Commands;
 
     private void Update()
     {
@@ -96,12 +97,13 @@ public class ConsoleService : Service<ConsoleService>
             }
         }
 
-        GUI.Box(new Rect(0f, 0f, Screen.width, 30f), "");
+        GUI.Box(new Rect(0f, 0f, Screen.width, 80f), "");
 
         GUI.SetNextControlName(m_InputControlName);
         GUI.backgroundColor = new Color(0f, 0f, 0f, 0f);
+        GUI.skin.textField.fontSize = 36;
 
-        m_Input = GUI.TextField(new Rect(10f, 5f, Screen.width - 20f, 20f), m_Input);
+        m_Input = GUI.TextField(new Rect(10f, 5f, Screen.width - 20f, 60f), m_Input);
         GUI.FocusControl(m_InputControlName);
 
         if (bMoveCursorToEnd)
