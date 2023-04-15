@@ -2,17 +2,17 @@ using UnityEngine;
 
 public class PauseWidget : UIWidget
 {
-    public override void Show()
+    public override void OnShow()
     {
-        base.Show();
+        base.OnShow();
 
         Time.timeScale = 0f;
         PlayerState.Instance.PlayerShip.bProcessInput = false;
     }
 
-    public override void Hide()
+    public override void OnHide()
     {
-        base.Hide();
+        base.OnHide();
 
         Time.timeScale = 1f;
         PlayerState.Instance.PlayerShip.bProcessInput = true;
@@ -20,7 +20,7 @@ public class PauseWidget : UIWidget
 
     public void OnContinueClicked()
     {
-        Hide();
+        UIService.Instance.Hide(this);
     }
 
     public void OnMenuClicked()

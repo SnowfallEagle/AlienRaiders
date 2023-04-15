@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class UIService : Service<UIService>
@@ -17,23 +16,41 @@ public class UIService : Service<UIService>
         }
     }
 
+    public void Show(UIWidget Widget)
+    {
+        if (!Widget.bShown)
+        {
+            Widget.OnShow();
+        }
+    }
+
     public void Show<T>() where T : UIWidget
     {
         if (!m_Widgets.TryGetValue(typeof(T), out UIWidget Widget))
         {
-            NoEntry.Assert($"There're no hud with type {typeof(T).Name}!");
+            NoEntry.Assert($"There're no hud with type { typeof(T).Name }!");
             return;
         }
-        Widget.Show();
+
+        Show(Widget);
+    }
+
+    public void Hide(UIWidget Widget)
+    {
+        if (Widget.bShown)
+        {
+            Widget.OnHide();
+        }
     }
 
     public void Hide<T>() where T : UIWidget
     {
         if (!m_Widgets.TryGetValue(typeof(T), out UIWidget Widget))
         {
-            NoEntry.Assert($"There're no hud with type {Widget.GetType().Name}!"); ;
+            NoEntry.Assert($"There're no hud with type { Widget.GetType().Name }!"); ;
             return;
         }
-        Widget.Hide();
+
+        Hide(Widget);
     }
 }

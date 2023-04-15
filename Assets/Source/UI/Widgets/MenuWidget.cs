@@ -17,9 +17,9 @@ public class MenuWidget : UIWidget
         m_BehaviorComponent = InitializeComponent<BehaviorComponent>();
     }
 
-    public override void Show()
+    public override void OnShow()
     {
-        base.Show();
+        base.OnShow();
 
         m_FadeImage.color = new Color(0f, 0f, 0f, 0f);
         m_FadeImage.raycastTarget = false;

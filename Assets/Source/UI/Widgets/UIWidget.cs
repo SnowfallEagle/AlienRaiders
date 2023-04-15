@@ -1,7 +1,8 @@
-using UnityEngine;
-
 public class UIWidget : CustomBehavior
 {
+    private bool m_bShown = false;
+    public bool bShown => m_bShown;
+
     private UIWidget[] m_Children;
 
     protected virtual void Start()
@@ -9,12 +10,15 @@ public class UIWidget : CustomBehavior
         m_Children = GetComponentsInChildren<UIWidget>(true);
     }
 
-    public virtual void Show()
+    /** UIService call it! Use UIService.Show() to show widget */
+    public virtual void OnShow()
     {
         gameObject.SetActive(true);
+        m_bShown = true;
     }
 
-    public virtual void Hide()
+    /** UIService call it! Use UIService.Hide() to hide widget */
+    public virtual void OnHide()
     {
         gameObject.SetActive(false);
 
@@ -22,8 +26,10 @@ public class UIWidget : CustomBehavior
         {
             if (Child != this)
             {
-                Child.Hide();
+                Child.OnHide();
             }
         }
+
+        m_bShown = false;
     }
 }
