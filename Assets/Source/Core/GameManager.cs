@@ -5,8 +5,8 @@ public class GameManager : CustomBehavior
     private void Start()
     {
         InitializePlatformSdk();
+        PlayerState.Instance.SpawnShip();
         InitializeGameStateMachine();
-
         var Console = ConsoleService.Instance;
     }
 

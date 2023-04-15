@@ -28,15 +28,13 @@ public abstract class FightStage
     private SpawnerInfo m_CurrentSpawnerInfo;
 
     private int m_CurrentSpawnerIdx;
-    private int m_SpecificSpawnerIdx;
-
     private Spawner m_CurrentSpawner;
     private GameObject[] m_CurrentShips;
-    private bool m_bWaitingEnded;
 
+    private bool m_bWaitingEnded;
     private TimerService.Handle m_hIterationTimer = new TimerService.Handle();
 
-    public void Start(int SpawnerIdx = AnyIdx)
+    public void Start(int SpecificSpawnerIdx = AnyIdx)
     {
         Assert.IsNotNull(m_Spawners);
 
@@ -47,15 +45,7 @@ public abstract class FightStage
             m_Spawners[SpawnersLength - 1].bWaitToEnd = true;
         }
 
-        if (m_SpecificSpawnerIdx == AnyIdx)
-        {
-            m_CurrentSpawnerIdx = -1;
-        }
-        else
-        {
-            m_CurrentSpawnerIdx = m_SpecificSpawnerIdx - 1;
-            m_SpecificSpawnerIdx = AnyIdx;
-        }
+        m_CurrentSpawnerIdx = SpecificSpawnerIdx == AnyIdx ? -1 : SpecificSpawnerIdx - 1;
         NextSpawner();
     }
 

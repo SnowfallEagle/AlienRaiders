@@ -41,13 +41,21 @@ public class ShipHealthComponent : CustomBehavior
 
         if (NewHealth <= 0f)
         {
-            m_bNeedToDestroy = true;
+            // @TODO: Separate PlayerHealthComponent
+            if (GetComponent<PlayerShip>())
+            {
+                gameObject.SetActive(false);
+            }
+            else
+            {
+                m_bNeedToDestroy = true;
+            }
         }
     }
 
     public void TakeDamage(float Damage)
     {
-        // @TODO: Move this logic in PlayerShipHealthComponent.CanBeDamaged()
+        // @TODO: Move this logic in PlayerHealthComponent.CanBeDamaged()
         if (GameEnvironment.Instance.GetDebugOption<bool>("DebugPlayer.bGodMode") && GetComponent<PlayerShip>())
         {
             return;

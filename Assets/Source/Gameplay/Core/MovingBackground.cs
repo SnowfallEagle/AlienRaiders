@@ -116,8 +116,17 @@ public class MovingBackground : CustomBehavior
             {
                 m_MovingEffects[i] = Instantiate(m_MovingEffectPrefab);
                 m_MovingEffects[i].transform.parent = transform;
-                m_MovingEffects[i].transform.position = i < MaxMovingEffectsOnSide ? EffectPositionLeft : EffectPositionRight;
-                EffectPositionLeft.y -= m_MovingEffectSize.y;
+
+                if (i < MaxMovingEffectsOnSide)
+                {
+                    m_MovingEffects[i].transform.position = EffectPositionLeft;
+                    EffectPositionLeft.y -= m_MovingEffectSize.y;
+                }
+                else
+                {
+                    m_MovingEffects[i].transform.position = EffectPositionRight;
+                    EffectPositionRight.y -= m_MovingEffectSize.y;
+                }
             }
         }
 

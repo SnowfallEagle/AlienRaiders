@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerShip : Ship
@@ -35,6 +34,11 @@ public class PlayerShip : Ship
     private void LateUpdate()
     {
         CheckBounds();
+    }
+
+    private void OnDisable()
+    {
+        WeaponComponent.StopFire();
     }
 
     protected override void ProcessInput()

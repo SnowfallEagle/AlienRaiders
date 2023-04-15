@@ -26,6 +26,8 @@ public class LevelConsoleCommand : ConsoleCommand
             }
         }
 
+        // @TODO: Figure out how to deal with player
+        PlayerState.Instance.PlayerShip.gameObject.SetActive(true);
         GameStateMachine.Instance.SwitchState(new FightGameState(LevelIdx, (int)Args[1], (int)Args[2]));
     }
 }

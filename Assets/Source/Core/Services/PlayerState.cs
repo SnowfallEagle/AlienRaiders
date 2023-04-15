@@ -26,7 +26,7 @@ public class PlayerState : Service<PlayerState>
             Destroy(m_PlayerShip.gameObject);
         }
 
-        m_PlayerShip = SpawnInState(Resources.Load<GameObject>("Player/Player")).GetComponent<PlayerShip>();
+        m_PlayerShip = Instantiate(Resources.Load<GameObject>("Player/Player")).GetComponent<PlayerShip>();
         m_PlayerShip.Initialize(new BuffMultipliers());
     }
 }
