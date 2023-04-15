@@ -32,7 +32,7 @@ public class Projectile : CustomBehavior
         BoxCollider.isTrigger = true;
 
         m_BehaviorComponent = InitializeComponent<BehaviorComponent>();
-        // @INCOMPLETE: We need to check bounds
+        m_BehaviorComponent.AddAction(new BHProjectileAction_DestroyWhenOutOfBounds());
 
         Destroy(gameObject, m_LifeTime);
     }
