@@ -6,6 +6,8 @@ using Agava.YandexGames;
 
 public class YandexSdk : PlatformSdk
 {
+    private bool m_bAudioMutedByBackground;
+
     private IEnumerator Start()
     {
         WebApplication.InBackgroundChangeEvent += OnInBackgroundChanged;
@@ -29,9 +31,17 @@ public class YandexSdk : PlatformSdk
 
     private void OnInBackgroundChanged(bool bInBackground)
     {
-        // @INCOMPLETE: Make AudioService
-        AudioListener.pause = bInBackground;
-        AudioListener.volume = bInBackground ? 0f : 1f;
+        // @TEST
+        if (bInBackground && !AudioService.Instance.bMuted)
+        {
+            AudioService.Instance.Mute(true);
+            m_bAudioMutedByBackground = true;
+        }
+        else if (!bInBackground && m_bAudioMutedByBackground)
+        {
+            AudioService.Instance.Mute(false);
+            m_bAudioMutedByBackground = false;
+        }
     }
 
     public override void ToggleStickyAd(bool bEnable)

@@ -40,6 +40,6 @@ public class MenuWidget : UIWidget
 
     public void OnMuteClicked()
     {
-        NotImplemented.Assert();
+        AudioService.Instance.Mute(!AudioService.Instance.bMuted);
     }
 }
