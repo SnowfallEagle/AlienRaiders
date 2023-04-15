@@ -8,7 +8,7 @@ public class UIService : Service<UIService>
 
     private void Start()
     {
-        UIWidget[] Widgets = FindObjectsOfType<UIWidget>();
+        UIWidget[] Widgets = Resources.FindObjectsOfTypeAll<UIWidget>();
 
         foreach (var Widget in Widgets)
         {
@@ -21,19 +21,19 @@ public class UIService : Service<UIService>
     {
         if (!m_Widgets.TryGetValue(typeof(T), out UIWidget Widget))
         {
-            NoEntry.Assert($"There're no hud with type {Widget.GetType().Name}!");
+            NoEntry.Assert($"There're no hud with type {typeof(T).Name}!");
             return;
         }
-        Widget.gameObject.SetActive(true);
+        Widget.Show();
     }
 
     public void Hide<T>() where T : UIWidget
     {
-        if (!m_Widgets.TryGetValue(typeof(T), out UIWidget Hud))
+        if (!m_Widgets.TryGetValue(typeof(T), out UIWidget Widget))
         {
-            NoEntry.Assert($"There're no hud with type {Hud.GetType().Name}!"); ;
+            NoEntry.Assert($"There're no hud with type {Widget.GetType().Name}!"); ;
             return;
         }
-        Hud.gameObject.SetActive(false);
+        Widget.Hide();
     }
 }

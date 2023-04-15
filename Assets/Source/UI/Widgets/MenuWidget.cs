@@ -8,17 +8,22 @@ public class MenuWidget : UIWidget
 
     private BehaviorComponent m_BehaviorComponent;
 
-    public void Start()
+    protected override void Start()
     {
+        base.Start();
+
         Assert.IsNotNull(m_FadeImage);
 
         m_BehaviorComponent = InitializeComponent<BehaviorComponent>();
+    }
+
+    public override void Show()
+    {
+        base.Show();
 
         m_FadeImage.color = new Color(0f, 0f, 0f, 0f);
         m_FadeImage.raycastTarget = false;
     }
-
-    // @INCOMPLETE: Show(), Hide()
 
     public void OnPlayClicked()
     {
@@ -28,9 +33,13 @@ public class MenuWidget : UIWidget
         m_BehaviorComponent.AddAction(
             new BHUIAction_FadeImage(m_FadeImage).AddOnActionFinished((_, _) =>
             {
-                UIService.Instance.Hide<MenuWidget>();
                 GameStateMachine.Instance.SwitchState(new FightGameState());
             })
         );
+    }
+
+    public void OnMuteClicked()
+    {
+        NotImplemented.Assert();
     }
 }

@@ -1,5 +1,4 @@
 using System;
-using UnityEngine;
 using UnityEngine.Assertions;
 
 public class FightGameState : GameState
@@ -24,14 +23,16 @@ public class FightGameState : GameState
 
     public FightGameState(int LevelIdx = AnyIdx, int StageIdx = AnyIdx, int SpawnerIdx = AnyIdx)
     {
-        m_SpecificLevelIdx   = LevelIdx   == AnyIdx ? AnyIdx : LevelIdx;
-        m_SpecificStageIdx   = StageIdx   == AnyIdx ? AnyIdx : StageIdx;
-        m_SpecificSpawnerIdx = SpawnerIdx == AnyIdx ? AnyIdx : SpawnerIdx;
+        m_SpecificLevelIdx   = LevelIdx;
+        m_SpecificStageIdx   = StageIdx;
+        m_SpecificSpawnerIdx = SpawnerIdx;
     }
 
     public override void Start()
     {
         base.Start();
+
+        UIService.Instance.Show<FightWidget>();
 
         PlayerState.Instance.PlayerShip.bProcessInput = true;
         NextLevel();
@@ -48,7 +49,11 @@ public class FightGameState : GameState
     {
         base.Exit();
 
+        UIService.Instance.Hide<FightWidget>();
         m_CurrentStage?.Exit();
+
+        // When we pause game and exit to menu we can shoot without stop
+        PlayerState.Instance.PlayerShip.WeaponComponent.StopFire();
     }
 
     private void NextLevel()
