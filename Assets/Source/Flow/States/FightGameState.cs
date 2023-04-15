@@ -33,8 +33,6 @@ public class FightGameState : GameState
     {
         base.Start();
 
-        // @TODO: Put stuff from fight scene in main scene
-        CustomBehavior.SpawnInState(Resources.Load<GameObject>("Scenes/Fight/FightScene"));
         NextLevel();
     }
 

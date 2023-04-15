@@ -69,6 +69,9 @@ public class MovingBackground : CustomBehavior
             m_BackgroundOver = new GameObject();
             m_BackgroundUnder = new GameObject();
 
+            m_BackgroundOver.name = "Background1";
+            m_BackgroundUnder.name = "Background2";
+
             m_BackgroundOver.transform.parent = transform;
             m_BackgroundUnder.transform.parent = transform;
 
@@ -88,7 +91,8 @@ public class MovingBackground : CustomBehavior
         }
 
         { // Clouds
-            m_Clouds = SpawnInState(m_CloudsPrefab);
+            m_Clouds = Instantiate(m_CloudsPrefab);
+            m_Clouds.transform.parent = transform;
 
             Position.y -= m_BackgroundSize.y * 0.5f;
             Position.z = WorldZLayers.BackgroundClouds;
@@ -108,19 +112,12 @@ public class MovingBackground : CustomBehavior
             Vector3 EffectPositionRight = EffectPositionLeft;
             EffectPositionRight.x = -EffectPositionRight.x;
 
-            int i;
-            for (i = 0; i < MaxMovingEffectsOnSide; ++i)
+            for (int i = 0; i < MaxMovingEffects; ++i)
             {
-                m_MovingEffects[i] = SpawnInState(m_MovingEffectPrefab);
-                m_MovingEffects[i].transform.position = EffectPositionLeft;
+                m_MovingEffects[i] = Instantiate(m_MovingEffectPrefab);
+                m_MovingEffects[i].transform.parent = transform;
+                m_MovingEffects[i].transform.position = i < MaxMovingEffectsOnSide ? EffectPositionLeft : EffectPositionRight;
                 EffectPositionLeft.y -= m_MovingEffectSize.y;
-            }
-
-            for ( ; i < MaxMovingEffects; ++i)
-            {
-                m_MovingEffects[i] = SpawnInState(m_MovingEffectPrefab);
-                m_MovingEffects[i].transform.position = EffectPositionRight;
-                EffectPositionRight.y -= m_MovingEffectSize.y;
             }
         }
 
@@ -131,7 +128,8 @@ public class MovingBackground : CustomBehavior
 
             for (int i = 0; i < MaxStars; ++i)
             {
-                m_Stars[i].SpriteRenderer = SpawnInState(StarPrefab).GetComponent<SpriteRenderer>();
+                m_Stars[i].SpriteRenderer = Instantiate(StarPrefab).GetComponent<SpriteRenderer>();
+                m_Stars[i].SpriteRenderer.transform.parent = transform;
                 RespawnStar(i);
 
                 Vector3 StarPosition = m_Stars[i].SpriteRenderer.transform.position;

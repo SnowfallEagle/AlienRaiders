@@ -2,8 +2,6 @@ using System;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-// @TODO: Maybe move all stage logic stuff in FightGameState and use Stages as Info?
-
 /** Fight stages should set m_Spawners in their constructor */
 public abstract class FightStage
 {
