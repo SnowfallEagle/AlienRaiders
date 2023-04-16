@@ -3,13 +3,17 @@ using UnityEngine;
 
 public class PlatformSdk : Service<PlatformSdk>
 {
-    private Action m_OnPostInitialization = null;
-    public Action OnPostInitialization { set => m_OnPostInitialization = value; }
+    public Action OnPostInitialization;
+
+    private void Start()
+    {
+        OnPostInitialization();
+    }
 
     /** All derived classes have to call this method after initialization */
     protected virtual void PostInitialize()
     {
-        m_OnPostInitialization?.Invoke();
+        OnPostInitialization?.Invoke();
     }
 
     public virtual void ToggleStickyAd(bool bEnable)

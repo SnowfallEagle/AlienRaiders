@@ -37,7 +37,14 @@ public class GameManager : CustomBehavior
         {
             Sdk.ToggleStickyAd(true);
             Sdk.ShowFullscreenAd();
+
+            InitializeRenderingService();
         };
+    }
+
+    private void InitializeRenderingService()
+    {
+        RenderingService.Instance.UpdateAppearance();
     }
 
     private void InitializeGameStateMachine()

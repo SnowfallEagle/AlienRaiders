@@ -22,11 +22,14 @@ public class UIWidget : CustomBehavior
     {
         gameObject.SetActive(false);
 
-        foreach (var Child in m_Children)
+        if (m_Children != null)
         {
-            if (Child != this)
+            foreach (var Child in m_Children)
             {
-                Child.OnHide();
+                if (Child != this)
+                {
+                    Child.OnHide();
+                }
             }
         }
 

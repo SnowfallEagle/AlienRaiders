@@ -19,7 +19,7 @@ public class LevelConsoleCommand : ConsoleCommand
 
         for (int i = 0; i < FightGameState.s_Levels.Length; ++i)
         {
-            if (LevelName == FightGameState.s_Levels[i].Name)
+            if (LevelName == FightGameState.s_Levels[i].GetType().Name)
             {
                 LevelIdx = i;
                 break;

@@ -5,9 +5,9 @@ public class FightGameState : GameState
 {
     public const int AnyIdx = -1;
 
-    public static Type[] s_Levels = new Type[]
+    public static Level[] s_Levels = new Level[]
     {
-        typeof(IntroLevel)
+        new IntroLevel()
     };
     private Level m_CurrentLevel;
     private int m_SpecificLevelIdx;
@@ -79,7 +79,7 @@ public class FightGameState : GameState
             return;
         }
 
-        m_CurrentLevel = (Level)Activator.CreateInstance(s_Levels[Level]);
+        m_CurrentLevel = s_Levels[Level];
         Assert.IsNotNull(m_CurrentLevel.Stages);
 
         if (m_SpecificStageIdx == AnyIdx)
