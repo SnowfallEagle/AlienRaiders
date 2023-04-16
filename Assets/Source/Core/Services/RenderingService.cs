@@ -223,18 +223,26 @@ public class RenderingService : Service<RenderingService>
 
     public void UpdateAppearance(int LevelIdx = -1)
     {
+        bool bFirstUpdate = m_Appearance == null;
+
         if (LevelIdx == -1)
         {
             LevelIdx = PlayerState.Instance.Level;
         }
+        m_Appearance = FightGameState.s_Levels[LevelIdx].Appearance;
 
-        if (m_Appearance == null)
+        if (bFirstUpdate)
         {
-            m_Appearance = FightGameState.s_Levels[LevelIdx].Appearance;
             return;
         }
 
-        // @INCOMPLETE: Update current
+        m_BackgroundOver.sprite = Resources.Load<Sprite>(m_Appearance.BackgroundOver);
+        m_BackgroundUnder.sprite = Resources.Load<Sprite>(m_Appearance.BackgroundUnder);
+
+        foreach (var SpriteRenderer in m_CloudSprites)
+        {
+            SpriteRenderer.color = m_Appearance.CloudsColor;
+        }
     }
 
     private void UpdateScreenRatio()
