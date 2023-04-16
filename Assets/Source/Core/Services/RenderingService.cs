@@ -229,8 +229,14 @@ public class RenderingService : Service<RenderingService>
         {
             LevelIdx = PlayerState.Instance.Level;
         }
-        m_Appearance = FightGameState.s_Levels[LevelIdx].Appearance;
 
+        LevelAppearance NewAppearance = FightGameState.s_Levels[LevelIdx].Appearance;
+        if (!bFirstUpdate && m_Appearance == NewAppearance)
+        {
+            return;
+        }
+
+        m_Appearance = NewAppearance;
         if (bFirstUpdate)
         {
             return;

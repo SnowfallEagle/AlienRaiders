@@ -18,6 +18,8 @@ public class GameStateMachine : Service<GameStateMachine>
 
         m_CurrentState = State;
         m_CurrentState.Start();
+
+        RenderingService.Instance.UpdateAppearance();
     }
 
     public T GetCurrentState<T>() where T: GameState
