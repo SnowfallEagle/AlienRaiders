@@ -18,7 +18,8 @@ public class ConsoleService : Service<ConsoleService>
 
     private Dictionary<string, ConsoleCommand> m_Commands = new Dictionary<string, ConsoleCommand>
     {
-        { "level", new LevelConsoleCommand() }
+        { "level",      new LevelConsoleCommand() },
+        { "appearance", new AppearanceConsoleCommand() }
     };
     public Dictionary<string, ConsoleCommand> Commands => m_Commands;
 

@@ -39,14 +39,15 @@ public class RenderingService : Service<RenderingService>
 
     private GameObject m_BackgroundRoot;
 
-    private GameObject m_BackgroundOver;
-    private GameObject m_BackgroundUnder;
+    private SpriteRenderer m_BackgroundOver;
+    private SpriteRenderer m_BackgroundUnder;
     private Vector3 m_BackgroundSize;
 
     /** Clouds */
     [Header("Clouds")]
     [SerializeField] private GameObject m_CloudsPrefab;
     private GameObject m_Clouds;
+    private SpriteRenderer[] m_CloudSprites;
 
     /** Moving Effects */
     [Header("Moving Effects")]
@@ -119,25 +120,24 @@ public class RenderingService : Service<RenderingService>
         UpdateAppearance();
 
         m_BackgroundRoot = new GameObject();
+        m_BackgroundRoot.name = "BackgroudRoot";
+        m_BackgroundRoot.transform.parent = transform;
 
         Vector3 Position;
         { // Backgrounds
-            m_BackgroundOver = new GameObject();
-            m_BackgroundUnder = new GameObject();
-
+            m_BackgroundOver = new GameObject().AddComponent<SpriteRenderer>();
             m_BackgroundOver.name = "Background1";
-            m_BackgroundUnder.name = "Background2";
 
             m_BackgroundOver.transform.parent = m_BackgroundRoot.transform;
+            m_BackgroundOver.transform.localScale = new Vector3(BackgroundScale, BackgroundScale, BackgroundScale);
+
+            m_BackgroundUnder = Instantiate(m_BackgroundOver);
+            m_BackgroundUnder.name = "Background2";
             m_BackgroundUnder.transform.parent = m_BackgroundRoot.transform;
 
-            Vector3 Scale = new Vector3(BackgroundScale, BackgroundScale, BackgroundScale);
-            m_BackgroundOver.transform.localScale = Scale;
-            m_BackgroundUnder.transform.localScale = Scale;
-
-            var SpriteRenderer = m_BackgroundOver.AddComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(m_Appearance.BackgroundOver);
-            m_BackgroundUnder.AddComponent<SpriteRenderer>().sprite                     = Resources.Load<Sprite>(m_Appearance.BackgroundUnder);
-            m_BackgroundSize = SpriteRenderer.bounds.size * BackgroundScale;
+            m_BackgroundOver.sprite  = Resources.Load<Sprite>(m_Appearance.BackgroundOver);
+            m_BackgroundUnder.sprite = Resources.Load<Sprite>(m_Appearance.BackgroundUnder);
+            m_BackgroundSize = m_BackgroundOver.bounds.size;
 
             Position = new Vector3(0f, 0f, WorldZLayers.BackgroundSprite);
             m_BackgroundUnder.transform.position = Position;
@@ -154,7 +154,8 @@ public class RenderingService : Service<RenderingService>
             Position.z = WorldZLayers.BackgroundClouds;
             m_Clouds.transform.position = Position;
 
-            foreach (var SpriteRenderer in m_Clouds.GetComponentsInChildren<SpriteRenderer>())
+            m_CloudSprites = m_Clouds.GetComponentsInChildren<SpriteRenderer>();
+            foreach (var SpriteRenderer in m_CloudSprites)
             {
                 SpriteRenderer.color = m_Appearance.CloudsColor;
             }
@@ -220,11 +221,16 @@ public class RenderingService : Service<RenderingService>
         UpdateMovingBackground();
     }
 
-    public void UpdateAppearance()
+    public void UpdateAppearance(int LevelIdx = -1)
     {
+        if (LevelIdx == -1)
+        {
+            LevelIdx = PlayerState.Instance.Level;
+        }
+
         if (m_Appearance == null)
         {
-            m_Appearance = FightGameState.s_Levels[PlayerState.Instance.Level].Appearance;
+            m_Appearance = FightGameState.s_Levels[LevelIdx].Appearance;
             return;
         }
 
@@ -285,7 +291,7 @@ public class RenderingService : Service<RenderingService>
                 NewUnderPosition.y = OverPosition.y + m_BackgroundSize.y;
                 m_BackgroundUnder.transform.position = NewUnderPosition;
 
-                GameObject Temp = m_BackgroundUnder;
+                SpriteRenderer Temp = m_BackgroundUnder;
                 m_BackgroundUnder = m_BackgroundOver;
                 m_BackgroundOver = Temp;
 

@@ -14,17 +14,7 @@ public class LevelConsoleCommand : ConsoleCommand
 
     public override void Execute(object[] Args)
     {
-        string LevelName = Args[0].ToString();
-        int LevelIdx = FightGameState.AnyIdx;
-
-        for (int i = 0; i < FightGameState.s_Levels.Length; ++i)
-        {
-            if (LevelName == FightGameState.s_Levels[i].GetType().Name)
-            {
-                LevelIdx = i;
-                break;
-            }
-        }
+        int LevelIdx = FightGameState.FindLevelIdxByName(Args[0].ToString());
 
         // @TODO: Figure out how to deal with player
         PlayerState.Instance.PlayerShip.gameObject.SetActive(true);

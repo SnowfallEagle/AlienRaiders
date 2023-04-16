@@ -56,6 +56,19 @@ public class FightGameState : GameState
         PlayerState.Instance.PlayerShip.WeaponComponent.StopFire();
     }
 
+    public static int FindLevelIdxByName(string Name)
+    {
+        for (int i = 0; i < s_Levels.Length; ++i)
+        {
+            if (s_Levels[i].GetType().Name == Name)
+            {
+                return i;
+            }
+        }
+
+        return AnyIdx;
+    }
+
     private void NextLevel()
     {
         int Level;
