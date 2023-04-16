@@ -51,7 +51,13 @@ public class Ship : CustomBehavior
 
         m_HealthComponent = InitializeComponent<ShipHealthComponent>();
         m_HealthComponent.Initialize(Buffs);
-        m_HealthComponent.OnDamageTaken += OnDamageTaken;
+        HealthComponent.OnHealthChanged += (_, DeltaHealth) =>
+        {
+            if (DeltaHealth < 0f)
+            {
+                BehaviorComponent.AddExclusiveAction(new BHShipAction_AnimateSpriteColor(Color.red, 0.1f, bPulse: true));
+            }
+        };
 
         m_WeaponComponent = InitializeComponent<ShipWeaponComponent>();
         Type[] WeaponTypes = OnPreInitializeWeapons();
@@ -82,9 +88,6 @@ public class Ship : CustomBehavior
     {
         return new Type[] { };
     }
-
-    protected virtual void OnDamageTaken(float NewHealth, float DeltaHealth)
-    { }
 
     private void UseBuffs(BuffMultipliers Buffs)
     {

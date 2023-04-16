@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class LevelConsoleCommand : ConsoleCommand
 {
     public LevelConsoleCommand()

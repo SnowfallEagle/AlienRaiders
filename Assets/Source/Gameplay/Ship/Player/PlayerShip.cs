@@ -25,10 +25,10 @@ public class PlayerShip : Ship
         gameObject.layer = LayerMask.NameToLayer("Player");
         m_Team = ShipTeam.Player;
 
-        HealthComponent.OnDamageTaken += (NewHealth, DeltaHealth) =>
-        {
-            BehaviorComponent.AddExclusiveAction(new BHShipAction_AnimateSpriteColor(Color.red, 0.1f, bPulse: true));
-        };
+        HealthComponent.OnDied += () => { gameObject.SetActive(false); };
+#if UNITY_EDITOR
+        HealthComponent.OnHealthChanged += (NewHealth, _) => { Debug.Log($"New Player Health: { NewHealth }"); };
+#endif
     }
 
     private void LateUpdate()

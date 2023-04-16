@@ -27,6 +27,8 @@ public class AlienShip : Ship
 
         BoxCollider.isTrigger = true;
 
+        HealthComponent.OnDied += () => { Destroy(gameObject); };
+
         BehaviorComponent.StartBehavior(new BHFlow_Sequence()
             .AddNode(new BHTask_LoopCommand(new BHCommand_MoveForward(Speed)))
 
@@ -40,13 +42,6 @@ public class AlienShip : Ship
         Type[] WeaponTypes = new Type[(int)Weapons.MaxWeapons];
         WeaponTypes[(int)Weapons.AnyWeapon] = typeof(Weapon);
         return WeaponTypes;
-    }
-
-    protected override void OnDamageTaken(float NewHealth, float DeltaHealth)
-    {
-        base.OnDamageTaken(NewHealth, DeltaHealth);
-
-        BehaviorComponent.AddExclusiveAction(new BHShipAction_AnimateSpriteColor(Color.red, Duration: 0.15f, bPulse: true));
     }
 
     private void OnTriggerEnter2D(Collider2D Other)

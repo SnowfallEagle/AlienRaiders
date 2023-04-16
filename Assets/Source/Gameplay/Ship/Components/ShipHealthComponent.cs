@@ -1,11 +1,13 @@
 using UnityEngine;
 
-// @TODO: Make base HealthComponent
 public class ShipHealthComponent : CustomBehavior
 {
-    public delegate void OnDamageTakenSignature(float NewHealth, float DeltaHealth);
+    public delegate void OnHealthChangedSignature(float NewHealth, float DeltaHealth);
 
-    public OnDamageTakenSignature OnDamageTaken;
+    public OnHealthChangedSignature OnHealthChanged;
+
+    public delegate void OnDiedSignature();
+    public OnDiedSignature OnDied;
 
     public bool bDead => m_Health <= 0f;
     public bool bAlive => m_Health > 0f;
@@ -14,8 +16,6 @@ public class ShipHealthComponent : CustomBehavior
     private float m_MaxHealth;
     private float m_Health;
 
-    private bool m_bNeedToDestroy = false;
-
     /** Must be called from Ship */
     public void Initialize(BuffMultipliers Buffs)
     {
@@ -23,41 +23,16 @@ public class ShipHealthComponent : CustomBehavior
         SetMaxHealth();
     }
 
-    private void LateUpdate()
-    {
-        if (m_bNeedToDestroy)
-        {
-            Destroy(gameObject);
-        }
-    }
-
     private void SetHealth(float NewHealth)
     {
         float OldHealth = m_Health;
         m_Health = System.MathF.Min(NewHealth, m_MaxHealth);
 
-        if (NewHealth < OldHealth)
-        {
-            OnDamageTaken?.Invoke(NewHealth, NewHealth - OldHealth);
-        }
+        OnHealthChanged?.Invoke(NewHealth, m_Health - OldHealth);
 
-        if (NewHealth <= 0f)
+        if (m_Health <= 0f)
         {
-            // @TODO: Separate PlayerHealthComponent
-            if (GetComponent<PlayerShip>())
-            {
-                gameObject.SetActive(false);
-            }
-            else
-            {
-                m_bNeedToDestroy = true;
-            }
-        }
-
-        // @DEBUG
-        if (GetComponent<PlayerShip>())
-        {
-            Debug.Log($"New Player Health: { m_Health }");
+            OnDied?.Invoke();
         }
     }
 
@@ -69,11 +44,12 @@ public class ShipHealthComponent : CustomBehavior
             return;
         }
 
-        // @TODO: Move this logic in PlayerHealthComponent.CanBeDamaged()
+#if UNITY_EDITOR
         if (GameEnvironment.Instance.GetDebugOption<bool>("DebugPlayer.bGodMode") && GetComponent<PlayerShip>())
         {
             return;
         }
+#endif
 
         SetHealth(m_Health - Damage);
     }
