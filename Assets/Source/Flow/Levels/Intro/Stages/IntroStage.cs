@@ -47,6 +47,8 @@ public class IntroStage : FightStage
                     Align = SpawnerConfig.AlignType.Center
                 },
 
+                Pickup = "Pickups/HealthPickup",
+
                 TimeToNext = 4f
             },
 
@@ -97,7 +99,9 @@ public class IntroStage : FightStage
                 Config = new OneBigTwoNearSpawner.Config
                 {
                     Align = SpawnerConfig.AlignType.Center
-                }
+                },
+
+                Pickup = "Pickups/HealthPickup"
             }
         };
     }

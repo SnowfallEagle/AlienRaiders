@@ -11,6 +11,7 @@ public class ShipHealthComponent : CustomBehavior
     public bool bAlive => m_Health > 0f;
 
     [SerializeField] protected float m_DefaultHealth = 100f;
+    private float m_MaxHealth;
     private float m_Health;
 
     private bool m_bNeedToDestroy = false;
@@ -18,7 +19,8 @@ public class ShipHealthComponent : CustomBehavior
     /** Must be called from Ship */
     public void Initialize(BuffMultipliers Buffs)
     {
-        SetHealth(m_DefaultHealth * Buffs.ShipHealth);
+        m_MaxHealth = m_DefaultHealth * Buffs.ShipHealth;
+        SetMaxHealth();
     }
 
     private void LateUpdate()
@@ -32,7 +34,7 @@ public class ShipHealthComponent : CustomBehavior
     private void SetHealth(float NewHealth)
     {
         float OldHealth = m_Health;
-        m_Health = NewHealth;
+        m_Health = System.MathF.Min(NewHealth, m_MaxHealth);
 
         if (NewHealth < OldHealth)
         {
@@ -51,10 +53,22 @@ public class ShipHealthComponent : CustomBehavior
                 m_bNeedToDestroy = true;
             }
         }
+
+        // @DEBUG
+        if (GetComponent<PlayerShip>())
+        {
+            Debug.Log($"New Player Health: { m_Health }");
+        }
     }
 
     public void TakeDamage(float Damage)
     {
+        if (Damage < 0f)
+        {
+            NoEntry.Assert("Damage can't be < 0f!");
+            return;
+        }
+
         // @TODO: Move this logic in PlayerHealthComponent.CanBeDamaged()
         if (GameEnvironment.Instance.GetDebugOption<bool>("DebugPlayer.bGodMode") && GetComponent<PlayerShip>())
         {
@@ -62,6 +76,22 @@ public class ShipHealthComponent : CustomBehavior
         }
 
         SetHealth(m_Health - Damage);
+    }
+
+    public void AddHealth(float AdditionalHealth)
+    {
+        if (AdditionalHealth < 0f)        
+        {
+            NoEntry.Assert("AdditionalHealth can't be < 0f!");
+            return;
+        }
+
+        SetHealth(m_Health + AdditionalHealth);
+    }
+
+    public void SetMaxHealth()
+    {
+        SetHealth(m_MaxHealth);
     }
 
     public void Kill()

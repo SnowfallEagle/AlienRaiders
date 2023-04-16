@@ -30,8 +30,7 @@ public class Pickup : CustomBehavior
 
     private void OnTriggerStay2D(Collider2D Other)
     {
-        Ship Ship = Other.GetComponent<Ship>();
-        if (Ship && Ship.Team == Ship.ShipTeam.Player)
+        if (Other.GetComponent<PlayerShip>() is var Ship)
         {
             if (GivePickup(Ship))
             {
@@ -40,7 +39,7 @@ public class Pickup : CustomBehavior
         }
     }
 
-    protected virtual bool GivePickup(Ship Ship)
+    protected virtual bool GivePickup(PlayerShip Ship)
     {
         return true;
     }
