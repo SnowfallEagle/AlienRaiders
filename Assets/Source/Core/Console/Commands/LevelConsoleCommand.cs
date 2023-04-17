@@ -14,11 +14,9 @@ public class LevelConsoleCommand : ConsoleCommand
     {
         int LevelIdx = FightGameState.FindLevelIdxByName(Args[0].ToString());
 
-        // @TODO: Figure out how to deal with player
-        PlayerState.Instance.PlayerShip.gameObject.SetActive(true);
-
         GameStateMachine.Instance.SwitchState(new FightGameState(LevelIdx, (int)Args[1], (int)Args[2]));
         RenderingService.Instance.UpdateAppearance(LevelIdx);
+        PlayerState.Instance.PlayerShip.StartRevive();
     }
 }
 

@@ -3,26 +3,26 @@ using UnityEngine;
 
 public class BHShipService_FireWhenSeePlayer : BHService
 {
-    private float m_FOV;
+    private float m_HalfFov;
+    PlayerShip m_PlayerShip = PlayerState.Instance.PlayerShip;
 
-    public BHShipService_FireWhenSeePlayer(float FOV = 180f)
+    public BHShipService_FireWhenSeePlayer(float Fov = 180f)
     {
-        m_FOV = FOV;
+        m_HalfFov = Fov * 0.5f;
     }
 
     public override void Update()
     {
-        PlayerShip PlayerShip = PlayerState.Instance.PlayerShip;
-        if (!PlayerShip)
-        {
-            new BHShipCommand_StopFire().Process(m_Owner);
-            return;
-        }
+        Vector3 PlayerPosition = m_PlayerShip.transform.position;
+        PlayerPosition.z = 0f;
 
-        Vector3 ToPlayerVector = (PlayerShip.transform.position - m_Owner.transform.position).normalized;
-        float Angle = Mathf.Rad2Deg * MathF.Acos(Vector3.Dot(m_Owner.transform.up, ToPlayerVector));
+        Vector3 OwnerPosition = m_Owner.transform.position;
+        OwnerPosition.z = 0f;
 
-        if (MathF.Abs(Angle) < m_FOV * 0.5f)
+        Vector3 DirectionToPlayer = (PlayerPosition - OwnerPosition).normalized;
+        float Angle = Mathf.Rad2Deg * MathF.Acos(Vector3.Dot(m_Owner.transform.up, DirectionToPlayer));
+
+        if (MathF.Abs(Angle) < m_HalfFov)
         {
             new BHShipCommand_StartFire().Process(m_Owner);
         }
@@ -36,12 +36,12 @@ public class BHShipService_FireWhenSeePlayer : BHService
         {
             // Direction to player
             {
-                Debug.DrawRay(m_Owner.transform.position, PlayerShip.transform.position - m_Owner.transform.position, Color.red);
+                Debug.DrawRay(m_Owner.transform.position, DirectionToPlayer, Color.red);
             }
 
             // FOV
             {
-                float FOVDiv2Rad = Mathf.Deg2Rad * (m_FOV * 0.5f);
+                float FOVDiv2Rad = Mathf.Deg2Rad * m_HalfFov;
 
                 Vector3 TransformAngles = Mathf.Deg2Rad * m_Owner.transform.rotation.eulerAngles;
                 float SpriteZRotation = MathF.PI * 0.5f;

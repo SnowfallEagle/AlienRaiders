@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class PlayerState : Service<PlayerState>
 {
-    // @NOTE: Can be null!
     private PlayerShip m_PlayerShip;
     public PlayerShip PlayerShip
     {

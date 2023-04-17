@@ -7,8 +7,8 @@ public class MenuGameState : GameState
         UIService.Instance.Show<MenuWidget>();
 
         var PlayerShip = PlayerState.Instance.PlayerShip;
-        PlayerShip.bProcessInput = false;
-        // @TODO: Make small behavior tree to fly around
+        PlayerShip.StartRevive();
+        // @TODO: Fly around after reviving
     }
 
     public override void Exit()

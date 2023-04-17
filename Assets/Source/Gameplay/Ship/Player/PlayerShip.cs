@@ -25,8 +25,10 @@ public class PlayerShip : Ship
     {
         base.Initialize(Buffs);
 
-        Vector3 Position = transform.position;
-        Position.z = WorldZLayers.Player;
+        Vector3 Position   = transform.position;
+        Position.z         = WorldZLayers.Player;
+        m_RevivePosition.z = WorldZLayers.Player;
+        m_ReadyPosition.z  = WorldZLayers.Player;
         transform.position = Position;
 
         gameObject.layer = LayerMask.NameToLayer("Player");
@@ -36,6 +38,7 @@ public class PlayerShip : Ship
         {
             Assert.IsNotNull(GameStateMachine.Instance.GetCurrentState<FightGameState>()); ;
 
+            // @INCOMPLETE: On IntroLevel we should respawn player every time...
             gameObject.SetActive(false);
             TimerService.Instance.AddTimer(null, this, () => { UIService.Instance.Show<DeathWidget>(); }, 2.5f);
         };
