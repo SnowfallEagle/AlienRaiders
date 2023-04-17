@@ -101,7 +101,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Team: 0
-  m_DefaultSpeed: 2.5
+  m_DefaultSpeed: 2
+  bProcessInput: 1
+  m_RevivePosition: {x: 5, y: -12.5, z: 0}
+  m_ReadyPosition: {x: 0, y: -7.5, z: 0}
 --- !u!114 &6980590516994496505
 MonoBehaviour:
   m_ObjectHideFlags: 0

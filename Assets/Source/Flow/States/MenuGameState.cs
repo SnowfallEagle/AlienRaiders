@@ -7,7 +7,6 @@ public class MenuGameState : GameState
         UIService.Instance.Show<MenuWidget>();
 
         var PlayerShip = PlayerState.Instance.PlayerShip;
-        PlayerShip.gameObject.SetActive(true);
         PlayerShip.bProcessInput = false;
         // @TODO: Make small behavior tree to fly around
     }

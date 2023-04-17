@@ -4,7 +4,9 @@ using UnityEngine.Assertions;
 public class BehaviorComponent : CustomBehavior
 {
     private BHFlow_Root m_Root = new BHFlow_Root();
+
     private List<BHAction> m_Actions = new List<BHAction>();
+    private List<BHAction> m_FixedActions = new List<BHAction>();
 
     private void LateUpdate()
     {
@@ -25,15 +27,27 @@ public class BehaviorComponent : CustomBehavior
         }
     }
 
+    private void FixedUpdate()
+    {
+        for (int i = m_FixedActions.Count - 1; i >= 0; --i)
+        {
+            if (!m_FixedActions[i].Update())
+            {
+                m_FixedActions[i].OnFinish();
+                m_FixedActions.RemoveAt(i);
+            }
+        }
+    }
+
     private void OnDestroy()
     {
-        StopBehavior();
+        FinishBehavior();
     }
 
     /** Node must be BHTaskNode or BHFlowNode */
     public void StartBehavior(BHActionNode Node = null)
     {
-        StopBehavior();
+        FinishBehavior();
 
         if (Node == null)
         {
@@ -48,7 +62,7 @@ public class BehaviorComponent : CustomBehavior
         m_Root.bActive = true;
     }
 
-    public void StopBehavior()
+    public void FinishBehavior()
     {
         if (m_Root.bActive)
         {
@@ -60,16 +74,26 @@ public class BehaviorComponent : CustomBehavior
     public void AddAction(BHAction Action)
     {
         Action.Initialize(this);
+
         if (Action.Start())
         {
-            m_Actions.Add(Action);
+            if (Action.bFixedUpdate)
+            {
+                m_FixedActions.Add(Action);
+            }
+            else
+            {
+                m_Actions.Add(Action);
+            }
         }
     }
 
     public void AddExclusiveAction(BHAction ExclusiveAction)
     {
         System.Type ExclusiveType = ExclusiveAction.GetType();
-        m_Actions.RemoveAll((Action) =>
+
+        List<BHAction> ActionList = ExclusiveAction.bFixedUpdate ? m_FixedActions : m_Actions;
+        ActionList.RemoveAll((Action) =>
         {
             if (Action.GetType() == ExclusiveType)
             {
@@ -80,5 +104,11 @@ public class BehaviorComponent : CustomBehavior
         });
 
         AddAction(ExclusiveAction);
+    }
+
+    public void ClearActions()
+    {
+        m_Actions.Clear();
+        m_FixedActions.Clear();
     }
 }

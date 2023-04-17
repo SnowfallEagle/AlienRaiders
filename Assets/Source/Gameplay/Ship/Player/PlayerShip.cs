@@ -9,9 +9,15 @@ public class PlayerShip : Ship
         MaxWeapons
     }
 
+    /** Should be right relative to ReadyPosition, so we can revive from random X position */
+    [SerializeField] private Vector3 m_RevivePosition = Vector3.zero;
+    public Vector3 RevivePosition => m_RevivePosition;
+
+    [SerializeField] private Vector3 m_ReadyPosition = Vector3.zero;
+    public Vector3 ReadyPosition => m_ReadyPosition;
+
     private Vector3 m_LastControlledWorldPosition = Vector3.zero;
     private bool m_bControlled = false;
-
     private bool m_bCheckBounds = true;
 
     public override void Initialize(BuffMultipliers Buffs)
@@ -25,7 +31,8 @@ public class PlayerShip : Ship
         gameObject.layer = LayerMask.NameToLayer("Player");
         m_Team = ShipTeam.Player;
 
-        HealthComponent.OnDied += () => { gameObject.SetActive(false); };
+        HealthComponent.OnDied += () => { StartRevive(); };
+
 #if UNITY_EDITOR
         HealthComponent.OnHealthChanged += (NewHealth, _) => { Debug.Log($"New Player Health: { NewHealth }"); };
 #endif
@@ -43,6 +50,32 @@ public class PlayerShip : Ship
         {
             WeaponComponent.StopFire();
         }
+    }
+
+    private void StartRevive()
+    {
+        gameObject.SetActive(false);
+
+        TimerService.Instance.AddTimer(null, this, () =>
+            {
+                gameObject.SetActive(true);
+                m_bCheckBounds = false;
+
+                HealthComponent.SetMaxHealth();
+                // @TODO: Enable shield
+
+                bProcessInput = false;
+                BehaviorComponent.ClearActions();
+                BehaviorComponent.AddAction(new BHPlayerAction_MoveFromReviveToReady()
+                    .AddOnActionFinished((_, _) =>
+                    {
+                        bProcessInput  = GameStateMachine.Instance.GetCurrentState<FightGameState>() != null;
+                        m_bCheckBounds = true;
+                    })
+                );
+            },
+            1f 
+        );
     }
 
     protected override void ProcessInput()

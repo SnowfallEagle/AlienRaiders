@@ -2,6 +2,9 @@ public abstract class BHAction
 {
     protected BehaviorComponent m_Owner;
 
+    protected bool m_bFixedUpdate = false;
+    public bool bFixedUpdate => m_bFixedUpdate;
+
     public delegate void OnActionFinishedSignature(BHAction Action, bool bSucceeded);
     private OnActionFinishedSignature m_OnActionFinished;
 

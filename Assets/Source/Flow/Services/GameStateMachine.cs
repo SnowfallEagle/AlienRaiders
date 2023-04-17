@@ -24,6 +24,6 @@ public class GameStateMachine : Service<GameStateMachine>
 
     public T GetCurrentState<T>() where T: GameState
     {
-        return (T)m_CurrentState;
+        return m_CurrentState as T;
     }
 }
