@@ -333,7 +333,7 @@ public class RenderingService : Service<RenderingService>
             for (int i = 0; i < MaxMovingEffects; ++i)
             {
                 Vector3 Position = m_MovingEffects[i].transform.position;
-                Position.y += YDiff; // @TODO: Maybe make it a bit random?
+                Position.y += YDiff;
 
                 if (Position.y < -m_MovingEffectThreshold)
                 {

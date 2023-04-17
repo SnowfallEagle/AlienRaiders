@@ -24,7 +24,7 @@ public class Pickup : CustomBehavior
         m_BehaviorComponent = InitializeComponent<BehaviorComponent>();
         m_BehaviorComponent.StartBehavior(new BHTask_LoopCommand(new BHCommand_MoveForward(-m_Speed)));
 
-        // @TODO: We should check for level boundaries
+        // @TODO: We should check for level boundaries instead
         Destroy(gameObject, 10f);
     }
 

@@ -1314,7 +1314,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 681993583}
   - {fileID: 1038630219}
   m_Father: {fileID: 0}
   m_RootOrder: 1
@@ -1395,60 +1394,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 655402991}
   m_CullTransparentMesh: 1
---- !u!1 &681993582
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 681993583}
-  - component: {fileID: 681993584}
-  m_Layer: 0
-  m_Name: MovingBackground
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &681993583
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 681993582}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 605880255}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &681993584
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 681993582}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4776c647b349e0541aa1da3d49853257, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_BackgroundVelocityY: 1
-  m_MovingEffectVelocityY: 35
-  m_BackgroundSpriteOver: {fileID: 21300000, guid: 89bca327dbe7e6540bb158ab20a8bcc3, type: 3}
-  m_BackgroundSpriteUnder: {fileID: 21300000, guid: 95098202e088b6d48b2ce02978c8713b, type: 3}
-  m_CloudsPrefab: {fileID: 6482188892765912834, guid: 106b9b1bfa0557a4ea02fe8d3a1a5750, type: 3}
-  m_MovingEffectPrefab: {fileID: 8145211107645638712, guid: cc88a1ee8b7d61b48be7fc26281087b1, type: 3}
-  m_StarSprite: {fileID: 21300000, guid: 5c018e4179a9d5245900ded5edc50e91, type: 3}
-  m_FarStarVelocityY: 1
-  m_NearStarVelocityY: 2
-  m_StarFadingSpeed: 0.05
 --- !u!1 &683548960
 GameObject:
   m_ObjectHideFlags: 0
@@ -1865,14 +1810,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8dd699090a837b847a0fb266b8803b8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ZNearClip: 0.1
-  ZFarClip: 2000
+  m_ZNearClip: 0.1
+  m_ZFarClip: 2000
   m_TargetSizeSprite: {fileID: 348050980}
   m_TargetSize: {x: 11.5, y: 20, z: 0}
   m_TargetCenter: {x: 0, y: 0, z: 0}
-  LeftTop: {x: -5.75, y: 10, z: 0}
-  RightTop: {x: 5.75, y: 10, z: 0}
-  CenterTop: {x: 0, y: 10, z: 0}
+  m_BackgroundVelocityY: 1
+  m_MovingEffectVelocityY: 35
+  m_CloudsPrefab: {fileID: 6482188892765912834, guid: 106b9b1bfa0557a4ea02fe8d3a1a5750, type: 3}
+  m_MovingEffectPrefab: {fileID: 8145211107645638712, guid: cc88a1ee8b7d61b48be7fc26281087b1, type: 3}
+  m_StarSprite: {fileID: 21300000, guid: 5c018e4179a9d5245900ded5edc50e91, type: 3}
+  m_FarStarVelocityY: 1
+  m_NearStarVelocityY: 2
+  m_StarFadingSpeed: 0.05
 --- !u!1 &870921091
 GameObject:
   m_ObjectHideFlags: 0
@@ -2074,7 +2024,7 @@ Transform:
   - {fileID: 2065050502}
   - {fileID: 2052886338}
   m_Father: {fileID: 605880255}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1104692277
 GameObject:

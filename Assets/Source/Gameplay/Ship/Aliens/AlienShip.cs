@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 
-// @TODO: We need to make base alien class from it
 public class AlienShip : Ship
 {
     private enum Weapons

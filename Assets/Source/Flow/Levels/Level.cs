@@ -7,8 +7,6 @@ public class LevelAppearance
     public string BackgroundUnder = "Backgrounds/5";
 
     public Color CloudsColor = Color.black;
-
-    // @TODO: Star colors, PCBorder sprites and colors
 }
 
 /** Levels should set fields in their constructor */
