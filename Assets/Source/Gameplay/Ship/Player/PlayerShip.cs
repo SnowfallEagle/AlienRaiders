@@ -43,7 +43,7 @@ public class PlayerShip : Ship
 
         HealthComponent.OnDied += () =>
         {
-            Assert.IsNotNull(GameStateMachine.Instance.GetCurrentState<FightGameState>()); ;
+            Assert.IsNotNull(GameStateMachine.Instance.GetCurrentState<FightGameState>());
 
             // @INCOMPLETE: On IntroLevel we should respawn player every time without ad...
             gameObject.SetActive(false);
@@ -57,10 +57,7 @@ public class PlayerShip : Ship
         {
             if (bToggle)
             {
-                if (m_ShieldIdleAnimationAction != null && !m_ShieldIdleAnimationAction.bDone)
-                {
-                    BehaviorComponent.AbortAction(m_ShieldIdleAnimationAction); // Don't save color
-                }
+                BehaviorComponent.AbortAction(m_ShieldIdleAnimationAction); // Don't save color
 
                 m_Shield.color = Color.white;
                 m_ShieldIdleAnimationAction = new BHAction_AnimateSpriteColor(m_Shield, new Color(0.5f, 0.5f, 0.5f), 1f, true, true);
@@ -68,12 +65,9 @@ public class PlayerShip : Ship
             }
             else
             {
-                if (m_ShieldFadeOffAnimationAction != null && !m_ShieldFadeOffAnimationAction.bDone)
-                {
-                    BehaviorComponent.FinishAction(m_ShieldFadeOffAnimationAction); // Save current color
-                }
+                BehaviorComponent.FinishAction(m_ShieldFadeOffAnimationAction); // Save current color
+                BehaviorComponent.FinishAction(m_ShieldIdleAnimationAction);    // Save current color
 
-                BehaviorComponent.FinishAction(m_ShieldIdleAnimationAction); // Save current color
                 m_ShieldFadeOffAnimationAction = new BHAction_AnimateSpriteColor(m_Shield, Color.clear, 0.5f);
                 BehaviorComponent.AddAction(m_ShieldFadeOffAnimationAction);
             }
@@ -98,42 +92,36 @@ public class PlayerShip : Ship
         }
     }
 
-    public void StartRevive(bool bShield = true, float ShieldTimeRate = 2.5f)
+    public void Revive(bool bShield = true, float ShieldTimeRate = 2.5f)
     {
-        gameObject.SetActive(false);
+        gameObject.SetActive(true);
+        m_bCheckBounds = false;
 
-        TimerService.Instance.AddTimer(null, this, () =>
+        BehaviorComponent.ClearActions();
+
+        HealthComponent.SetMaxHealth();
+        if (bShield)
+        {
+            HealthComponent.ToggleShield(true);
+        }
+
+        bProcessInput = false;
+
+        Vector3 RevivePosition = m_RevivePosition;
+        if (UnityEngine.Random.Range(0, 2) == 1)
+        {
+            RevivePosition.x = -RevivePosition.x;
+        }
+        transform.position = RevivePosition;
+
+        BehaviorComponent.AddAction(new BHPlayerAction_CinematicMoveWithRotation(m_ReadyPosition)
+            .AddOnActionFinished((_) =>
             {
-                gameObject.SetActive(true);
-                m_bCheckBounds = false;
-                BehaviorComponent.ClearActions();
+                bProcessInput  = GameStateMachine.Instance.GetCurrentState<FightGameState>() != null;
+                m_bCheckBounds = true;
 
-                HealthComponent.SetMaxHealth();
-                if (bShield)
-                {
-                    HealthComponent.ToggleShield(true);
-                }
-
-                bProcessInput = false;
-
-                Vector3 RevivePosition = m_RevivePosition;
-                if (UnityEngine.Random.Range(0, 2) == 1)
-                {
-                    RevivePosition.x = -RevivePosition.x;
-                }
-                transform.position = RevivePosition;
-
-                BehaviorComponent.AddAction(new BHPlayerAction_CinematicMoveWithRotation(m_ReadyPosition)
-                    .AddOnActionFinished((_) =>
-                    {
-                        bProcessInput  = GameStateMachine.Instance.GetCurrentState<FightGameState>() != null;
-                        m_bCheckBounds = true;
-
-                        TimerService.Instance.AddTimer(null, this, () => { HealthComponent.ToggleShield(false); }, ShieldTimeRate);
-                    })
-                );
-            },
-            1f 
+                TimerService.Instance.AddTimer(null, this, () => { HealthComponent.ToggleShield(false); }, ShieldTimeRate);
+            })
         );
     }
 

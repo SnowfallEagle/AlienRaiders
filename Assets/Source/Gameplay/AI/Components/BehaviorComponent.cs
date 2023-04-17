@@ -117,7 +117,7 @@ public class BehaviorComponent : CustomBehavior
 
     public void AbortAction(BHAction Action)
     {
-        if (Action != null)
+        if (Action != null && !Action.bDone)
         {
             Action.OnAbort();
             RemoveAction(Action);
@@ -126,7 +126,7 @@ public class BehaviorComponent : CustomBehavior
 
     public void FinishAction(BHAction Action)
     {
-        if (Action != null)
+        if (Action != null && !Action.bDone)
         {
             Action.OnFinish();
             RemoveAction(Action);

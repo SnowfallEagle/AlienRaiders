@@ -16,7 +16,7 @@ public class LevelConsoleCommand : ConsoleCommand
 
         GameStateMachine.Instance.SwitchState(new FightGameState(LevelIdx, (int)Args[1], (int)Args[2]));
         RenderingService.Instance.UpdateAppearance(LevelIdx);
-        PlayerState.Instance.PlayerShip.StartRevive();
+        PlayerState.Instance.PlayerShip.Revive();
     }
 }
 

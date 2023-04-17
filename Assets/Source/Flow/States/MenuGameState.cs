@@ -7,7 +7,7 @@ public class MenuGameState : GameState
         UIService.Instance.Show<MenuWidget>();
 
         var PlayerShip = PlayerState.Instance.PlayerShip;
-        PlayerShip.StartRevive(false);
+        PlayerShip.Revive(false);
         // @TODO: Fly around after reviving
     }
 
