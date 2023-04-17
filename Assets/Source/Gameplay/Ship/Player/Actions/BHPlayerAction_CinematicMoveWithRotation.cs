@@ -1,11 +1,14 @@
 using UnityEngine;
 
-// @TODO: Acceleration, Deceleration
+// @TODO: I think back rotation must be interpolated between start position of second part and destination
 
 public class BHPlayerAction_CinematicMoveWithRotation : BHAction
 {
     private Vector3 m_Destination;
-    private float m_Speed;
+    private float m_Speed = 0f;
+    private float m_MaxAcceleratedSpeed;
+    private float m_MaxDeceleratedSpeed;
+    private float m_Acceleration;
 
     private float m_MaxAngle = 30f;
     private float m_Angle = 0f;
@@ -16,13 +19,17 @@ public class BHPlayerAction_CinematicMoveWithRotation : BHAction
     private float m_SecondPartDistance;
     private bool m_bMovingFirstPart = true;
 
-    /** FirstPart = (0f;1f) */
-    public BHPlayerAction_CinematicMoveWithRotation(Vector3 Destination, float Speed = 5f, float FirstPart = 0.95f)
+    /** Params:
+            FirstPart = (0f;1f)
+    */
+    public BHPlayerAction_CinematicMoveWithRotation(Vector3 Destination, float MaxSpeed = 5f, float Acceleration = 0.05f, float FirstPart = 0.8f)
     {
         m_bFixedUpdate = true;
 
         m_Destination = Destination;
-        m_Speed = Speed * Time.fixedDeltaTime;
+        m_MaxAcceleratedSpeed = MaxSpeed;
+        m_MaxDeceleratedSpeed = MaxSpeed * 0.5f;
+        m_Acceleration = Acceleration;
 
         m_FirstPart = FirstPart;
     }
@@ -54,7 +61,16 @@ public class BHPlayerAction_CinematicMoveWithRotation : BHAction
         Vector3 RemainingPath = m_Destination - CurrentPosition;
         float Distance = RemainingPath.sqrMagnitude;
 
-        Vector3 Step = RemainingPath.normalized * m_Speed; // m_Speed already multiplied by fixedDeltaTime
+        if (m_bMovingFirstPart)
+        {
+            m_Speed = System.MathF.Min(m_Speed + m_Acceleration, m_MaxAcceleratedSpeed);
+        }
+        else
+        {
+            m_Speed = System.MathF.Max(m_Speed - m_Acceleration, m_MaxDeceleratedSpeed);
+        }
+
+        Vector3 Step = RemainingPath.normalized * (m_Speed * Time.fixedDeltaTime);
         float StepLength = Step.sqrMagnitude;
 
         if (StepLength < Distance)
@@ -79,16 +95,14 @@ public class BHPlayerAction_CinematicMoveWithRotation : BHAction
             {
                 if (m_bStartedFromRight)
                 {
-                    // Angle < 0f -> ship moves right
-                    if (m_Angle < 0f)
+                    if (m_Angle < 0f) // Angle < 0f -> ship moves right
                     {
                         m_Angle = 0f;
                     }
                 }
                 else
                 {
-                    // Angle > 0f -> ship moves left
-                    if (m_Angle > 0f)
+                    if (m_Angle > 0f) // Angle > 0f -> ship moves left
                     {
                         m_Angle = 0f;
                     }
