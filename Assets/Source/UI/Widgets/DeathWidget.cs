@@ -15,17 +15,18 @@ public class DeathWidget : UIWidget
         base.OnHide();
 
         Time.timeScale = 1f;
-        PlayerState.Instance.PlayerShip.StartRevive();
     }
 
     public void OnWatchAdClicked()
     {
+        PlayerState.Instance.PlayerShip.StartRevive();
         UIService.Instance.Hide(this);
         NotImplemented.Assert();
     }
 
     public void OnBuyLifeClicked()
     {
+        PlayerState.Instance.PlayerShip.StartRevive();
         UIService.Instance.Hide(this);
         NotImplemented.Assert();
     }

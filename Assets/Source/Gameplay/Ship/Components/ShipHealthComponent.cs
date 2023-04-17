@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class ShipHealthComponent : CustomBehavior
 {
@@ -9,9 +10,15 @@ public class ShipHealthComponent : CustomBehavior
     public delegate void OnDiedSignature();
     public OnDiedSignature OnDied;
 
+    public delegate void OnShieldToggledSignature(bool bToggle);
+    public OnShieldToggledSignature OnShieldToggled;
+
     public bool bDead => m_Health <= 0f;
     public bool bAlive => m_Health > 0f;
 
+    private bool m_bShield = false;
+
+    [Header("Health")]
     [SerializeField] protected float m_DefaultHealth = 100f;
     private float m_MaxHealth;
     private float m_Health;
@@ -38,9 +45,10 @@ public class ShipHealthComponent : CustomBehavior
 
     public void TakeDamage(float Damage)
     {
-        if (Damage < 0f)
+        Assert.IsTrue(Damage >= 0f);
+
+        if (m_bShield)
         {
-            NoEntry.Assert("Damage can't be < 0f!");
             return;
         }
 
@@ -56,18 +64,19 @@ public class ShipHealthComponent : CustomBehavior
 
     public void AddHealth(float AdditionalHealth)
     {
-        if (AdditionalHealth < 0f)        
-        {
-            NoEntry.Assert("AdditionalHealth can't be < 0f!");
-            return;
-        }
-
+        Assert.IsTrue(AdditionalHealth >= 0f);
         SetHealth(m_Health + AdditionalHealth);
     }
 
     public void SetMaxHealth()
     {
         SetHealth(m_MaxHealth);
+    }
+
+    public void ToggleShield(bool bToggle)
+    {
+        m_bShield = bToggle;
+        OnShieldToggled?.Invoke(bToggle);
     }
 
     public void Kill()

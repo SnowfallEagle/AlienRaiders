@@ -10,7 +10,11 @@ public class PlayerShip : Ship
         MaxWeapons
     }
 
+    [Header("Shield")]
+    [SerializeField] private SpriteRenderer m_Shield;
+
     /** Should be right relative to ReadyPosition, so we can revive from random X position */
+    [Header("Position")]
     [SerializeField] private Vector3 m_RevivePosition = Vector3.zero;
     public Vector3 RevivePosition => m_RevivePosition;
 
@@ -43,6 +47,22 @@ public class PlayerShip : Ship
             TimerService.Instance.AddTimer(null, this, () => { UIService.Instance.Show<DeathWidget>(); }, 2.5f);
         };
 
+        Assert.IsNotNull(m_Shield);
+        m_Shield.color = Color.clear;
+
+        // @TODO: Animations?
+        HealthComponent.OnShieldToggled += (bToggle) =>
+        {
+            if (bToggle)
+            {
+                m_Shield.color = Color.white;
+            }
+            else
+            {
+                m_Shield.color = Color.clear;
+            }
+        };
+
 #if UNITY_EDITOR
         HealthComponent.OnHealthChanged += (NewHealth, _) => { Debug.Log($"New Player Health: { NewHealth }"); };
 #endif
@@ -62,7 +82,7 @@ public class PlayerShip : Ship
         }
     }
 
-    public void StartRevive()
+    public void StartRevive(bool bShield = true, float ShieldTimeRate = 2.5f)
     {
         gameObject.SetActive(false);
 
@@ -72,7 +92,10 @@ public class PlayerShip : Ship
                 m_bCheckBounds = false;
 
                 HealthComponent.SetMaxHealth();
-                // @TODO: Enable shield
+                if (bShield)
+                {
+                    HealthComponent.ToggleShield(true);
+                }
 
                 bProcessInput = false;
                 BehaviorComponent.ClearActions();
@@ -81,6 +104,8 @@ public class PlayerShip : Ship
                     {
                         bProcessInput  = GameStateMachine.Instance.GetCurrentState<FightGameState>() != null;
                         m_bCheckBounds = true;
+
+                        TimerService.Instance.AddTimer(null, this, () => { HealthComponent.ToggleShield(false); }, ShieldTimeRate);
                     })
                 );
             },
