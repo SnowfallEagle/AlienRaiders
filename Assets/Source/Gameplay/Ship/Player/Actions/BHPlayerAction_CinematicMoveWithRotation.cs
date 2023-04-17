@@ -1,8 +1,10 @@
 using UnityEngine;
 
-public class BHPlayerAction_MoveFromReviveToReady : BHAction
+// @TODO: Acceleration, Deceleration
+
+public class BHPlayerAction_CinematicMoveWithRotation : BHAction
 {
-    private Vector3 m_ReadyPosition;
+    private Vector3 m_Destination;
     private float m_Speed;
 
     private float m_MaxAngle = 30f;
@@ -13,20 +15,22 @@ public class BHPlayerAction_MoveFromReviveToReady : BHAction
     private float m_FirstPartDistance;
     private bool m_bMovingFirstPart = true;
 
-    public BHPlayerAction_MoveFromReviveToReady()
+    public BHPlayerAction_CinematicMoveWithRotation(Vector3 Destination, float Speed = 5f)
     {
         m_bFixedUpdate = true;
+
+        m_Destination = Destination;
+        m_Speed = Speed * Time.fixedDeltaTime;
     }
 
     public override bool Start()
     {
-        var PlayerShip = m_Owner.GetComponent<PlayerShip>();
-
-        m_ReadyPosition = PlayerShip.ReadyPosition;
-        m_Speed = PlayerShip.Speed * Time.fixedDeltaTime;
-
-        Vector3 CurrentPosition = PlayerShip.RevivePosition;
-        if (Random.Range(0, 2) == 1)
+        Vector3 CurrentPosition = m_Owner.transform.position;
+        if (CurrentPosition.x > m_Destination.x)
+        {
+            m_bStartedFromRight = true;
+        }
+        else
         {
             CurrentPosition.x = -CurrentPosition.x;
             m_MaxAngle        = -m_MaxAngle;
@@ -34,13 +38,8 @@ public class BHPlayerAction_MoveFromReviveToReady : BHAction
 
             m_bStartedFromRight = false;
         }
-        else
-        {
-            m_bStartedFromRight = true;
-        }
 
-        PlayerShip.transform.position = CurrentPosition;
-        m_FirstPartDistance = (m_ReadyPosition - CurrentPosition).sqrMagnitude * 0.25f;
+        m_FirstPartDistance = (m_Destination - CurrentPosition).sqrMagnitude * 0.25f;
         return true;
     }
 
@@ -48,7 +47,7 @@ public class BHPlayerAction_MoveFromReviveToReady : BHAction
     {
         Vector3 CurrentPosition = m_Owner.transform.position;
 
-        Vector3 RemainingPath = m_ReadyPosition - CurrentPosition;
+        Vector3 RemainingPath = m_Destination - CurrentPosition;
         float Distance = RemainingPath.sqrMagnitude;
 
         Vector3 Step = RemainingPath.normalized * m_Speed; // m_Speed already multiplied by fixedDeltaTime
@@ -96,7 +95,7 @@ public class BHPlayerAction_MoveFromReviveToReady : BHAction
             return true;
         }
 
-        m_Owner.transform.position = m_ReadyPosition;
+        m_Owner.transform.position = m_Destination;
         m_Owner.transform.rotation = Quaternion.identity;
         return false;
     }

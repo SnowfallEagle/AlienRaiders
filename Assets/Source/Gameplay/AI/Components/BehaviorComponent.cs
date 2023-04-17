@@ -73,8 +73,12 @@ public class BehaviorComponent : CustomBehavior
 
     public void AddAction(BHAction Action)
     {
-        Action.Initialize(this);
+        if (Action == null)
+        {
+            return;
+        }
 
+        Action.Initialize(this);
         if (Action.Start())
         {
             if (Action.bFixedUpdate)
@@ -90,6 +94,11 @@ public class BehaviorComponent : CustomBehavior
 
     public void AddExclusiveAction(BHAction ExclusiveAction)
     {
+        if (ExclusiveAction == null)
+        {
+            return;
+        }
+
         System.Type ExclusiveType = ExclusiveAction.GetType();
 
         List<BHAction> ActionList = ExclusiveAction.bFixedUpdate ? m_FixedActions : m_Actions;
@@ -108,20 +117,29 @@ public class BehaviorComponent : CustomBehavior
 
     public void AbortAction(BHAction Action)
     {
-        Action.OnAbort();
-        RemoveAction(Action);
+        if (Action != null)
+        {
+            Action.OnAbort();
+            RemoveAction(Action);
+        }
     }
 
     public void FinishAction(BHAction Action)
     {
-        Action.OnFinish();
-        RemoveAction(Action);
+        if (Action != null)
+        {
+            Action.OnFinish();
+            RemoveAction(Action);
+        }
     }
 
     private void RemoveAction(BHAction Action)
     {
-        List<BHAction> ActionList = Action.bFixedUpdate ? m_FixedActions : m_Actions;
-        ActionList.Remove(Action);
+        if (Action != null)
+        {
+            List<BHAction> ActionList = Action.bFixedUpdate ? m_FixedActions : m_Actions;
+            ActionList.Remove(Action);
+        }
     }
 
     public void ClearActions()

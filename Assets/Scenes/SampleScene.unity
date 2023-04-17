@@ -3341,7 +3341,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 545b45855693738438a91b3e65579d7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SdkType: 1
+  SdkType: 0
   bDebugMode: 1
   DebugLevel:
     bEnabled: 0
@@ -3355,7 +3355,7 @@ MonoBehaviour:
     bEnabled: 0
     bGodMode: 1
   DebugAI:
-    bEnabled: 0
+    bEnabled: 1
     bDrawEyesight: 1
 --- !u!1 &1665675826
 GameObject:

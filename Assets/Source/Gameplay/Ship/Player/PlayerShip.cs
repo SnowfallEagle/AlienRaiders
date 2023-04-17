@@ -115,7 +115,15 @@ public class PlayerShip : Ship
                 }
 
                 bProcessInput = false;
-                BehaviorComponent.AddAction(new BHPlayerAction_MoveFromReviveToReady()
+
+                Vector3 RevivePosition = m_RevivePosition;
+                if (UnityEngine.Random.Range(0, 2) == 1)
+                {
+                    RevivePosition.x = -RevivePosition.x;
+                }
+                transform.position = RevivePosition;
+
+                BehaviorComponent.AddAction(new BHPlayerAction_CinematicMoveWithRotation(m_ReadyPosition)
                     .AddOnActionFinished((_) =>
                     {
                         bProcessInput  = GameStateMachine.Instance.GetCurrentState<FightGameState>() != null;
