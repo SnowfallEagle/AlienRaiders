@@ -12,15 +12,19 @@ public class BHPlayerAction_CinematicMoveWithRotation : BHAction
     private float m_RotationSpeed = 5f * Time.fixedDeltaTime;
     private bool m_bStartedFromRight;
 
-    private float m_FirstPartDistance;
+    private float m_FirstPart;
+    private float m_SecondPartDistance;
     private bool m_bMovingFirstPart = true;
 
-    public BHPlayerAction_CinematicMoveWithRotation(Vector3 Destination, float Speed = 5f)
+    /** FirstPart = (0f;1f) */
+    public BHPlayerAction_CinematicMoveWithRotation(Vector3 Destination, float Speed = 5f, float FirstPart = 0.95f)
     {
         m_bFixedUpdate = true;
 
         m_Destination = Destination;
         m_Speed = Speed * Time.fixedDeltaTime;
+
+        m_FirstPart = FirstPart;
     }
 
     public override bool Start()
@@ -39,7 +43,7 @@ public class BHPlayerAction_CinematicMoveWithRotation : BHAction
             m_bStartedFromRight = false;
         }
 
-        m_FirstPartDistance = (m_Destination - CurrentPosition).sqrMagnitude * 0.25f;
+        m_SecondPartDistance = (m_Destination - CurrentPosition).sqrMagnitude * (1f - m_FirstPart);
         return true;
     }
 
@@ -57,7 +61,7 @@ public class BHPlayerAction_CinematicMoveWithRotation : BHAction
         {
             m_Owner.transform.position += Step;
 
-            if (m_bMovingFirstPart && Distance <= m_FirstPartDistance)
+            if (m_bMovingFirstPart && Distance <= m_SecondPartDistance)
             {
                 m_RotationSpeed = -m_RotationSpeed;
                 m_bMovingFirstPart = false;
