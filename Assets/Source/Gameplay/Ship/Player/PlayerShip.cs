@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class PlayerShip : Ship
 {
@@ -31,7 +32,13 @@ public class PlayerShip : Ship
         gameObject.layer = LayerMask.NameToLayer("Player");
         m_Team = ShipTeam.Player;
 
-        HealthComponent.OnDied += () => { StartRevive(); };
+        HealthComponent.OnDied += () =>
+        {
+            Assert.IsNotNull(GameStateMachine.Instance.GetCurrentState<FightGameState>()); ;
+
+            gameObject.SetActive(false);
+            TimerService.Instance.AddTimer(null, this, () => { UIService.Instance.Show<DeathWidget>(); }, 2.5f);
+        };
 
 #if UNITY_EDITOR
         HealthComponent.OnHealthChanged += (NewHealth, _) => { Debug.Log($"New Player Health: { NewHealth }"); };
@@ -52,7 +59,7 @@ public class PlayerShip : Ship
         }
     }
 
-    private void StartRevive()
+    public void StartRevive()
     {
         gameObject.SetActive(false);
 

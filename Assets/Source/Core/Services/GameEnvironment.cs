@@ -1,11 +1,4 @@
-#if !UNITY_EDITOR && UNITY_WEBGL
-    #define NDEBUG
-#else
-    #define _DEBUG
-#endif
-
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,7 +6,6 @@ public class GameEnvironment : Service<GameEnvironment>
 {
     public enum PlatformSdk
     {
-        Fake,
         Yandex
     }
 
@@ -48,12 +40,7 @@ public class GameEnvironment : Service<GameEnvironment>
         [SerializeField] public bool bDrawEyesight = false;
     }
 
-    [SerializeField] public PlatformSdk SdkType =
-#if NDEBUG
-        PlatformSdk.Yandex;
-#else
-        PlatformSdk.Fake;
-#endif
+    [SerializeField] public PlatformSdk SdkType = PlatformSdk.Yandex;
 
     [SerializeField] public bool bDebugMode = false;
 
@@ -71,7 +58,7 @@ public class GameEnvironment : Service<GameEnvironment>
  
     private void Update()
     {
-#if NDEBUG
+#if !UNITY_EDITOR
         return;
 #endif
 
@@ -114,9 +101,7 @@ public class GameEnvironment : Service<GameEnvironment>
 
     private void EnforceEnvironment()
     {
-#if _DEBUG
-        SdkType = PlatformSdk.Fake;
-#else
+#if !UNITY_EDITOR
         bDebugMode = false;
 #endif
     }

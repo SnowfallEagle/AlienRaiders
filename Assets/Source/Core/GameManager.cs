@@ -27,10 +27,12 @@ public class GameManager : CustomBehavior
 
     private void InitializePlatformSdk()
     {
+#if !UNITY_EDITOR
         if (GameEnvironment.Instance.SdkType == GameEnvironment.PlatformSdk.Yandex)
         {
             ServiceLocator.Instance.Add<PlatformSdk, YandexSdk>();
         }
+#endif
 
         var Sdk = PlatformSdk.Instance;
         Sdk.OnPostInitialization = () =>

@@ -54,7 +54,7 @@ public class ServiceLocator : Singleton<ServiceLocator>
             var ExistingAsNeeded = ExistingService as TService;
             if (ExistingAsNeeded)
             {
-                ExistingAsNeeded.transform.SetParent(transform);
+                ExistingAsNeeded.transform.parent = transform;
                 ExistingAsNeeded.name = typeof(TService).Name;
                 m_Services[typeof(TType)] = ExistingAsNeeded;
                 return ExistingAsNeeded;
@@ -67,7 +67,7 @@ public class ServiceLocator : Singleton<ServiceLocator>
         // Create new service
         GameObject ServiceObject = new GameObject();
         ServiceObject.name = typeof(TService).Name;
-        ServiceObject.transform.SetParent(transform);
+        ServiceObject.transform.parent = transform;
 
         var NewService = ServiceObject.AddComponent<TService>();
         m_Services[typeof(TType)] = NewService;
