@@ -22,8 +22,11 @@ public class PlayerShip : Ship
     public Vector3 ReadyPosition => m_ReadyPosition;
 
     private Vector3 m_LastControlledWorldPosition = Vector3.zero;
-    private bool m_bControlled = false;
+    private bool m_bControlled  = false;
     private bool m_bCheckBounds = true;
+
+    private BHAction_AnimateSpriteColor m_ShieldIdleAnimationAction;
+    private BHAction_AnimateSpriteColor m_ShieldFadeOffAnimationAction;
 
     public override void Initialize(BuffMultipliers Buffs)
     {
@@ -42,7 +45,7 @@ public class PlayerShip : Ship
         {
             Assert.IsNotNull(GameStateMachine.Instance.GetCurrentState<FightGameState>()); ;
 
-            // @INCOMPLETE: On IntroLevel we should respawn player every time...
+            // @INCOMPLETE: On IntroLevel we should respawn player every time without ad...
             gameObject.SetActive(false);
             TimerService.Instance.AddTimer(null, this, () => { UIService.Instance.Show<DeathWidget>(); }, 2.5f);
         };
@@ -50,16 +53,29 @@ public class PlayerShip : Ship
         Assert.IsNotNull(m_Shield);
         m_Shield.color = Color.clear;
 
-        // @TODO: Animations?
         HealthComponent.OnShieldToggled += (bToggle) =>
         {
             if (bToggle)
             {
+                if (m_ShieldIdleAnimationAction != null && !m_ShieldIdleAnimationAction.bDone)
+                {
+                    BehaviorComponent.AbortAction(m_ShieldIdleAnimationAction); // Don't save color
+                }
+
                 m_Shield.color = Color.white;
+                m_ShieldIdleAnimationAction = new BHAction_AnimateSpriteColor(m_Shield, new Color(0.5f, 0.5f, 0.5f), 1f, true, true);
+                BehaviorComponent.AddAction(m_ShieldIdleAnimationAction);
             }
             else
             {
-                m_Shield.color = Color.clear;
+                if (m_ShieldFadeOffAnimationAction != null && !m_ShieldFadeOffAnimationAction.bDone)
+                {
+                    BehaviorComponent.FinishAction(m_ShieldFadeOffAnimationAction); // Save current color
+                }
+
+                BehaviorComponent.FinishAction(m_ShieldIdleAnimationAction); // Save current color
+                m_ShieldFadeOffAnimationAction = new BHAction_AnimateSpriteColor(m_Shield, Color.clear, 0.5f);
+                BehaviorComponent.AddAction(m_ShieldFadeOffAnimationAction);
             }
         };
 
@@ -90,6 +106,7 @@ public class PlayerShip : Ship
             {
                 gameObject.SetActive(true);
                 m_bCheckBounds = false;
+                BehaviorComponent.ClearActions();
 
                 HealthComponent.SetMaxHealth();
                 if (bShield)
@@ -98,9 +115,8 @@ public class PlayerShip : Ship
                 }
 
                 bProcessInput = false;
-                BehaviorComponent.ClearActions();
                 BehaviorComponent.AddAction(new BHPlayerAction_MoveFromReviveToReady()
-                    .AddOnActionFinished((_, _) =>
+                    .AddOnActionFinished((_) =>
                     {
                         bProcessInput  = GameStateMachine.Instance.GetCurrentState<FightGameState>() != null;
                         m_bCheckBounds = true;

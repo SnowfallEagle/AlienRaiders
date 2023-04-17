@@ -31,7 +31,7 @@ public class MenuWidget : UIWidget
 
         m_FadeImage.raycastTarget = true;
         m_BehaviorComponent.AddAction(
-            new BHUIAction_FadeImage(m_FadeImage).AddOnActionFinished((_, _) =>
+            new BHUIAction_FadeImage(m_FadeImage).AddOnActionFinished((_) =>
             {
                 GameStateMachine.Instance.SwitchState(new FightGameState());
             })

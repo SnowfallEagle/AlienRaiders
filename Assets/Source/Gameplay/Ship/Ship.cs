@@ -20,6 +20,8 @@ public class Ship : CustomBehavior
 
     public bool bProcessInput = true;
 
+    private BHAction_AnimateSpriteColor m_DamageAnimationAction;
+
     private BoxCollider2D m_BoxCollider;
     public BoxCollider2D BoxCollider => m_BoxCollider;
 
@@ -55,7 +57,13 @@ public class Ship : CustomBehavior
         {
             if (DeltaHealth < 0f)
             {
-                BehaviorComponent.AddExclusiveAction(new BHShipAction_AnimateSpriteColor(Color.red, 0.1f, bPulse: true));
+                if (m_DamageAnimationAction != null && !m_DamageAnimationAction.bDone)
+                {
+                    BehaviorComponent.AbortAction(m_DamageAnimationAction);
+                }
+
+                m_DamageAnimationAction = new BHAction_AnimateSpriteColor(GetComponent<SpriteRenderer>(), Color.red, 0.1f, bPulse: true);
+                BehaviorComponent.AddAction(m_DamageAnimationAction);
             }
         };
 

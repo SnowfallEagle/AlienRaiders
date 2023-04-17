@@ -5,7 +5,13 @@ public abstract class BHAction
     protected bool m_bFixedUpdate = false;
     public bool bFixedUpdate => m_bFixedUpdate;
 
-    public delegate void OnActionFinishedSignature(BHAction Action, bool bSucceeded);
+    private bool m_bDone = false;
+    public bool bDone => m_bDone;
+
+    private bool m_bSucceeded;
+    public bool bSucceeded => m_bSucceeded;
+
+    public delegate void OnActionFinishedSignature(BHAction Action);
     private OnActionFinishedSignature m_OnActionFinished;
 
     public void Initialize(BehaviorComponent Owner)
@@ -28,13 +34,19 @@ public abstract class BHAction
     /** Called by Behavior Component */
     public virtual void OnAbort()
     {
-        m_OnActionFinished?.Invoke(this, false);
+        m_bDone = true;
+        m_bSucceeded = false;
+
+        m_OnActionFinished?.Invoke(this);
     }
 
     /** Called by Behavior Component */
     public virtual void OnFinish()
     {
-        m_OnActionFinished?.Invoke(this, true);
+        m_bDone = true;
+        m_bSucceeded = true;
+
+        m_OnActionFinished?.Invoke(this);
     }
 
     public BHAction AddOnActionFinished(OnActionFinishedSignature Callback)

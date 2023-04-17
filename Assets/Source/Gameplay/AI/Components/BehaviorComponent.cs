@@ -106,6 +106,24 @@ public class BehaviorComponent : CustomBehavior
         AddAction(ExclusiveAction);
     }
 
+    public void AbortAction(BHAction Action)
+    {
+        Action.OnAbort();
+        RemoveAction(Action);
+    }
+
+    public void FinishAction(BHAction Action)
+    {
+        Action.OnFinish();
+        RemoveAction(Action);
+    }
+
+    private void RemoveAction(BHAction Action)
+    {
+        List<BHAction> ActionList = Action.bFixedUpdate ? m_FixedActions : m_Actions;
+        ActionList.Remove(Action);
+    }
+
     public void ClearActions()
     {
         m_Actions.Clear();
