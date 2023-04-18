@@ -27,7 +27,7 @@ public class MenuGameState : GameState
 
     private void NextCruise(PlayerShip PlayerShip, bool bLeftCruise)
     {
-        PlayerShip.BehaviorComponent.AddAction(
+        PlayerShip.BehaviorComponent.AddExclusiveAction(
             new BHPlayerAction_CinematicMove(bLeftCruise ? PlayerShip.LeftCruisePosition : PlayerShip.RightCruisePosition)
                 .AddOnActionFinished((_) => { NextCruise(PlayerShip, !bLeftCruise); } )
         );

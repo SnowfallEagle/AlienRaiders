@@ -21,8 +21,7 @@ public class BehaviorComponent : CustomBehavior
         {
             if (!m_Actions[i].Update())
             {
-                m_Actions[i].OnFinish();
-                m_Actions.RemoveAt(i);
+                FinishAction(m_Actions[i]);
             }
         }
     }
@@ -33,8 +32,7 @@ public class BehaviorComponent : CustomBehavior
         {
             if (!m_FixedActions[i].Update())
             {
-                m_FixedActions[i].OnFinish();
-                m_FixedActions.RemoveAt(i);
+                FinishAction(m_FixedActions[i]);
             }
         }
     }
@@ -102,15 +100,13 @@ public class BehaviorComponent : CustomBehavior
         System.Type ExclusiveType = ExclusiveAction.GetType();
 
         List<BHAction> ActionList = ExclusiveAction.bFixedUpdate ? m_FixedActions : m_Actions;
-        ActionList.RemoveAll((Action) =>
+        for (int i = ActionList.Count - 1; i >= 0; --i)
         {
-            if (Action.GetType() == ExclusiveType)
+            if (ActionList[i].GetType() == ExclusiveType)
             {
-                Action.OnAbort();
-                return true;
+                AbortAction(ActionList[i]);
             }
-            return false;
-        });
+        }
 
         AddAction(ExclusiveAction);
     }
@@ -119,8 +115,9 @@ public class BehaviorComponent : CustomBehavior
     {
         if (Action != null && !Action.bDone)
         {
-            Action.OnAbort();
             RemoveAction(Action);
+            Action.OnAbort();
+            Action.OnActionFinished?.Invoke(Action);
         }
     }
 
@@ -128,8 +125,9 @@ public class BehaviorComponent : CustomBehavior
     {
         if (Action != null && !Action.bDone)
         {
-            Action.OnFinish();
             RemoveAction(Action);
+            Action.OnFinish();
+            Action.OnActionFinished?.Invoke(Action);
         }
     }
 
@@ -144,6 +142,7 @@ public class BehaviorComponent : CustomBehavior
 
     public void ClearActions()
     {
+        // @TODO: Aborts?
         m_Actions.Clear();
         m_FixedActions.Clear();
     }

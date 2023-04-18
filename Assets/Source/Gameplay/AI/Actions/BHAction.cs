@@ -12,7 +12,7 @@ public abstract class BHAction
     public bool bSucceeded => m_bSucceeded;
 
     public delegate void OnActionFinishedSignature(BHAction Action);
-    private OnActionFinishedSignature m_OnActionFinished;
+    public OnActionFinishedSignature OnActionFinished;
 
     public void Initialize(BehaviorComponent Owner)
     {
@@ -36,8 +36,6 @@ public abstract class BHAction
     {
         m_bDone = true;
         m_bSucceeded = false;
-
-        m_OnActionFinished?.Invoke(this);
     }
 
     /** Called by Behavior Component */
@@ -45,13 +43,11 @@ public abstract class BHAction
     {
         m_bDone = true;
         m_bSucceeded = true;
-
-        m_OnActionFinished?.Invoke(this);
     }
 
     public BHAction AddOnActionFinished(OnActionFinishedSignature Callback)
     {
-        m_OnActionFinished += Callback;
+        OnActionFinished += Callback;
         return this;
     }
 }
