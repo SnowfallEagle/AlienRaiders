@@ -14,12 +14,21 @@ public class PlayerShip : Ship
     [SerializeField] private SpriteRenderer m_Shield;
 
     /** Should be right relative to ReadyPosition, so we can revive from random X position */
+    // @TODO: Put this stuff in PlayerState instead
     [Header("Position")]
     [SerializeField] private Vector3 m_RevivePosition = Vector3.zero;
     public Vector3 RevivePosition => m_RevivePosition;
 
     [SerializeField] private Vector3 m_ReadyPosition = Vector3.zero;
     public Vector3 ReadyPosition => m_ReadyPosition;
+
+    [SerializeField] private Vector3 m_LeftCruisePosition = Vector3.zero;
+    public Vector3 LeftCruisePosition => m_LeftCruisePosition;
+
+    [SerializeField] private Vector3 m_RightCruisePosition = Vector3.zero;
+    public Vector3 RightCruisePosition => m_RightCruisePosition;
+
+    public Action OnRevived;
 
     private Vector3 m_LastControlledWorldPosition = Vector3.zero;
     private bool m_bControlled  = false;
@@ -114,11 +123,13 @@ public class PlayerShip : Ship
         }
         transform.position = RevivePosition;
 
-        BehaviorComponent.AddAction(new BHPlayerAction_CinematicMoveWithRotation(m_ReadyPosition)
+        BehaviorComponent.AddAction(new BHPlayerAction_CinematicMove(m_ReadyPosition)
             .AddOnActionFinished((_) =>
             {
                 bProcessInput  = GameStateMachine.Instance.GetCurrentState<FightGameState>() != null;
                 m_bCheckBounds = true;
+
+                OnRevived?.Invoke();
 
                 TimerService.Instance.AddTimer(null, this, () => { HealthComponent.ToggleShield(false); }, ShieldTimeRate);
             })

@@ -191,6 +191,8 @@ MonoBehaviour:
   m_Shield: {fileID: 4989401484448279679}
   m_RevivePosition: {x: 5, y: -12.5, z: 0}
   m_ReadyPosition: {x: 0, y: -7.5, z: 0}
+  m_LeftCruisePosition: {x: -2.5, y: -7.5, z: 0}
+  m_RightCruisePosition: {x: 2.5, y: -7.5, z: 0}
 --- !u!114 &6980590516994496505
 MonoBehaviour:
   m_ObjectHideFlags: 0

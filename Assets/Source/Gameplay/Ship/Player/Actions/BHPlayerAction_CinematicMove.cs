@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BHPlayerAction_CinematicMoveWithRotation : BHAction
+public class BHPlayerAction_CinematicMove : BHAction
 {
     private Vector3 m_Destination;
 
@@ -23,7 +23,7 @@ public class BHPlayerAction_CinematicMoveWithRotation : BHAction
     /** Params:
             FirstPart = (0f;1f)
     */
-    public BHPlayerAction_CinematicMoveWithRotation(Vector3 Destination, float MaxSpeed = 5f, float Acceleration = 0.10f, float MaxAngle = 45f, float MaxRotationSpeed = 10f, float FirstPart = 0.75f)
+    public BHPlayerAction_CinematicMove(Vector3 Destination, float MaxSpeed = 5f, float Acceleration = 0.10f, float MaxAngle = 45f, float MaxRotationSpeed = 10f, float FirstPart = 0.75f)
     {
         m_bFixedUpdate = true;
 
@@ -42,6 +42,8 @@ public class BHPlayerAction_CinematicMoveWithRotation : BHAction
     public override bool Start()
     {
         Vector3 CurrentPosition = m_Owner.transform.position;
+        m_Destination.z = CurrentPosition.z;
+
         if (CurrentPosition.x < m_Destination.x)
         {
             CurrentPosition.x = -CurrentPosition.x;
@@ -72,7 +74,7 @@ public class BHPlayerAction_CinematicMoveWithRotation : BHAction
         Vector3 Step = RemainingPath.normalized * (m_Speed * Time.fixedDeltaTime);
         float StepLength = Step.sqrMagnitude;
 
-        if (StepLength < Distance)
+        if (StepLength < Distance && StepLength > 0.00000001f)
         {
             m_Owner.transform.position += Step;
 
@@ -85,8 +87,7 @@ public class BHPlayerAction_CinematicMoveWithRotation : BHAction
 
             if (m_bMovingFirstPart)
             {
-                // @INCOMPLETE
-                m_Angle += Mathf.Lerp(0f, 10f, m_Speed / m_MaxAcceleratedSpeed) * m_RotationSign * Time.fixedDeltaTime;
+                m_Angle += Mathf.Lerp(0f, m_MaxRotationSpeed, m_Speed / m_MaxAcceleratedSpeed) * m_RotationSign * Time.fixedDeltaTime;
 
                 if (System.MathF.Abs(m_Angle) > System.MathF.Abs(m_MaxAngle))
                 {
@@ -96,6 +97,7 @@ public class BHPlayerAction_CinematicMoveWithRotation : BHAction
             else
             {
                 // Less distance -> angle closer to 0
+                // @TODO: Debug it
                 m_Angle = Mathf.Lerp(0f, m_AngleOnStartingSecondPart, Distance / m_SecondPartDistance);
             }
 

@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public class MenuGameState : GameState
 {
     public override void Start()
@@ -8,7 +10,11 @@ public class MenuGameState : GameState
 
         var PlayerShip = PlayerState.Instance.PlayerShip;
         PlayerShip.Revive(false);
-        // @TODO: Fly around after reviving
+
+        PlayerShip.OnRevived = () =>
+        {
+            NextCruise(PlayerShip, Random.Range(0, 2) == 1);
+        };
     }
 
     public override void Exit()
@@ -16,5 +22,14 @@ public class MenuGameState : GameState
         base.Exit();
 
         UIService.Instance.Hide<MenuWidget>();
+        PlayerState.Instance.PlayerShip.OnRevived = null;
+    }
+
+    private void NextCruise(PlayerShip PlayerShip, bool bLeftCruise)
+    {
+        PlayerShip.BehaviorComponent.AddAction(
+            new BHPlayerAction_CinematicMove(bLeftCruise ? PlayerShip.LeftCruisePosition : PlayerShip.RightCruisePosition)
+                .AddOnActionFinished((_) => { NextCruise(PlayerShip, !bLeftCruise); } )
+        );
     }
 }
