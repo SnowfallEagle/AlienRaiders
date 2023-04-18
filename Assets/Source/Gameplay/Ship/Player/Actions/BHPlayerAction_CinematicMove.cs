@@ -46,9 +46,8 @@ public class BHPlayerAction_CinematicMove : BHAction
 
         if (CurrentPosition.x < m_Destination.x)
         {
-            CurrentPosition.x = -CurrentPosition.x;
-            m_MaxAngle        = -m_MaxAngle;
-            m_RotationSign    = -m_RotationSign;
+            m_MaxAngle     = -m_MaxAngle;
+            m_RotationSign = -m_RotationSign;
         }
 
         m_SecondPartDistance = (m_Destination - CurrentPosition).sqrMagnitude * (1f - m_FirstPart);
@@ -97,7 +96,6 @@ public class BHPlayerAction_CinematicMove : BHAction
             else
             {
                 // Less distance -> angle closer to 0
-                // @TODO: Debug it
                 m_Angle = Mathf.Lerp(0f, m_AngleOnStartingSecondPart, Distance / m_SecondPartDistance);
             }
 
