@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 public class FightGameState : GameState
@@ -10,6 +11,7 @@ public class FightGameState : GameState
         new IntroLevel(),
         new DevLevel()
     };
+
     private Level m_CurrentLevel;
     private int m_SpecificLevelIdx;
 
@@ -78,16 +80,6 @@ public class FightGameState : GameState
             m_SpecificLevelIdx = AnyIdx;
         }
 
-        if (Level >= s_Levels.Length)
-        {
-            // @TODO: What we'll do when player completes game?
-
-            // @DEBUG
-            PlayerState.Instance.Level = 0;
-            NextLevel();
-            return;
-        }
-
         m_CurrentLevel = s_Levels[Level];
         Assert.IsNotNull(m_CurrentLevel.Stages);
 
@@ -105,15 +97,56 @@ public class FightGameState : GameState
 
     public void NextStage()
     {
+        const float DelayInTheMiddle = 1f;
+        const float DelayAfterFlewAway = 2.5f;
+        const float DelayBeforeFinishing = 1f;
+
         m_CurrentStage?.Exit();
 
         if (++m_CurrentStageIdx >= m_CurrentLevel.Stages.Length)
         {
-            ++PlayerState.Instance.Level;
-            // @TODO: Call GameStateMachine to switch state; Show ad;
+            if (++PlayerState.Instance.Level >= s_Levels.Length)
+            {
+                PlayerState.Instance.Level = 0;
+            }
 
-            // @DEBUG
-            NextLevel();
+            var PlayerShip = PlayerState.Instance.PlayerShip;
+            // @TODO: Put this stuff in method for player ship?
+            PlayerShip.bProcessInput = false;
+            PlayerShip.bCheckBounds  = false;
+            PlayerShip.WeaponComponent.StopFire();
+
+            TimerService.Instance.AddTimer(null, PlayerShip, () =>
+                {
+                    // @TODO: Put in method for player ship
+                    TimerService.Instance.RemoveOwnerTimers(PlayerShip);
+                    PlayerShip.BehaviorComponent.ClearActions();
+
+                    PlayerShip.BehaviorComponent.AddAction(new BHPlayerAction_CinematicMove(Vector3.zero, MaxAngle: 1f)
+                        .AddOnActionFinished((_) =>
+                        {
+                            TimerService.Instance.AddTimer(null, PlayerShip, () =>
+                                {
+                                    PlayerShip.BehaviorComponent.AddAction(new BHPlayerAction_CinematicMove(new Vector3(0f, 50f), MaxAngle: 0f, Acceleration: 1f, MaxSpeed: 25f)
+                                        .AddOnActionFinished((_) =>
+                                        {
+                                            TimerService.Instance.AddTimer(null, PlayerShip, () =>
+                                                {
+                                                    GameStateMachine.Instance.SwitchState(new MenuGameState());
+                                                },
+                                                DelayAfterFlewAway
+                                            );
+                                        })
+                                    );
+                                },
+                                DelayInTheMiddle
+                            );
+                        })
+                    );
+                },
+                DelayBeforeFinishing
+            );
+
             return;
         }
 

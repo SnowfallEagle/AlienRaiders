@@ -38,13 +38,6 @@ public abstract class FightStage
     {
         Assert.IsNotNull(m_Spawners);
 
-        // Force wait to end last spawner
-        int SpawnersLength = m_Spawners.Length;
-        if (SpawnersLength > 0)
-        {
-            m_Spawners[SpawnersLength - 1].bWaitToEnd = true;
-        }
-
         m_CurrentSpawnerIdx = SpecificSpawnerIdx == AnyIdx ? -1 : SpecificSpawnerIdx - 1;
         NextSpawner();
     }
@@ -56,6 +49,7 @@ public abstract class FightStage
             return;
         }
 
+        Assert.IsNotNull(m_CurrentShips);
         foreach (var Ship in m_CurrentShips)
         {
             if (Ship)

@@ -140,6 +140,7 @@ public class BehaviorComponent : CustomBehavior
         }
     }
 
+    /** Clears all actions, but doesn't remove timers! */
     public void ClearActions()
     {
         m_Actions.Clear();

@@ -54,7 +54,7 @@ public class GameManager : CustomBehavior
         var StateMachine = GameStateMachine.Instance;
 
         GameState NewState;
-        if (GameEnvironment.Instance.GetDebugOption<bool>("bDebugLevel.bEnabled"))
+        if (GameEnvironment.Instance.GetDebugOption<bool>("DebugLevel.bEnabled"))
         {
             int Level = GameEnvironment.Instance.GetDebugOption<bool>("DebugLevel.bSpecificLevel") ?
                 GameEnvironment.Instance.GetDebugOption<int>("DebugLevel.Level") :

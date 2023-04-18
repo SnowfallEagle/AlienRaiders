@@ -1,12 +1,26 @@
 using UnityEngine;
 
+public class DevStage : FightStage
+{
+    public DevStage()
+    {
+        m_Spawners = new SpawnerInfo[]
+        {
+            new SpawnerInfo
+            {
+                TimeToNext = 1f
+            }
+        };
+    }
+}
+
 public class DevLevel : Level
 {
     public DevLevel()
     {
         Stages = new StageInfo[]
         {
-            new StageInfo { Stage = typeof(IntroStage) }
+            new StageInfo { Stage = typeof(DevStage) }
         };
 
         Appearance = new LevelAppearance
