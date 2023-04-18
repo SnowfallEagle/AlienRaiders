@@ -34,9 +34,10 @@ public class PlayerShip : Ship
     /** Can be used by GameStates, resets every GameState changing */
     public Action OnRevived;
 
+    public bool bCheckBounds = true;
+
     private Vector3 m_LastControlledWorldPosition = Vector3.zero;
     private bool m_bControlled  = false;
-    private bool m_bCheckBounds = true;
 
     private BHAction_AnimateSpriteColor m_ShieldIdleAnimationAction;
     private BHAction_AnimateSpriteColor m_ShieldFadeOffAnimationAction;
@@ -119,7 +120,7 @@ public class PlayerShip : Ship
     public void Revive(bool bShield = true, float ShieldTimeRate = 2.5f)
     {
         gameObject.SetActive(true);
-        m_bCheckBounds = false;
+        bCheckBounds = false;
 
         BehaviorComponent.ClearActions();
 
@@ -142,7 +143,7 @@ public class PlayerShip : Ship
             .AddOnActionFinished((_) =>
             {
                 bProcessInput  = GameStateMachine.Instance.GetCurrentState<FightGameState>() != null;
-                m_bCheckBounds = true;
+                bCheckBounds = true;
 
                 OnRevived?.Invoke();
 
@@ -231,7 +232,7 @@ public class PlayerShip : Ship
 
     private void CheckBounds()
     {
-        if (!m_bCheckBounds)
+        if (!bCheckBounds)
         {
             return;
         }

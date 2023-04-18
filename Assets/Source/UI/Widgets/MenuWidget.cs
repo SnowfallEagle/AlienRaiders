@@ -1,40 +1,19 @@
 using UnityEngine;
-using UnityEngine.Assertions;
-using UnityEngine.UI;
 
 public class MenuWidget : UIWidget
 {
-    [SerializeField] private Image m_FadeImage;
-
-    private BehaviorComponent m_BehaviorComponent;
-
-    protected override void Start()
-    {
-        base.Start();
-
-        Assert.IsNotNull(m_FadeImage);
-
-        m_BehaviorComponent = InitializeComponent<BehaviorComponent>();
-    }
-
-    public override void OnShow()
-    {
-        base.OnShow();
-
-        m_FadeImage.color = new Color(0f, 0f, 0f, 0f);
-        m_FadeImage.raycastTarget = false;
-    }
-
     public void OnPlayClicked()
     {
-        Debug.Log("Clicked");
+        GameStateMachine.Instance.SwitchState(new FightGameState());
 
-        m_FadeImage.raycastTarget = true;
-        m_BehaviorComponent.AddAction(
-            new BHUIAction_FadeImage(m_FadeImage).AddOnActionFinished((_) =>
-            {
-                GameStateMachine.Instance.SwitchState(new FightGameState());
-            })
+        var PlayerShip = PlayerState.Instance.PlayerShip;
+        PlayerShip.BehaviorComponent.AddAction(
+            new BHPlayerAction_CinematicMove(new Vector3(0f, -2f), Acceleration: 0.25f, Deceleration: 0.075f, MaxAngle: 1f, FirstPart: 0.65f)
+                .AddOnActionFinished((_) =>
+                {
+                    PlayerShip.bProcessInput = true;
+                    PlayerShip.bCheckBounds = true;
+                })
         );
     }
 

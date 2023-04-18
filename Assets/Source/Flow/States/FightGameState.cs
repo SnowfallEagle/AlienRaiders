@@ -34,9 +34,6 @@ public class FightGameState : GameState
         base.Start();
 
         UIService.Instance.Show<FightWidget>();
-
-        // @FIXME: We should process input only after player arrived at destination...
-        PlayerState.Instance.PlayerShip.bProcessInput = true;
         NextLevel();
     }
 
