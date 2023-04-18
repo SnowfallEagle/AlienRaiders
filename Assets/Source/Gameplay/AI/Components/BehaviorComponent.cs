@@ -142,7 +142,6 @@ public class BehaviorComponent : CustomBehavior
 
     public void ClearActions()
     {
-        // @TODO: Aborts?
         m_Actions.Clear();
         m_FixedActions.Clear();
     }

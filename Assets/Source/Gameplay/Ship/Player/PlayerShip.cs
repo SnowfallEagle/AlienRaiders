@@ -28,6 +28,10 @@ public class PlayerShip : Ship
     [SerializeField] private Vector3 m_RightCruisePosition = Vector3.zero;
     public Vector3 RightCruisePosition => m_RightCruisePosition;
 
+    [SerializeField] private Vector3 m_FlyAroundDiff = new Vector3(2.5f, 0f, 0f);
+    public Vector3 FlyAroundDiff => m_FlyAroundDiff;
+
+    /** Can be used by GameStates, resets every GameState changing */
     public Action OnRevived;
 
     private Vector3 m_LastControlledWorldPosition = Vector3.zero;
@@ -85,6 +89,17 @@ public class PlayerShip : Ship
 #if UNITY_EDITOR
         HealthComponent.OnHealthChanged += (NewHealth, _) => { Debug.Log($"New Player Health: { NewHealth }"); };
 #endif
+
+        GameStateMachine.Instance.OnStateExited += () =>
+        {
+            OnRevived = null;
+
+            BehaviorComponent.ClearActions();
+            TimerService.Instance.RemoveOwnerTimers(this);
+
+            // When we pause game and exit to menu we can shoot without stop
+            WeaponComponent.StopFire();
+        };
     }
 
     private void LateUpdate()

@@ -154,4 +154,15 @@ public class TimerService : Service<TimerService>
             Handle.bOwned = false;
         }
     }
+
+    public void RemoveOwnerTimers(UnityEngine.Object Owner)
+    {
+        for (int i = m_Timers.Count - 1; i >= 0; --i)
+        {
+            if (m_Timers[i].Handle.Owner == Owner)
+            {
+                m_Timers.RemoveAt(i);
+            }
+        }
+    }
 }

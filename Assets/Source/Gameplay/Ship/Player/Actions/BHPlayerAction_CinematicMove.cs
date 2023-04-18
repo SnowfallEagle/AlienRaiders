@@ -8,6 +8,7 @@ public class BHPlayerAction_CinematicMove : BHAction
     private float m_MaxAcceleratedSpeed;
     private float m_MaxDeceleratedSpeed;
     private float m_Acceleration;
+    private float m_Deceleration;
 
     private float m_MaxAngle;
     private float m_Angle = 0f;
@@ -23,15 +24,16 @@ public class BHPlayerAction_CinematicMove : BHAction
     /** Params:
             FirstPart = (0f;1f)
     */
-    public BHPlayerAction_CinematicMove(Vector3 Destination, float MaxSpeed = 5f, float Acceleration = 0.10f, float MaxAngle = 45f, float MaxRotationSpeed = 10f, float FirstPart = 0.75f)
+    public BHPlayerAction_CinematicMove(Vector3 Destination, float MaxSpeed = 5f, float Acceleration = 0.1f, float Deceleration = 0.1f, float MaxAngle = 45f, float MaxRotationSpeed = 10f, float FirstPart = 0.75f)
     {
         m_bFixedUpdate = true;
 
         m_Destination = Destination;
 
         m_MaxAcceleratedSpeed = MaxSpeed;
-        m_MaxDeceleratedSpeed = MaxSpeed * 0.5f;
+        m_MaxDeceleratedSpeed = MaxSpeed * 0.25f;
         m_Acceleration = Acceleration;
+        m_Deceleration = Deceleration;
 
         m_MaxRotationSpeed = MaxRotationSpeed;
         m_MaxAngle = MaxAngle;
@@ -67,13 +69,13 @@ public class BHPlayerAction_CinematicMove : BHAction
         }
         else
         {
-            m_Speed = System.MathF.Max(m_Speed - m_Acceleration, m_MaxDeceleratedSpeed);
+            m_Speed = System.MathF.Max(m_Speed - m_Deceleration, m_MaxDeceleratedSpeed);
         }
 
         Vector3 Step = RemainingPath.normalized * (m_Speed * Time.fixedDeltaTime);
         float StepLength = Step.sqrMagnitude;
 
-        if (StepLength < Distance && StepLength > 0.00000001f)
+        if (StepLength < Distance && Distance > 0.000000000000000000001f)
         {
             m_Owner.transform.position += Step;
 

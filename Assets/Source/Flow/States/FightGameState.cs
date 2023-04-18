@@ -53,9 +53,6 @@ public class FightGameState : GameState
 
         UIService.Instance.Hide<FightWidget>();
         m_CurrentStage?.Exit();
-
-        // When we pause game and exit to menu we can shoot without stop
-        PlayerState.Instance.PlayerShip.WeaponComponent.StopFire();
     }
 
     public static int FindLevelIdxByName(string Name)
