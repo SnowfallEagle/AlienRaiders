@@ -146,4 +146,19 @@ public class BehaviorComponent : CustomBehavior
         m_Actions.Clear();
         m_FixedActions.Clear();
     }
+
+    public void AbortActions()
+    {
+        for (int i = m_Actions.Count - 1; i >= 0; --i)
+        {
+            AbortAction(m_Actions[i]);
+        }
+
+        for (int i = m_FixedActions.Count - 1; i >= 0; --i)
+        {
+            AbortAction(m_FixedActions[i]);
+        }
+
+        ClearActions();
+    }
 }

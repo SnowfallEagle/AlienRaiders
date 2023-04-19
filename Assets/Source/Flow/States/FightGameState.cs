@@ -24,11 +24,16 @@ public class FightGameState : GameState
     private BuffMultipliers m_EnemyBuffs;
     public BuffMultipliers EnemyBuffs => m_EnemyBuffs;
 
-    public FightGameState(int LevelIdx = AnyIdx, int StageIdx = AnyIdx, int SpawnerIdx = AnyIdx)
+    public FightGameState(int LevelIdx = AnyIdx, int StageIdx = AnyIdx, int SpawnerIdx = AnyIdx, bool bFadeIn = false)
     {
         m_SpecificLevelIdx   = LevelIdx;
         m_SpecificStageIdx   = StageIdx;
         m_SpecificSpawnerIdx = SpawnerIdx;
+
+        if (bFadeIn)
+        {
+            UIService.Instance.GetWidget<FightWidget>().FadeIn();
+        }
     }
 
     public override void Start()

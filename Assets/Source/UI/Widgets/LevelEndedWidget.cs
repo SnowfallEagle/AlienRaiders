@@ -25,7 +25,7 @@ public class LevelEndedWidget : UIWidget
         m_BehaviorComponent.AddAction(new BHUIAction_FadeImage(m_FadeImage)
             .AddOnActionFinished((_) =>
             {
-                GameStateMachine.Instance.SwitchState(new FightGameState());
+                GameStateMachine.Instance.SwitchState(new FightGameState(bFadeIn: true));
                 PlayerState.Instance.PlayerShip.Revive(false);
             })
         );

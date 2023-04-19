@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class UIService : Service<UIService>
 {
@@ -18,6 +19,12 @@ public class UIService : Service<UIService>
 
     public void ShowWidget(UIWidget Widget)
     {
+        if (!Widget)
+        {
+            NoEntry.Assert();
+            return;
+        }
+
         if (!Widget.bShown)
         {
             Widget.OnShow();
@@ -26,17 +33,17 @@ public class UIService : Service<UIService>
 
     public void ShowWidget<T>() where T : UIWidget
     {
-        if (!m_Widgets.TryGetValue(typeof(T), out UIWidget Widget))
-        {
-            NoEntry.Assert($"There're no hud with type { typeof(T).Name }!");
-            return;
-        }
-
-        ShowWidget(Widget);
+        ShowWidget(GetWidget<T>());
     }
 
     public void HideWidget(UIWidget Widget)
     {
+        if (!Widget)
+        {
+            NoEntry.Assert();
+            return;
+        }
+
         if (Widget.bShown)
         {
             Widget.OnHide();
@@ -45,12 +52,17 @@ public class UIService : Service<UIService>
 
     public void HideWidget<T>() where T : UIWidget
     {
+        HideWidget(GetWidget<T>());
+    }
+
+    public T GetWidget<T>() where T : UIWidget
+    {
         if (!m_Widgets.TryGetValue(typeof(T), out UIWidget Widget))
         {
-            NoEntry.Assert($"There're no hud with type { Widget.GetType().Name }!"); ;
-            return;
+            NoEntry.Assert($"There're no widget with type { Widget.GetType().Name }!"); ;
+            return null;
         }
 
-        HideWidget(Widget);
+        return (T)Widget;
     }
 }
