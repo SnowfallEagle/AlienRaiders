@@ -16,7 +16,7 @@ public class UIService : Service<UIService>
         }
     }
 
-    public void Show(UIWidget Widget)
+    public void ShowWidget(UIWidget Widget)
     {
         if (!Widget.bShown)
         {
@@ -24,7 +24,7 @@ public class UIService : Service<UIService>
         }
     }
 
-    public void Show<T>() where T : UIWidget
+    public void ShowWidget<T>() where T : UIWidget
     {
         if (!m_Widgets.TryGetValue(typeof(T), out UIWidget Widget))
         {
@@ -32,10 +32,10 @@ public class UIService : Service<UIService>
             return;
         }
 
-        Show(Widget);
+        ShowWidget(Widget);
     }
 
-    public void Hide(UIWidget Widget)
+    public void HideWidget(UIWidget Widget)
     {
         if (Widget.bShown)
         {
@@ -43,7 +43,7 @@ public class UIService : Service<UIService>
         }
     }
 
-    public void Hide<T>() where T : UIWidget
+    public void HideWidget<T>() where T : UIWidget
     {
         if (!m_Widgets.TryGetValue(typeof(T), out UIWidget Widget))
         {
@@ -51,6 +51,6 @@ public class UIService : Service<UIService>
             return;
         }
 
-        Hide(Widget);
+        HideWidget(Widget);
     }
 }

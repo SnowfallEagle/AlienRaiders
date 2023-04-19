@@ -20,7 +20,7 @@ public class PauseWidget : UIWidget
 
     public void OnContinueClicked()
     {
-        UIService.Instance.Hide(this);
+        UIService.Instance.HideWidget(this);
     }
 
     public void OnMenuClicked()

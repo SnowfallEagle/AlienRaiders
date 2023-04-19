@@ -61,7 +61,7 @@ public class PlayerShip : Ship
 
             // @INCOMPLETE: On IntroLevel we should respawn player every time without ad...
             gameObject.SetActive(false);
-            TimerService.Instance.AddTimer(null, this, () => { UIService.Instance.Show<DeathWidget>(); }, 2.5f);
+            TimerService.Instance.AddTimer(null, this, () => { UIService.Instance.ShowWidget<DeathWidget>(); }, 2.5f);
         };
 
         Assert.IsNotNull(m_Shield);

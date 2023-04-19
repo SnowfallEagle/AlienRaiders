@@ -6,7 +6,7 @@ public class MenuGameState : GameState
     {
         base.Start();
 
-        UIService.Instance.Show<MenuWidget>();
+        UIService.Instance.ShowWidget<MenuWidget>();
 
         var PlayerShip = PlayerState.Instance.PlayerShip;
 
@@ -21,7 +21,7 @@ public class MenuGameState : GameState
     {
         base.Exit();
 
-        UIService.Instance.Hide<MenuWidget>();
+        UIService.Instance.HideWidget<MenuWidget>();
     }
 
     private void Cruise(PlayerShip PlayerShip, bool bLeft)

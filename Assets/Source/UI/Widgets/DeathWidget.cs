@@ -20,14 +20,14 @@ public class DeathWidget : UIWidget
     public void OnWatchAdClicked()
     {
         PlayerState.Instance.PlayerShip.Revive();
-        UIService.Instance.Hide(this);
+        UIService.Instance.HideWidget(this);
         NotImplemented.Assert();
     }
 
     public void OnBuyLifeClicked()
     {
         PlayerState.Instance.PlayerShip.Revive();
-        UIService.Instance.Hide(this);
+        UIService.Instance.HideWidget(this);
         NotImplemented.Assert();
     }
 

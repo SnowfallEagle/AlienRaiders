@@ -2,6 +2,6 @@ public class FightWidget : UIWidget
 {
     public void OnPauseClicked()
     {
-        UIService.Instance.Show<PauseWidget>();
+        UIService.Instance.ShowWidget<PauseWidget>();
     }
 }

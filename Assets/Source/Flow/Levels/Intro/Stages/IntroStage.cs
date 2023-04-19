@@ -101,6 +101,8 @@ public class IntroStage : FightStage
                     Align = SpawnerConfig.AlignType.Center
                 },
 
+                bWaitToEnd = true,
+
                 Pickup = "Pickups/HealthPickup"
             }
         };

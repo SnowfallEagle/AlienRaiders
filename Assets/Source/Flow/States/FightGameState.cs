@@ -35,7 +35,7 @@ public class FightGameState : GameState
     {
         base.Start();
 
-        UIService.Instance.Show<FightWidget>();
+        UIService.Instance.ShowWidget<FightWidget>();
         NextLevel();
     }
 
@@ -50,7 +50,7 @@ public class FightGameState : GameState
     {
         base.Exit();
 
-        UIService.Instance.Hide<FightWidget>();
+        UIService.Instance.HideWidget<FightWidget>();
         m_CurrentStage?.Exit();
     }
 
@@ -132,7 +132,7 @@ public class FightGameState : GameState
                                         {
                                             TimerService.Instance.AddTimer(null, PlayerShip, () =>
                                                 {
-                                                    GameStateMachine.Instance.SwitchState(new MenuGameState());
+                                                    UIService.Instance.ShowWidget<LevelEndedWidget>();
                                                 },
                                                 DelayAfterFlewAway
                                             );
