@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.UI;
 
 public class LevelEndedWidget : UIWidget
@@ -12,6 +13,7 @@ public class LevelEndedWidget : UIWidget
 
         m_BehaviorComponent = InitializeComponent<BehaviorComponent>();
 
+        Assert.IsNotNull(m_FadeImage);
         m_FadeImage.color = Color.clear;
         m_FadeImage.raycastTarget = false;
     }

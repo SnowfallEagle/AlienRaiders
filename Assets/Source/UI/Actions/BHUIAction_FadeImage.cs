@@ -24,7 +24,7 @@ public class BHUIAction_FadeImage : BHAction
 
         if (m_bFadeOut)
         {
-            m_Color.a += m_Speed * Time.deltaTime;
+            m_Color.a += m_Speed * Time.unscaledDeltaTime;
             if (m_Color.a >= 1f)
             {
                 m_Color.a = 1f;
@@ -33,7 +33,7 @@ public class BHUIAction_FadeImage : BHAction
         }
         else
         {
-            m_Color.a -= m_Speed * Time.deltaTime;
+            m_Color.a -= m_Speed * Time.unscaledDeltaTime;
             if (m_Color.a <= 0f)
             {
                 m_Color.a = 0f;
