@@ -23,6 +23,8 @@ public class ShipHealthComponent : CustomBehavior
     private float m_MaxHealth;
     private float m_Health;
 
+    public bool bGodMode = false;
+
     /** Must be called from Ship */
     public void Initialize(BuffMultipliers Buffs)
     {
@@ -47,7 +49,7 @@ public class ShipHealthComponent : CustomBehavior
     {
         Assert.IsTrue(Damage >= 0f);
 
-        if (m_bShield)
+        if (m_bShield || bGodMode)
         {
             return;
         }

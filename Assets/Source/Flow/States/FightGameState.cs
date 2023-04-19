@@ -9,7 +9,7 @@ public class FightGameState : GameState
     public static Level[] s_Levels = new Level[]
     {
         new IntroLevel(),
-        new DevLevel()
+        // new DevLevel()
     };
 
     private Level m_CurrentLevel;
@@ -111,10 +111,16 @@ public class FightGameState : GameState
             }
 
             var PlayerShip = PlayerState.Instance.PlayerShip;
-            // @TODO: Put this stuff in method for player ship?
-            PlayerShip.bProcessInput = false;
-            PlayerShip.bCheckBounds  = false;
-            PlayerShip.WeaponComponent.StopFire();
+            { // @TODO: Put this stuff in method for player ship?
+                PlayerShip.BehaviorComponent.ClearActions();
+                TimerService.Instance.RemoveOwnerTimers(PlayerShip);
+
+                PlayerShip.bProcessInput = false;
+                PlayerShip.bCheckBounds  = false;
+                PlayerShip.WeaponComponent.StopFire();
+            }
+
+            PlayerShip.HealthComponent.bGodMode = true;
 
             TimerService.Instance.AddTimer(null, PlayerShip, () =>
                 {
@@ -132,6 +138,7 @@ public class FightGameState : GameState
                                         {
                                             TimerService.Instance.AddTimer(null, PlayerShip, () =>
                                                 {
+                                                    PlayerShip.HealthComponent.bGodMode = false;
                                                     UIService.Instance.ShowWidget<LevelEndedWidget>();
                                                 },
                                                 DelayAfterFlewAway
