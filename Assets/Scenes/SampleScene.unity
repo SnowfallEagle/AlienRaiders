@@ -2299,7 +2299,7 @@ MonoBehaviour:
   m_TargetSizeSprite: {fileID: 348050980}
   m_TargetSize: {x: 11.5, y: 20, z: 0}
   m_TargetCenter: {x: 0, y: 0, z: 0}
-  m_BackgroundVelocityY: 1
+  BackgroundVelocityY: 1
   m_MovingEffectVelocityY: 35
   m_CloudsPrefab: {fileID: 6482188892765912834, guid: 106b9b1bfa0557a4ea02fe8d3a1a5750, type: 3}
   m_MovingEffectPrefab: {fileID: 8145211107645638712, guid: cc88a1ee8b7d61b48be7fc26281087b1, type: 3}
@@ -3866,9 +3866,9 @@ MonoBehaviour:
   SdkType: 0
   bDebugMode: 1
   DebugLevel:
-    bEnabled: 1
+    bEnabled: 0
     bSpecificLevel: 1
-    Level: 1
+    Level: 0
     bSpecificStage: 0
     Stage: 0
     bSpecificSpawner: 0

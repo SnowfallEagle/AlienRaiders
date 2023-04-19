@@ -34,8 +34,8 @@ public class RenderingService : Service<RenderingService>
     private const float BackgroundScale = 3f;
 
     [Header("Backgrounds")]
-    [SerializeField] private float m_BackgroundVelocityY = 1f;
-    [SerializeField] private float m_MovingEffectVelocityY = 35f;
+    public float BackgroundVelocityY   = 1f;
+    public float MovingEffectVelocityY = 35f;
 
     private GameObject m_BackgroundRoot;
 
@@ -82,8 +82,8 @@ public class RenderingService : Service<RenderingService>
     [SerializeField] private Sprite m_StarSprite;
     private Star[] m_Stars = new Star[MaxStars];
 
-    [SerializeField] private float m_FarStarVelocityY = 1f;
-    [SerializeField] private float m_NearStarVelocityY = 2f;
+    public float FarStarVelocityY = 1f;
+    public float NearStarVelocityY = 2f;
 
     [SerializeField] private float m_StarFadingSpeed = 0.05f;
 
@@ -293,7 +293,7 @@ public class RenderingService : Service<RenderingService>
     private void UpdateMovingBackground()
     {
         { // Swap backgrounds and move clouds
-            Vector3 Diff = new Vector3(0f, -m_BackgroundVelocityY * Time.deltaTime, 0f);
+            Vector3 Diff = new Vector3(0f, -BackgroundVelocityY * Time.deltaTime, 0f);
 
             Vector3 OverPosition = m_BackgroundOver.transform.position += Diff;
             m_BackgroundUnder.transform.position += Diff;
@@ -328,7 +328,7 @@ public class RenderingService : Service<RenderingService>
         }
 
         { // Moving effects
-            float YDiff = -m_MovingEffectVelocityY * Time.deltaTime;
+            float YDiff = -MovingEffectVelocityY * Time.deltaTime;
 
             for (int i = 0; i < MaxMovingEffects; ++i)
             {
@@ -345,8 +345,8 @@ public class RenderingService : Service<RenderingService>
         }
 
         { // Stars
-            Vector3 NearDiff = new Vector3(0f, -m_NearStarVelocityY * Time.deltaTime);
-            Vector3 FarDiff = new Vector3(0f, -m_FarStarVelocityY * Time.deltaTime);
+            Vector3 NearDiff = new Vector3(0f, -NearStarVelocityY * Time.deltaTime);
+            Vector3 FarDiff = new Vector3(0f, -FarStarVelocityY * Time.deltaTime);
 
             for (int i = 0; i < MaxStars; ++i)
             {

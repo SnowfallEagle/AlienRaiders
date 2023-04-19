@@ -8,8 +8,8 @@ public class FightGameState : GameState
 
     public static Level[] s_Levels = new Level[]
     {
-        new IntroLevel(),
-        // new DevLevel()
+        // new IntroLevel(),
+        new DevLevel()
     };
 
     private Level m_CurrentLevel;
@@ -133,6 +133,8 @@ public class FightGameState : GameState
                         {
                             TimerService.Instance.AddTimer(null, PlayerShip, () =>
                                 {
+                                    PlayerShip.BehaviorComponent.AddExclusiveAction(new BHAction_CinematicBackgroundMove());
+
                                     PlayerShip.BehaviorComponent.AddAction(new BHPlayerAction_CinematicMove(new Vector3(0f, 50f), MaxAngle: 0f, Acceleration: 1f, MaxSpeed: 25f)
                                         .AddOnActionFinished((_) =>
                                         {
