@@ -8,11 +8,16 @@ public class MenuWidget : UIWidget
 
     private BehaviorComponent m_BehaviorComponent;
 
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        m_BehaviorComponent = InitializeComponent<BehaviorComponent>();
+    }
+
     public override void OnShow()
     {
         base.OnShow();
-
-        m_BehaviorComponent = InitializeComponent<BehaviorComponent>();
 
         Assert.IsNotNull(m_FadeImage);
         m_FadeImage.color = Color.black;

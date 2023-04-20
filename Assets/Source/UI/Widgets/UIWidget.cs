@@ -5,7 +5,7 @@ public class UIWidget : CustomBehavior
 
     private UIWidget[] m_Children;
 
-    protected virtual void Start()
+    public virtual void Initialize()
     {
         m_Children = GetComponentsInChildren<UIWidget>(true);
     }

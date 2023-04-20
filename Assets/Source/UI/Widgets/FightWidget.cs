@@ -11,9 +11,9 @@ public class FightWidget : UIWidget
 
     private BehaviorComponent m_BehaviorComponent;
 
-    protected override void Start()
+    public override void Initialize()
     {
-        base.Start();
+        base.Initialize();
 
         Assert.IsNotNull(m_FadeImage);
         Assert.IsNotNull(m_PauseButton);

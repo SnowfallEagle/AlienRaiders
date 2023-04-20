@@ -13,6 +13,8 @@ public class UIService : Service<UIService>
         foreach (var Widget in Widgets)
         {
             m_Widgets[Widget.GetType()] = Widget;
+
+            Widget.Initialize();
             Widget.gameObject.SetActive(false);
         }
     }
