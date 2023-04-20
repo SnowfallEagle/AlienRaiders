@@ -161,6 +161,7 @@ public class FightGameState : GameState
                 DelayBeforeFinishing
             );
 
+            UIService.Instance.GetWidget<FightWidget>().HidePauseButton();
             return;
         }
 

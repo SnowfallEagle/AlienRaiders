@@ -7,11 +7,16 @@ public class FightWidget : UIWidget
     [SerializeField] private Image m_FadeImage;
     private bool m_bFadingIn = false;
 
+    [SerializeField] private GameObject m_PauseButton;
+
     private BehaviorComponent m_BehaviorComponent;
 
     protected override void Start()
     {
         base.Start();
+
+        Assert.IsNotNull(m_FadeImage);
+        Assert.IsNotNull(m_PauseButton);
 
         m_BehaviorComponent = InitializeComponent<BehaviorComponent>();
     }
@@ -20,17 +25,18 @@ public class FightWidget : UIWidget
     {
         base.OnShow();
 
-        Assert.IsNotNull(m_FadeImage);
-
         if (m_bFadingIn)
         {
             // Reset for the next time
             m_bFadingIn = false;
-            return;
+        }
+        else
+        {
+            m_FadeImage.raycastTarget = false;
+            m_FadeImage.color = Color.clear;
         }
 
-        m_FadeImage.raycastTarget = false;
-        m_FadeImage.color = Color.clear;
+        ShowPauseButton();
     }
 
     public void OnPauseClicked()
@@ -43,5 +49,15 @@ public class FightWidget : UIWidget
         m_FadeImage.color = Color.black;
         m_BehaviorComponent.AddExclusiveAction(new BHUIAction_FadeImage(m_FadeImage, false, 0.5f));
         m_bFadingIn = true;
+    }
+
+    private void ShowPauseButton()
+    {
+        m_PauseButton.SetActive(true);
+    }
+
+    public void HidePauseButton()
+    {
+        m_PauseButton.SetActive(false);
     }
 }
