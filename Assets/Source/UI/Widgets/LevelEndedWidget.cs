@@ -11,6 +11,7 @@ public class LevelEndedWidget : UIWidget
     {
         base.Initialize();
 
+        Assert.IsNotNull(m_FadeImage);
         m_BehaviorComponent = InitializeComponent<BehaviorComponent>();
     }
 
@@ -18,7 +19,6 @@ public class LevelEndedWidget : UIWidget
     {
         base.OnShow();
 
-        Assert.IsNotNull(m_FadeImage);
         m_FadeImage.color = Color.clear;
         m_FadeImage.raycastTarget = false;
     }
@@ -27,7 +27,7 @@ public class LevelEndedWidget : UIWidget
     {
         m_FadeImage.raycastTarget = true;
 
-        m_BehaviorComponent.AddAction(new BHUIAction_FadeImage(m_FadeImage)
+        m_BehaviorComponent.AddExclusiveAction(new BHUIAction_FadeImage(m_FadeImage)
             .AddOnActionFinished((_) =>
             {
                 GameStateMachine.Instance.SwitchState(new FightGameState(bFadeIn: true));
@@ -38,7 +38,9 @@ public class LevelEndedWidget : UIWidget
 
     public void OnMenuClicked()
     {
-        m_BehaviorComponent.AddAction(new BHUIAction_FadeImage(m_FadeImage)
+        m_FadeImage.raycastTarget = true;
+
+        m_BehaviorComponent.AddExclusiveAction(new BHUIAction_FadeImage(m_FadeImage)
             .AddOnActionFinished((_) =>
             {
                 GameStateMachine.Instance.SwitchState(new MenuGameState());

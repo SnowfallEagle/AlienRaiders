@@ -22,6 +22,7 @@ public class TimerService : Service<TimerService>
 
     public class Timer
     {
+        // Null if timer removed
         public Handle Handle;
 
         public float TimeRate;
@@ -38,14 +39,17 @@ public class TimerService : Service<TimerService>
 
     private void Update()
     {
+        // Clean timers
+        m_Timers.RemoveAll((Timer) => Timer.Handle == null);
+
+        // Update timers
         for (int i = m_Timers.Count - 1; i >= 0; --i)
         {
             Timer Timer = m_Timers[i];
 
-            // Check if we lost reference
-            if (!Timer.Handle.bValid)
+            // Skip removed timers
+            if (Timer.Handle == null)
             {
-                RemoveTimer(Timer.Handle);
                 continue;
             }
 
@@ -115,6 +119,8 @@ public class TimerService : Service<TimerService>
         // Add new timer
         m_Timers.Add(new Timer
         {
+            Handle = Handle,
+
             TimeRate = TimeRate,
             TimeLeftToFire = bLoop && FirstDelay < 0f ? 0f : TimeRate,
 
@@ -129,8 +135,6 @@ public class TimerService : Service<TimerService>
         Timer Timer = m_Timers[m_Timers.Count - 1];
 
         Handle.Timer = Timer;
-        Timer.Handle = Handle;
-
         Handle.Owner = Owner;
         Handle.bOwned = Owner ? true : false;
     }
@@ -147,8 +151,10 @@ public class TimerService : Service<TimerService>
     {
         if (Handle.bValid)
         {
-            m_Timers.Remove(Handle.Timer);
+            // Mark timer as removed
+            Handle.Timer.Handle = null;
 
+            // Reset handle
             Handle.Timer = null;
             Handle.Owner = null;
             Handle.bOwned = false;
@@ -159,9 +165,9 @@ public class TimerService : Service<TimerService>
     {
         for (int i = m_Timers.Count - 1; i >= 0; --i)
         {
-            if (m_Timers[i].Handle.Owner == Owner)
+            if (m_Timers[i].Handle != null && m_Timers[i].Handle.Owner == Owner)
             {
-                m_Timers.RemoveAt(i);
+                RemoveTimer(m_Timers[i].Handle);
             }
         }
     }

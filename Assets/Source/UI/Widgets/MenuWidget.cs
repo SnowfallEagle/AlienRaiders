@@ -12,6 +12,7 @@ public class MenuWidget : UIWidget
     {
         base.Initialize();
 
+        Assert.IsNotNull(m_FadeImage);
         m_BehaviorComponent = InitializeComponent<BehaviorComponent>();
     }
 
@@ -19,11 +20,10 @@ public class MenuWidget : UIWidget
     {
         base.OnShow();
 
-        Assert.IsNotNull(m_FadeImage);
         m_FadeImage.color = Color.black;
         m_FadeImage.raycastTarget = false;
 
-        m_BehaviorComponent.AddAction(new BHUIAction_FadeImage(m_FadeImage, false, 0.5f));
+        m_BehaviorComponent.AddExclusiveAction(new BHUIAction_FadeImage(m_FadeImage, false, 0.5f));
     }
 
     public void OnPlayClicked()

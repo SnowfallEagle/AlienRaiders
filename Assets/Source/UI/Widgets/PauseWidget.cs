@@ -11,6 +11,7 @@ public class PauseWidget : UIWidget
     {
         base.Initialize();
 
+        Assert.IsNotNull(m_FadeImage);
         m_BehaviorComponent = InitializeComponent<BehaviorComponent>();
     }
 
@@ -18,7 +19,6 @@ public class PauseWidget : UIWidget
     {
         base.OnShow();
 
-        Assert.IsNotNull(m_FadeImage);
         m_FadeImage.color = Color.clear;
         m_FadeImage.raycastTarget = false;
 
@@ -42,7 +42,8 @@ public class PauseWidget : UIWidget
     public void OnMenuClicked()
     {
         m_FadeImage.raycastTarget = true;
-        m_BehaviorComponent.AddAction(new BHUIAction_FadeImage(m_FadeImage)
+
+        m_BehaviorComponent.AddExclusiveAction(new BHUIAction_FadeImage(m_FadeImage)
             .AddOnActionFinished((_) =>
             {
                 GameStateMachine.Instance.SwitchState(new MenuGameState());

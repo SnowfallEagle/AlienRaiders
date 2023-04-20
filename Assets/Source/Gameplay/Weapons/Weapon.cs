@@ -18,6 +18,15 @@ public class Weapon : CustomBehavior
         Assert.IsNotNull(m_Owner);
     }
 
+    private void OnDestroy()
+    {
+        if (gameObject.scene.isLoaded)
+        {
+            m_hFireTimer.Invalidate();
+            m_hShootDelayTimer.Invalidate();
+        }
+    }
+
     public void StartFire()
     {
         if (!m_hFireTimer.bValid && !m_hShootDelayTimer.bValid)
