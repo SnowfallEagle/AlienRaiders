@@ -95,7 +95,7 @@ public class PlayerShip : Ship
         {
             OnRevived = null;
 
-            BehaviorComponent.ClearActions();
+            BehaviorComponent.AbortActions();
             TimerService.Instance.RemoveOwnerTimers(this);
 
             // When we pause game and exit to menu we can shoot without stop
@@ -122,7 +122,7 @@ public class PlayerShip : Ship
         gameObject.SetActive(true);
         bCheckBounds = false;
 
-        BehaviorComponent.ClearActions();
+        BehaviorComponent.AbortActions();
 
         HealthComponent.SetMaxHealth();
         if (bShield)

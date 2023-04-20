@@ -117,7 +117,7 @@ public class FightGameState : GameState
 
             var PlayerShip = PlayerState.Instance.PlayerShip;
             { // @TODO: Put this stuff in method for player ship?
-                PlayerShip.BehaviorComponent.ClearActions();
+                PlayerShip.BehaviorComponent.AbortActions();
                 TimerService.Instance.RemoveOwnerTimers(PlayerShip);
 
                 PlayerShip.bProcessInput = false;
@@ -129,10 +129,6 @@ public class FightGameState : GameState
 
             TimerService.Instance.AddTimer(null, PlayerShip, () =>
                 {
-                    // @TODO: Put in method for player ship
-                    TimerService.Instance.RemoveOwnerTimers(PlayerShip);
-                    PlayerShip.BehaviorComponent.ClearActions();
-
                     PlayerShip.BehaviorComponent.AddAction(new BHPlayerAction_CinematicMove(Vector3.zero, MaxAngle: 1f)
                         .AddOnActionFinished((_) =>
                         {
