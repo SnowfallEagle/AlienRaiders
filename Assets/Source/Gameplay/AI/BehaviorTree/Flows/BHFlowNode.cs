@@ -100,6 +100,16 @@ public abstract class BHFlowNode : BHActionNode
     {
         Assert.IsNotNull(m_CurrentChild);
 
+        if (!m_CurrentChild.bActive)
+        {
+            FindNextChild();
+            if (m_CurrentChildHandle == ChildHandle.Done)
+            {
+                Finish(NodeStatus.Done);
+                return;
+            }
+        }
+
         // @OPTIMIZE: Check type
         BHFlowNode ChildAsFlowNode = m_CurrentChild as BHFlowNode;
         if (m_CurrentChild.bActive && ChildAsFlowNode != null)
@@ -111,22 +121,15 @@ public abstract class BHFlowNode : BHActionNode
             }
         }
 
-        if (!m_CurrentChild.bActive)
+        if (m_CurrentChild.bActive)
         {
-            FindNextChild();
-            if (m_CurrentChildHandle == ChildHandle.Done)
-            {
-                Finish(NodeStatus.Done);
-                return;
-            }
+            m_CurrentChild.Update();
         }
 
         foreach (var Service in m_Services)
         {
             Service.Update();
         }
-
-        m_CurrentChild.Update();
     }
 
     public override void Finish(NodeStatus FinishStatus)

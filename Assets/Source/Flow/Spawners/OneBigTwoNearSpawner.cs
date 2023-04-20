@@ -7,6 +7,8 @@ public class OneBigTwoNearSpawner : Spawner
     {
         public string BigResourcePath = "Aliens/BigAlien";
         public string NearResourcePath = "Aliens/Alien";
+
+        public int NearBehaviorPattern = AlienShip.Pattern.MoveBottom;
     }
 
     protected override GameObject[] OnSpawn(SpawnerConfig BaseConfig)
@@ -47,6 +49,9 @@ public class OneBigTwoNearSpawner : Spawner
         Aliens[0].transform.position = Position;
         Aliens[1].transform.position = Position + NearPositionDiff;
         Aliens[2].transform.position = Position - NearPositionDiff;
+
+        Aliens[1].GetComponent<AlienShip>().BehaviorPattern = Config.NearBehaviorPattern;
+        Aliens[2].GetComponent<AlienShip>().BehaviorPattern = Config.NearBehaviorPattern;
 
         return Aliens;
     }

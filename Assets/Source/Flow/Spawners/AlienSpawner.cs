@@ -28,52 +28,49 @@ public class AlienSpawner : Spawner
         public const int MaxPatterns = 4;
     }
 
-    private GameObject m_AlienPrefab;
-    private Config m_Config;
-
     protected override GameObject[] OnSpawn(SpawnerConfig BaseConfig)
     {
-        m_Config = (Config)BaseConfig;
+        Config Config = (Config)BaseConfig;
 
-        m_AlienPrefab = Resources.Load<GameObject>(m_Config.ResourcePath);
-        Assert.IsNotNull(m_AlienPrefab);
+        var AlienPrefab = Resources.Load<GameObject>(Config.ResourcePath);
+        Assert.IsNotNull(AlienPrefab);
 
-        m_AlienPrefab.transform.rotation = Quaternion.Euler(0f, 0f, 180f);
+        AlienPrefab.transform.rotation = Quaternion.Euler(0f, 0f, 180f);
 
-        switch (m_Config.Pattern.GetPattern(Pattern.MaxPatterns))
+        switch (Config.Pattern.GetPattern(Pattern.MaxPatterns))
         {
-            case Pattern.Single: return SpawnSingle();
-            case Pattern.Triple: return SpawnTriple();
+            case Pattern.Single: return SpawnSingle(Config, AlienPrefab);
+            case Pattern.Triple: return SpawnTriple(Config, AlienPrefab);
             default: return new GameObject[] { };
         }
     }
 
-    private GameObject[] SpawnSingle()
+    private GameObject[] SpawnSingle(Config Config, GameObject AlienPrefab)
     {
-        GameObject Alien = SpawnInState(m_AlienPrefab);
+        GameObject Alien = SpawnInState(AlienPrefab);
         Vector3 Size = Alien.GetComponent<SpriteRenderer>().bounds.size;
 
         Vector3 Position;
-        if (!m_Config.GetSpawnPosition(out Position, Size.x, Size.y))
+        if (!Config.GetSpawnPosition(out Position, Size.x, Size.y))
         {
             float XRange = RenderingService.Instance.TargetSize.x * 0.5f;
             Position = new Vector3(Random.Range(-XRange, XRange), RenderingService.Instance.TargetCenter.y + RenderingService.Instance.TargetSize.y * 0.6f);
         }
-
         Alien.transform.position = Position;
+
         return new GameObject[] { Alien };
     }
 
-    private GameObject[] SpawnTriple()
+    private GameObject[] SpawnTriple(Config Config, GameObject AlienPrefab)
     {
         const int NumAliens = 3;
-        float SpaceBetweenAliens = m_Config.SpaceBetweenAliens > 0f ? m_Config.SpaceBetweenAliens : 0.5f;
+        float SpaceBetweenAliens = Config.SpaceBetweenAliens > 0f ? Config.SpaceBetweenAliens : 0.5f;
 
         // Spawn aliens
         GameObject[] Aliens = new GameObject[NumAliens];
         for (int i = 0; i < NumAliens; ++i)
         {
-            Aliens[i] = SpawnInState(m_AlienPrefab);
+            Aliens[i] = SpawnInState(AlienPrefab);
         }
 
         // Set up config
@@ -82,7 +79,7 @@ public class AlienSpawner : Spawner
         float XDiff = 0f;
         float YDiff = 0f;
 
-        switch (m_Config.Pattern.GetSubpattern(TripleSubpattern.MaxPatterns))
+        switch (Config.Pattern.GetSubpattern(TripleSubpattern.MaxPatterns))
         {
             case TripleSubpattern.Right:
                 XDiff = AlienSize.x + SpaceBetweenAliens;
@@ -107,9 +104,9 @@ public class AlienSpawner : Spawner
         float GroupHeight = YDiff > 0f ? YDiff * NumAliens : AlienSize.y;
 
         Vector3 FirstPosition;
-        if (!m_Config.GetSpawnPosition(out FirstPosition, GroupWidth, GroupHeight))
+        if (!Config.GetSpawnPosition(out FirstPosition, GroupWidth, GroupHeight))
         {
-            m_Config.GetSpawnPosition(out FirstPosition, SpawnerConfig.AlignType.Center, GroupWidth, GroupHeight);
+            Config.GetSpawnPosition(out FirstPosition, SpawnerConfig.AlignType.Center, GroupWidth, GroupHeight);
         }
 
         // Set positions

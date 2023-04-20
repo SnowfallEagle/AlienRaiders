@@ -10,8 +10,17 @@ public class AlienShip : Ship
         MaxWeapons
     }
 
+    public static class Pattern
+    {
+        public const int MoveBottom    = 0;
+        public const int MoveLeftRight = 1;
+        public const int MoveZigZag    = 2; // @INCOMPLETE
+    }
+
     [SerializeField] protected float m_DamageOnCollide = 10f;
     public float DamageOnCollide => m_DamageOnCollide;
+
+    [NonSerialized] public int BehaviorPattern = Pattern.MoveBottom;
 
     public override void Initialize(BuffMultipliers Buffs)
     {
@@ -28,12 +37,16 @@ public class AlienShip : Ship
 
         HealthComponent.OnDied += () => { Destroy(gameObject); };
 
-        BehaviorComponent.StartBehavior(new BHFlow_Sequence()
-            .AddNode(new BHTask_LoopCommand(new BHCommand_MoveForward(Speed)))
+        BehaviorComponent.StartBehavior(GetBehaviorTree(BehaviorPattern));
+    }
 
-            .AddService(new BHShipService_DestroyWhenOutOfBottomBound())
-            .AddService(new BHShipService_FireWhenSeePlayer(90f))
-        );
+    private void OnTriggerEnter2D(Collider2D Other)
+    {
+        var PlayerShip = Other.GetComponent<PlayerShip>();
+        if (PlayerShip)
+        {
+            PlayerShip.HealthComponent.TakeDamage(m_DamageOnCollide);
+        }
     }
 
     protected override Type[] OnPreInitializeWeapons()
@@ -43,12 +56,48 @@ public class AlienShip : Ship
         return WeaponTypes;
     }
 
-    private void OnTriggerEnter2D(Collider2D Other)
+    public virtual BHActionNode GetBehaviorTree(int BehaviorPattern)
     {
-        var PlayerShip = Other.GetComponent<PlayerShip>();
-        if (PlayerShip)
+        const float Fov = 135f;
+        const float MoveLeftRightTimeLimit = 2.5f;
+
+        switch (BehaviorPattern)
         {
-            PlayerShip.HealthComponent.TakeDamage(m_DamageOnCollide);
+            case Pattern.MoveBottom:
+                return new BHFlow_Sequence()
+                    .AddNode(new BHTask_LoopCommand(new BHCommand_MoveForward(Speed)))
+
+                    .AddService(new BHShipService_DestroyWhenOutOfBottomBound())
+                    .AddService(new BHShipService_FireWhenSeePlayer(Fov));
+
+            /* @INCOMPLETE:
+                - Remove previous code, put task execution stuff in special method Process
+                - Check if we lose frames when done
+            */
+            case Pattern.MoveLeftRight:
+                return new BHFlow_Selector()
+                    .AddNode(new BHFlow_Sequence()
+                        .AddNode(new BHTask_ProcessCommand(new BHCommand_DirectionalMove(transform.up, Speed)))
+                        .AddNode(new BHTask_ProcessCommand(new BHCommand_DirectionalMove(-transform.right, Speed * 2f)))
+
+                        // @INCOMPLETE AddDecorator(new BHDecorator_Loop())
+                        .AddDecorator(new BHDecorator_TimeLimit(MoveLeftRightTimeLimit))
+                    )
+
+                    .AddNode(new BHFlow_Sequence()
+                        .AddNode(new BHTask_ProcessCommand(new BHCommand_DirectionalMove(transform.up, Speed)))
+                        .AddNode(new BHTask_ProcessCommand(new BHCommand_DirectionalMove(transform.right, Speed * 2f)))
+
+                        // @INCOMPLETE AddDecorator(new BHDecorator_Loop())
+                        .AddDecorator(new BHDecorator_TimeLimit(MoveLeftRightTimeLimit))
+                    )
+
+                    .AddService(new BHShipService_DestroyWhenOutOfBottomBound())
+                    .AddService(new BHShipService_FireWhenSeePlayer(Fov));
+
+            default:
+                NoEntry.Assert($"No pattern { BehaviorPattern }");
+                return null;
         }
     }
 }

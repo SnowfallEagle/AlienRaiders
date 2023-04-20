@@ -4078,12 +4078,12 @@ MonoBehaviour:
   SdkType: 0
   bDebugMode: 1
   DebugLevel:
-    bEnabled: 0
+    bEnabled: 1
     bSpecificLevel: 1
     Level: 0
     bSpecificStage: 0
     Stage: 0
-    bSpecificSpawner: 0
+    bSpecificSpawner: 1
     Spawner: 1
   DebugPlayer:
     bEnabled: 0

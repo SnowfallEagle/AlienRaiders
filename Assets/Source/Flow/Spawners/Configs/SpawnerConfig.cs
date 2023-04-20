@@ -3,6 +3,9 @@ using UnityEngine.Assertions;
 
 public class SpawnerConfig
 {
+    public const int AnyValue = -1;
+    public static Color AnyColor = Color.clear;
+
     public enum AlignType
     {
         None,
@@ -10,9 +13,6 @@ public class SpawnerConfig
         Right,
         Center
     }
-
-    public const int AnyValue = -1;
-    public static Color AnyColor = Color.black;
 
     public Color ShipColor = AnyColor;
     public BuffMultipliers Buffs = new BuffMultipliers();

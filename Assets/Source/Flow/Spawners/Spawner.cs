@@ -9,6 +9,7 @@ public abstract class Spawner : CustomBehavior
         Assert.IsNotNull(Config);
 
         GameObject[] Ships = OnSpawn(Config);
+
         Assert.IsNotNull(Ships);
         InitializeShips(Ships, Config);
 
@@ -30,7 +31,8 @@ public abstract class Spawner : CustomBehavior
         foreach (var Ship in Ships)
         {
             Ship.GetComponent<Ship>().Initialize(Buffs);
-            if (Config.ShipColor != Color.black)
+
+            if (Config.ShipColor != SpawnerConfig.AnyColor)
             {
                 Ship.GetComponent<SpriteRenderer>().color = Config.ShipColor;
             }

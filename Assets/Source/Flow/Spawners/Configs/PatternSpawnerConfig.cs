@@ -36,11 +36,4 @@ public class PatternSpawnerConfig
 
         return Random.Range(From, To);
     }
-
-    public int GetShipPattern(int MaxPatterns)
-    {
-        // @INCOMPLETE
-        NotImplemented.Assert();
-        return 0;
-    }
 }

@@ -11,6 +11,17 @@ public class IntroStage : FightStage
 
             new SpawnerInfo
             {
+                Spawner = typeof(OneBigTwoNearSpawner),
+                Config = new OneBigTwoNearSpawner.Config
+                {
+                    NearBehaviorPattern = AlienShip.Pattern.MoveLeftRight
+                },
+
+                bWaitToEnd = true,
+            },
+
+            new SpawnerInfo
+            {
                 Spawner = typeof(AlienSpawner),
                 Config = new AlienSpawner.Config
                 {
