@@ -29,7 +29,7 @@ public class MenuGameState : GameState
         const float CruiseDelay = 1f;
 
         PlayerShip.BehaviorComponent.AddExclusiveAction(
-            new BHPlayerAction_CinematicMove(bLeft ? PlayerShip.LeftCruisePosition : PlayerShip.RightCruisePosition, FirstPart: 0.5f, Deceleration: 0.05f)
+            new BHPlayerAction_CinematicMove(bLeft ? PlayerState.Instance.LeftCruisePosition : PlayerState.Instance.RightCruisePosition, FirstPart: 0.5f, Deceleration: 0.05f)
                 .AddOnActionFinished((_) =>
                 {
                     TimerService.Instance.AddTimer(null, PlayerShip, () =>
@@ -47,7 +47,7 @@ public class MenuGameState : GameState
     {
         const float FlyAroundDelay = 0.5f;
 
-        Vector3 Diff = (bLeft ? -PlayerShip.FlyAroundDiff : PlayerShip.FlyAroundDiff) * (bCruiseOnFinished ? 2f : 1f);
+        Vector3 Diff = (bLeft ? -PlayerState.Instance.FlyAroundDiff : PlayerState.Instance.FlyAroundDiff) * (bCruiseOnFinished ? 2f : 1f);
         Vector3 Destination = PlayerShip.transform.position + Diff;
 
         PlayerShip.BehaviorComponent.AddExclusiveAction(

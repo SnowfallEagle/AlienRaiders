@@ -129,14 +129,14 @@ public class FightGameState : GameState
 
             TimerService.Instance.AddTimer(null, PlayerShip, () =>
                 {
-                    PlayerShip.BehaviorComponent.AddAction(new BHPlayerAction_CinematicMove(Vector3.zero, MaxAngle: 1f)
+                    PlayerShip.BehaviorComponent.AddAction(new BHPlayerAction_CinematicMove(PlayerState.Instance.PrepareToFlewAwayPosition, MaxAngle: 1f)
                         .AddOnActionFinished((_) =>
                         {
                             TimerService.Instance.AddTimer(null, PlayerShip, () =>
                                 {
                                     PlayerShip.BehaviorComponent.AddExclusiveAction(new BHAction_CinematicBackgroundMove());
 
-                                    PlayerShip.BehaviorComponent.AddAction(new BHPlayerAction_CinematicMove(new Vector3(0f, 50f), MaxAngle: 0f, Acceleration: 1f, MaxSpeed: 25f)
+                                    PlayerShip.BehaviorComponent.AddAction(new BHPlayerAction_CinematicMove(PlayerState.Instance.FlewAwayPosition, MaxAngle: 0f, Acceleration: 1f, MaxSpeed: 25f)
                                         .AddOnActionFinished((_) =>
                                         {
                                             TimerService.Instance.AddTimer(null, PlayerShip, () =>

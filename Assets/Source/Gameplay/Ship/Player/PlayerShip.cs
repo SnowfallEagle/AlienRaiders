@@ -13,24 +13,6 @@ public class PlayerShip : Ship
     [Header("Shield")]
     [SerializeField] private SpriteRenderer m_Shield;
 
-    /** Should be right relative to ReadyPosition, so we can revive from random X position */
-    // @TODO: Put this stuff in PlayerState instead
-    [Header("Position")]
-    [SerializeField] private Vector3 m_RevivePosition = Vector3.zero;
-    public Vector3 RevivePosition => m_RevivePosition;
-
-    [SerializeField] private Vector3 m_ReadyPosition = Vector3.zero;
-    public Vector3 ReadyPosition => m_ReadyPosition;
-
-    [SerializeField] private Vector3 m_LeftCruisePosition = Vector3.zero;
-    public Vector3 LeftCruisePosition => m_LeftCruisePosition;
-
-    [SerializeField] private Vector3 m_RightCruisePosition = Vector3.zero;
-    public Vector3 RightCruisePosition => m_RightCruisePosition;
-
-    [SerializeField] private Vector3 m_FlyAroundDiff = new Vector3(2.5f, 0f, 0f);
-    public Vector3 FlyAroundDiff => m_FlyAroundDiff;
-
     /** Can be used by GameStates, resets every GameState changing */
     public Action OnRevived;
 
@@ -46,10 +28,8 @@ public class PlayerShip : Ship
     {
         base.Initialize(Buffs);
 
-        Vector3 Position   = transform.position;
-        Position.z         = WorldZLayers.Player;
-        m_RevivePosition.z = WorldZLayers.Player;
-        m_ReadyPosition.z  = WorldZLayers.Player;
+        Vector3 Position = transform.position;
+        Position.z = WorldZLayers.Player;
         transform.position = Position;
 
         gameObject.layer = LayerMask.NameToLayer("Player");
@@ -132,14 +112,14 @@ public class PlayerShip : Ship
 
         bProcessInput = false;
 
-        Vector3 RevivePosition = m_RevivePosition;
+        Vector3 RevivePosition = PlayerState.Instance.RevivePosition;
         if (UnityEngine.Random.Range(0, 2) == 1)
         {
             RevivePosition.x = -RevivePosition.x;
         }
         transform.position = RevivePosition;
 
-        BehaviorComponent.AddAction(new BHPlayerAction_CinematicMove(m_ReadyPosition)
+        BehaviorComponent.AddAction(new BHPlayerAction_CinematicMove(PlayerState.Instance.ReadyPosition)
             .AddOnActionFinished((_) =>
             {
                 bProcessInput  = GameStateMachine.Instance.GetCurrentState<FightGameState>() != null;
