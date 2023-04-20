@@ -44,12 +44,13 @@ public class PlayerState : Service<PlayerState>
 
     public PlayerState()
     {
-        m_RevivePosition.z      = WorldZLayers.Player;
-        m_ReadyPosition.z       = WorldZLayers.Player;
-        m_LeftCruisePosition.z  = WorldZLayers.Player;
-        m_RightCruisePosition.z = WorldZLayers.Player;
-        m_FlyAroundDiff.z       = WorldZLayers.Player;
-        m_FlewAwayPosition.z    = WorldZLayers.Player;
+        m_RevivePosition.z            = WorldZLayers.Player;
+        m_ReadyPosition.z             = WorldZLayers.Player;
+        m_LeftCruisePosition.z        = WorldZLayers.Player;
+        m_RightCruisePosition.z       = WorldZLayers.Player;
+        m_FlyAroundDiff.z             = WorldZLayers.Player;
+        m_FlewAwayPosition.z          = WorldZLayers.Player;
+        m_PrepareToFlewAwayPosition.z = WorldZLayers.Player;
     }
 
     public void SpawnShip()

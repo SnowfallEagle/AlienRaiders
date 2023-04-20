@@ -774,6 +774,57 @@ Transform:
   m_Father: {fileID: 816877536}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &409267980
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 409267981}
+  - component: {fileID: 409267982}
+  m_Layer: 0
+  m_Name: PlayerState
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &409267981
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 409267980}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2028257627}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &409267982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 409267980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28d99f85bf1b5d84a96b137d98eb1062, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RevivePosition: {x: 5, y: -12.5, z: 100}
+  m_ReadyPosition: {x: 0, y: -7.5, z: 100}
+  m_LeftCruisePosition: {x: -2.5, y: -7.5, z: 100}
+  m_RightCruisePosition: {x: 2.5, y: -7.5, z: 100}
+  m_FlyAroundDiff: {x: 2.5, y: 0, z: 100}
+  m_FlewAwayPosition: {x: 0, y: 50, z: 100}
+  m_PrepareToFlewAwayPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &424523117
 GameObject:
   m_ObjectHideFlags: 0
@@ -4845,6 +4896,7 @@ Transform:
   - {fileID: 816877536}
   - {fileID: 339272417}
   - {fileID: 1557932032}
+  - {fileID: 409267981}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
