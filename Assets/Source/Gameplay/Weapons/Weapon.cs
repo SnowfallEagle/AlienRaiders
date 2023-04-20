@@ -7,7 +7,8 @@ public class Weapon : CustomBehavior
     protected BuffMultipliers m_Buffs;
 
     [SerializeField] protected float m_FireRate = 0.5f;
-    private TimerService.Handle m_hFireTimer = new TimerService.Handle();
+    private TimerService.Handle m_hFireTimer       = new TimerService.Handle();
+    private TimerService.Handle m_hShootDelayTimer = new TimerService.Handle();
 
     public virtual void Initialize(BuffMultipliers Buffs)
     {
@@ -19,8 +20,7 @@ public class Weapon : CustomBehavior
 
     public void StartFire()
     {
-        // @FIXME: We should set timers that'll fire when we can shoot again, because we can spam taps
-        if (!m_hFireTimer.bValid)
+        if (!m_hFireTimer.bValid && !m_hShootDelayTimer.bValid)
         {
             TimerService.Instance.AddTimer(m_hFireTimer, this, Fire, m_FireRate, true);
         }
@@ -28,7 +28,11 @@ public class Weapon : CustomBehavior
 
     public void StopFire()
     {
-        m_hFireTimer.Invalidate();
+        if (m_hFireTimer.bValid)
+        {
+            TimerService.Instance.AddTimer(m_hShootDelayTimer, this, () => { }, m_hFireTimer.Timer.TimeLeftToFire);
+            m_hFireTimer.Invalidate();
+        }
     }
 
     /** Overridable method for derived weapons */

@@ -180,16 +180,20 @@ public class PlayerShip : Ship
             case TouchPhase.Began:
                 m_bControlled = true;
                 m_LastControlledWorldPosition = CoreUtils.ScreenToWorldPosition(touch.position);
+
                 new BHShipCommand_StartFire().Process(BehaviorComponent);
                 break;
 
             case TouchPhase.Stationary:
                 m_LastControlledWorldPosition = CoreUtils.ScreenToWorldPosition(touch.position);
+
+                new BHShipCommand_StartFire().Process(BehaviorComponent);
                 break;
 
             case TouchPhase.Canceled:
             case TouchPhase.Ended:
                 m_bControlled = false;
+
                 new BHShipCommand_StopFire().Process(BehaviorComponent);
                 break;
 
@@ -199,12 +203,14 @@ public class PlayerShip : Ship
                 m_LastControlledWorldPosition = CurrentTouchWorldPosition;
 
                 new BHCommand_RelativeMove(DeltaPosition).Process(BehaviorComponent);
+                new BHShipCommand_StartFire().Process(BehaviorComponent);
                 break;
         }
     }
 
     private void ProcessMouse()
     {
+        // Check if Lmb is hold
         if (!Input.GetMouseButton(0))
         {
             if (m_bControlled)
@@ -215,14 +221,18 @@ public class PlayerShip : Ship
             return;
         }
 
+        // Fire any time we hold Lmb
+        new BHShipCommand_StartFire().Process(BehaviorComponent);
+
+        // If it's first frame when Lmb is clicked, mark it and return
         if (!m_bControlled)
         {
             m_LastControlledWorldPosition = CoreUtils.ScreenToWorldPosition(Input.mousePosition);
             m_bControlled = true;
-                new BHShipCommand_StartFire().Process(BehaviorComponent);
             return;
         }
 
+        // Move
         Vector3 CurrentMouseWorldPosition = CoreUtils.ScreenToWorldPosition(Input.mousePosition);
         Vector3 DeltaPosition = CurrentMouseWorldPosition - m_LastControlledWorldPosition;
         m_LastControlledWorldPosition = CurrentMouseWorldPosition;

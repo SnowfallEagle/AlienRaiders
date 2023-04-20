@@ -8,8 +8,8 @@ public class FightGameState : GameState
 
     public static Level[] s_Levels = new Level[]
     {
-        // new IntroLevel(),
-        new DevLevel()
+        new IntroLevel(),
+        // new DevLevel()
     };
 
     private Level m_CurrentLevel;
