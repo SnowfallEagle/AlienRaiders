@@ -3,6 +3,8 @@
 ## Summary
 Alien Raiders is Space Shoot 'Em Up Game. Work in progress.
 
+Watch progress [on YouTube](https://www.youtube.com/watch?v=7F9lRh4ejRc&t=20s)
+
 ![](Project/Images/2.png)
 
 ## Features
