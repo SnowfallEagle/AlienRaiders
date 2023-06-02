@@ -1,4 +1,4 @@
-# AlienRaiders
+# Alien Raiders
 
 ## Summary
 Alien Raiders is Space Shoot 'Em Up Game. Work in progress.
